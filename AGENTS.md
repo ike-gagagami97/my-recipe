@@ -38,11 +38,12 @@ auto-run. To bring the database up:
 Caveats:
 - The Supabase CLI is a shim (`supabase`) that forwards to a `supabase-go` binary; both
   must sit together on `PATH` (both are in `/usr/local/bin`).
-- New tables need explicit `grant` statements for the `anon`/`authenticated` roles in the
-  migration in addition to RLS policies, otherwise the REST API returns
-  `permission denied` (see `supabase/migrations/20260709000000_create_recipes.sql`).
-- The app renders a "Supabase is not configured" notice when `.env.local` is missing, so
-  the dev server still boots without the DB.
+- No database schema exists yet (no files in `supabase/migrations/`). The app currently
+  renders a static landing screen and does not read/write any tables, so it boots fine
+  without Supabase configured.
+- When tables are added later: new tables need explicit `grant` statements for the
+  `anon`/`authenticated` roles in the migration in addition to RLS policies, otherwise the
+  REST API returns `permission denied`.
 
 ### Next.js 16 gotchas
 

@@ -32,22 +32,28 @@ cp .env.example .env.local
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase project (or local) API URL |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon/publishable key |
 
-#### Option A — Local Supabase (recommended for development)
+Configuring Supabase is **optional right now** — the app currently renders a landing
+screen and does not read or write any tables yet. Set the values below when the data
+model is added.
+
+#### Option A — Local Supabase (for development)
 
 Requires Docker and the [Supabase CLI](https://supabase.com/docs/guides/cli).
 
 ```bash
-supabase start        # starts Postgres + API in Docker, applies supabase/migrations
+supabase start        # starts Postgres + API in Docker
 ```
 
 Copy the printed `API_URL` and `ANON_KEY` into `.env.local`.
 
 #### Option B — Hosted Supabase project
 
-Create a project at [supabase.com](https://supabase.com), run the SQL in
-`supabase/migrations/` against it, and copy the project URL and anon key from
-**Project Settings → API** into `.env.local` (or pull them from Vercel with
+Create a project at [supabase.com](https://supabase.com), then copy the project URL and
+anon key from **Project Settings → API** into `.env.local` (or pull them from Vercel with
 `vercel env pull .env.local`).
+
+> The database schema (tables, RLS policies) is not defined yet. It will be added under
+> `supabase/migrations/` once the recipe features are designed.
 
 ### 3. Run the dev server
 
@@ -55,8 +61,7 @@ Create a project at [supabase.com](https://supabase.com), run the SQL in
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). Add a recipe using the form; it is
-stored in Supabase and shown in the list.
+Open [http://localhost:3000](http://localhost:3000) to see the landing screen.
 
 ## Scripts
 
@@ -69,9 +74,9 @@ stored in Supabase and shown in the list.
 
 ## Project structure
 
-- `src/app` — App Router pages, layout, server action (`actions.ts`) and the client form.
-- `src/lib/supabase` — browser (`client.ts`) and server (`server.ts`) Supabase clients + types.
-- `supabase/migrations` — SQL migrations (the `recipes` table).
+- `src/app` — App Router pages and layout (currently a landing screen).
+- `src/lib/supabase` — browser (`client.ts`) and server (`server.ts`) Supabase clients, ready for use once features are built.
+- `supabase/` — Supabase CLI config (`config.toml`); migrations will live in `supabase/migrations/`.
 
 ## Deploying to Vercel
 
