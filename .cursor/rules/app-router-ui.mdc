@@ -1,0 +1,12 @@
+---
+description: Next.js App Router and React conventions for src/app and related UI.
+globs: src/app/**,src/components/**,src/**/*.tsx
+alwaysApply: false
+---
+
+# App Router / UI
+
+- Default to Server Components; add `"use client"` only when needed.
+- Reuse `src/lib/supabase/server.ts` or `client.ts` — do not invent new Supabase client factories.
+- After UI edits, follow `.cursor/skills/verify-frontend-change/SKILL.md` before calling the work done.
+- For landing/visual work, also follow `.cursor/skills/ui-design/SKILL.md`.

@@ -32,7 +32,10 @@ supabase/
   config.toml
   migrations/          # SQL migrations (empty until schema exists)
 docs/                  # Human + agent documentation
-agent-skills/          # Project-specific agent skills
+.cursor/
+  skills/              # On-demand procedural skills
+  rules/               # Always-on and path-scoped rules
+  agents/              # Isolated subagents
 ```
 
 ## Next.js 16 notes (must follow)

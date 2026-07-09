@@ -1,16 +1,16 @@
 ---
-description: My Recipe プロジェクトの常時ルール。実装前に docs と agent-skills を参照する。
-globs:
+description: Always-on My Recipe conventions for Cursor agents. Keep short; put procedures in skills.
 alwaysApply: true
 ---
 
-# My Recipe — agent rules
+# My Recipe — always-on
 
-- プロダクトスコープの正本は `docs/product/vision.md`
-- 技術構成の正本は `docs/architecture/overview.md`
-- 開発の進め方は `docs/development/workflow.md`
-- タスク種別に応じて `agent-skills/*/SKILL.md` を読む
-- Next.js 16: unfamiliar API は `node_modules/next/dist/docs/` を先に確認。`cookies()`/`headers()` は async。middleware ではなく `proxy.ts`
-- Supabase の新テーブルは RLS + grant（anon/authenticated）をセットで書く
-- `.env*` の秘密情報をコミットしない（`.env.example` のみ可）
-- 無関係なリフォーマットやスコープ外機能を同じ変更に混ぜない
+- Product scope: `docs/product/vision.md`
+- Architecture: `docs/architecture/overview.md`
+- Workflow: `docs/development/workflow.md`
+- Steering map (what goes where): `docs/development/steering.md`
+- Task procedures: `.cursor/skills/*/SKILL.md`
+- Next.js 16: read `node_modules/next/dist/docs/` before unfamiliar APIs. `cookies()`/`headers()` are async. Use `proxy.ts`, not `middleware.ts`.
+- New Supabase tables need RLS **and** `grant` for `anon`/`authenticated`.
+- Do not commit secrets (`.env*` except `.env.example`).
+- Keep diffs scoped; update `docs/` in the same PR when behavior or scope changes.

@@ -1,0 +1,12 @@
+---
+description: Constraints for Supabase SQL migrations — append-only, RLS + grants required.
+globs: supabase/migrations/**,supabase/**/*.sql
+alwaysApply: false
+---
+
+# Supabase migrations
+
+- Migrations are append-only. Do not rewrite already-applied migration files; add a new file instead.
+- Every new table: enable RLS, add policies, and `grant` to `anon`/`authenticated` as needed.
+- Dashboard-only schema edits are not source of truth — encode changes in `supabase/migrations/`.
+- Prefer the `supabase-migration` skill for the full checklist.

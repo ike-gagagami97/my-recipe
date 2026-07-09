@@ -30,3 +30,4 @@
 | ADR | Title | Status |
 | --- | --- | --- |
 | [0001](./0001-stack-next-supabase-vercel.md) | Next.js + Supabase + Vercel を採用 | accepted |
+| [0002](./0002-cursor-native-steering.md) | Cursor ネイティブの agent steering 構成 | accepted |

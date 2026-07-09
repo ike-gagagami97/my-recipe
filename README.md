@@ -78,12 +78,14 @@ Open [http://localhost:3000](http://localhost:3000) to see the landing screen.
 - `src/lib/supabase` — browser (`client.ts`) and server (`server.ts`) Supabase clients, ready for use once features are built.
 - `supabase/` — Supabase CLI config (`config.toml`); migrations will live in `supabase/migrations/`.
 - `docs/` — Product vision, architecture, development workflow, and ADRs (source of truth for humans and agents).
-- `agent-skills/` — Project-specific agent skills (recipe features, Supabase migrations, UI design).
-- `.cursor/rules/` — Always-on Cursor rules for this repo.
-- `AGENTS.md` — Agent entrypoint (Cloud + local).
+- `.cursor/skills/` — Cursor skills (recipe features, migrations, UI, verification).
+- `.cursor/rules/` — Always-on and path-scoped Cursor rules.
+- `.cursor/agents/` — Cursor subagents (e.g. code review).
+- `AGENTS.md` — Cursor agent entrypoint (Cloud + local).
 
-See [`docs/README.md`](docs/README.md) for the documentation map and
-[`docs/development/workflow.md`](docs/development/workflow.md) for the AI-assisted development flow.
+See [`docs/README.md`](docs/README.md) for the documentation map,
+[`docs/development/steering.md`](docs/development/steering.md) for Cursor steering,
+and [`docs/development/workflow.md`](docs/development/workflow.md) for the development flow.
 
 ## Deploying to Vercel
 
