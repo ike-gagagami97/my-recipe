@@ -28,7 +28,8 @@ vision: docs/product/vision.md
 - 秘密鍵・`.env.local` をコミットしない
 - 無関係なリフォーマットをしない
 - Production マージを勝手にしない（D1）
-- テストレベルを独自に拡大解釈しない（[`test-level-policy.md`](./test-level-policy.md) が未整備の間は受け入れ条件に従う）
+- テストレベルを独自に拡大解釈しない（[`test-level-policy.md`](./test-level-policy.md)）。スコア表が無い間は暫定ゲートに従う
+- 「振る舞い不変」で L4 を省略する場合は、PR にその判断を一言書く（一次判定は PR 作成者）
 
 ## スキルの使い分け
 
