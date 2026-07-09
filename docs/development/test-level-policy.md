@@ -97,6 +97,9 @@ PR に理由を書く。代替:
 
 ## PR 本文への書き方（短く）
 
+GitHub の PR 作成時は [`.github/PULL_REQUEST_TEMPLATE.md`](../../.github/PULL_REQUEST_TEMPLATE.md) が載る。  
+Test level 欄は次の形で埋める。
+
 ```text
 Test level: L0 + L2 + L4
 Type: 新規画面・新規フロー（レシピ一覧）

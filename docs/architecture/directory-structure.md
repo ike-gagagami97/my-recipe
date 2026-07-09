@@ -15,6 +15,7 @@
 | `AGENTS.md` | Cursor エージェント向けエントリ（正本） |
 | `CLAUDE.md` | 互換用ポインタ（`@AGENTS.md`） |
 | `README.md` | 人間向けセットアップ |
+| `.github/PULL_REQUEST_TEMPLATE.md` | PR 本文テンプレ（feature doc・Test level・D1） |
 
 このリポジトリは **Cursor 前提**。Claude Code の `.claude/` を主構成にしない。
 

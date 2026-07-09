@@ -20,6 +20,7 @@ vision: docs/product/vision.md
 
 上記 feature doc の §1〜6（とくに §5 Gherkin と §6）を満たす実装と draft PR まで。
 やらないことは §4 に従う。マージしない。
+PR 本文は .github/PULL_REQUEST_TEMPLATE.md に従い、Test level を記入する。
 ```
 
 ## エージェントが守ること

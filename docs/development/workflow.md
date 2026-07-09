@@ -204,6 +204,18 @@ DBが未作成なら migration も同じPRで。UI変更後は verify-frontend-c
 - [ ] 必要なら Preview 確認のうえ Production
 - [ ] `vision.md` の状態を更新（完了 / 一部残など）
 
+### PR 本文
+
+PR 作成時は [`.github/PULL_REQUEST_TEMPLATE.md`](../../.github/PULL_REQUEST_TEMPLATE.md) に従う。
+
+最低限埋める欄:
+
+- Summary / Links（feature doc）
+- Test level（タイプ・必須レベル・実施チェック）
+- Deploy notes（D1: 人間がマージ）
+
+エージェントは draft PR まで。マージしない。
+
 ---
 
 ## 関連ドキュメント
