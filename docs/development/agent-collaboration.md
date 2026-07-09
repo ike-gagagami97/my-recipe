@@ -7,7 +7,7 @@
 
 | 誰 | やること |
 | --- | --- |
-| 人間（QA / プロダクト） | ①決める、②受け入れ条件の承認、③短い依頼、④受け入れ確認と Production マージ |
+| 人間（QA / プロダクト） | ①決める、② feature doc §1〜6 の承認、③短い依頼、④受け入れ確認と Production マージ |
 | Cursor エージェント | ②の下書き、④の実装・自己検証・draft PR。**マージはしない** |
 
 ## 依頼は短く（詳細は feature doc）
@@ -18,8 +18,8 @@
 feature doc: docs/product/features/<name>.md
 vision: docs/product/vision.md
 
-上記の受け入れ条件を満たす実装と draft PR まで。
-やらないことは feature doc に従う。マージしない。
+上記 feature doc の §1〜6（とくに §5 Gherkin と §6）を満たす実装と draft PR まで。
+やらないことは §4 に従う。マージしない。
 ```
 
 ## エージェントが守ること

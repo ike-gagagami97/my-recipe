@@ -7,7 +7,7 @@ description: Implement My Recipe list/detail/create/edit flows with App Router a
 
 ## Before starting
 
-1. Read the feature doc under `docs/product/features/` (acceptance + out of scope). If missing, stop and ask for stage ② docs.
+1. Read the feature doc under `docs/product/features/` (§1–6 required; Gherkin in §5, acceptance in §6). If missing, stop and ask for stage ② docs.
 2. Confirm scope in [`docs/product/vision.md`](../../../docs/product/vision.md)
 3. If tables are missing, invoke [`supabase-migration`](../supabase-migration/SKILL.md) first
 4. Reuse `src/lib/supabase/{client,server}.ts` — do not add new client factories
