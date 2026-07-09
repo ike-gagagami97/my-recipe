@@ -4,6 +4,17 @@
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
 <!-- END:nextjs-agent-rules -->
 
+## Project docs (read first)
+
+| Path | Purpose |
+| --- | --- |
+| [`docs/product/vision.md`](docs/product/vision.md) | Product scope and MVP |
+| [`docs/architecture/overview.md`](docs/architecture/overview.md) | Stack and data boundaries |
+| [`docs/development/workflow.md`](docs/development/workflow.md) | Branch / PR / verification flow |
+| [`agent-skills/`](agent-skills/) | Task-specific skills (recipe, migrations, UI) |
+
+Always-on Cursor rules: [`.cursor/rules/project.mdc`](.cursor/rules/project.mdc).
+
 ## Cursor Cloud specific instructions
 
 This is a Next.js 16 (App Router, React 19, Tailwind 4) recipe app that uses Supabase

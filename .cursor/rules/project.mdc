@@ -1,0 +1,16 @@
+---
+description: My Recipe プロジェクトの常時ルール。実装前に docs と agent-skills を参照する。
+globs:
+alwaysApply: true
+---
+
+# My Recipe — agent rules
+
+- プロダクトスコープの正本は `docs/product/vision.md`
+- 技術構成の正本は `docs/architecture/overview.md`
+- 開発の進め方は `docs/development/workflow.md`
+- タスク種別に応じて `agent-skills/*/SKILL.md` を読む
+- Next.js 16: unfamiliar API は `node_modules/next/dist/docs/` を先に確認。`cookies()`/`headers()` は async。middleware ではなく `proxy.ts`
+- Supabase の新テーブルは RLS + grant（anon/authenticated）をセットで書く
+- `.env*` の秘密情報をコミットしない（`.env.example` のみ可）
+- 無関係なリフォーマットやスコープ外機能を同じ変更に混ぜない
