@@ -32,8 +32,12 @@
 ## `docs/` の置き方
 
 - 仕様・設計の議論結果はコードコメントではなく `docs/` に残す
+- 機能の振る舞いは `docs/product/features/`（QA向け受け入れ契約）。テンプレは `_template.md`
+- 進め方の正本は `docs/development/workflow.md`（①〜④）
 - 1 トピック 1 ファイル。巨大な単一 Markdown にしない
 - 決定事項は `docs/decisions/` に ADR として残す
+- 技術詳細を feature doc に無理に書かせない（付録はエージェント用・任意）
+
 
 ## `.cursor/` の置き方
 

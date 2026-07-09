@@ -1,84 +1,198 @@
-# Development workflow
+# Development workflow（4段階）
 
 Cursor エージェントと人間が同じ流れで進めるための開発フローです。
 
-## 原則
+合意済みの方針:
 
-1. **小さく出す** — 1 PR = 1 意図（機能 / 修正 / ドキュメント）
-2. **ドキュメント先行または同時** — 仕様が変わるなら `docs/` も同じ PR
-3. **推測で広げない** — 未決定は実装せず、質問するか ADR / vision に「未決定」と書く
-4. **検証してから完了** — 該当スキル（特に `verify-frontend-change`）と `lint` / 必要なら `build`
-
-## 標準フロー
+| 項目 | 決定 |
+| --- | --- |
+| ①の成果物 | **A2** — GitHub Issue + `docs/product/vision.md` の状態更新 |
+| ②の厚み | **B2** — feature doc 1枚必須（QA向け・振る舞い中心） |
+| ③の依頼の切り方 | **未決定**（実装開始時に決める。依頼文は短く保つ） |
+| ④のデプロイ | **D1** — Preview までエージェント可、Production マージは人間 |
+| ④のテストレベル | **別途検討**（スコープ等から定量判定する仕組みを後で作る） |
 
 ```mermaid
-flowchart LR
-  A[Issue / 依頼] --> B[docs で前提確認]
-  B --> C[該当 .cursor/skills を使う]
-  C --> D[ブランチ作成]
-  D --> E[実装]
-  E --> F[検証ループ]
-  F --> G[Commit / Push / PR]
-  G --> H[レビュー / マージ]
+flowchart TD
+  S1[① 作るものを決める] --> S2[② feature doc にする]
+  S2 --> S3[③ エージェントに短く依頼]
+  S3 --> S4[④ 実装・レビュー・検証・Preview]
+  S4 --> S5[人間が Production マージ]
 ```
 
-### 1. 前提確認
+---
 
-- [`../product/vision.md`](../product/vision.md) — スコープ内か
-- [`../architecture/overview.md`](../architecture/overview.md) — 置き場所・制約
-- [`steering.md`](./steering.md) — rules / skills / agents の使い分け
-- [`.cursor/skills/`](../../.cursor/skills/) — 該当手順
+## 役割分担
 
-### 2. ブランチ
+| 段階 | 主担当 | エージェント |
+| --- | --- | --- |
+| ① 決める | 人間 | 壁打ちのみ（実装しない） |
+| ② ドキュメント化 | 人間が承認 / 下書きはエージェント可 | feature doc 下書き・抜け漏れ指摘 |
+| ③ 依頼 | 人間 | （まだ実装しない） |
+| ④ 実装〜Preview | エージェント中心 | 実装・自己検証・draft PR |
+| Production | **人間のみ** | 依頼されてもマージしない（原則） |
 
-```bash
-git checkout main
-git pull origin main
-git checkout -b cursor/<short-description>
+---
+
+## ① 作るものを決める（成果物: A2）
+
+### 目的
+
+今やることを1スライスに絞る。
+
+### やること
+
+1. ユーザー価値を一文で書く
+2. In / Out を切る（やらないことを先に書く）
+3. `docs/product/vision.md` の該当行を「着手中」などに更新する
+4. GitHub Issue を作る（タイトル + 上記の要約。詳細仕様は②へ）
+
+### やらないこと
+
+- この段階で実装依頼を出さない
+- 長い設計書を書かない（②へ）
+
+### 出口（これがあれば①完了）
+
+- [ ] Issue がある
+- [ ] `vision.md` の状態が更新されている
+- [ ] 「作るもの / やらないこと / 成功イメージ」を復唱できる
+
+---
+
+## ② 作るものをドキュメント化する（厚み: B2）
+
+### 目的
+
+実装者（エージェント）が推測しなくてよい **振る舞いの契約** を残す。
+
+### 必須成果物
+
+`docs/product/features/<feature-name>.md` を1枚用意する。
+
+テンプレート: [`../product/features/_template.md`](../product/features/_template.md)
+
+### 書き方の方針（QA向け）
+
+feature doc の主読者は **QA / プロダクト** です。次を中心に書く。
+
+- 誰が・何ができればよいか
+- 画面上の流れ（操作手順）
+- 受け入れ条件（検証可能な文）
+- やらないこと
+- 空のとき・失敗したときにどう見えるか
+- 手動確認の観点
+
+次は **書かなくてよい**（エージェントまたは後続の技術メモに任せる）。
+
+- テーブル定義の SQL、RLS の詳細
+- ファイルパスやコンポーネント構成
+- Server Components / ライブラリ選定の長文
+
+技術的な未決だけは「オープンクエスチョン」に Residual として残す。実装前に人間が Yes/No できれば十分。
+
+### 進め方
+
+1. `_template.md` をコピーして feature 名のファイルを作る
+2. 人間が書くか、エージェントに下書きさせて人間が Acceptance を承認する
+3. Issue から feature doc へリンクする
+
+### 出口（これがあれば②完了）
+
+- [ ] feature doc がある
+- [ ] 「受け入れ条件」がチェック可能な文になっている（「いい感じ」禁止）
+- [ ] 「やらないこと」がある
+- [ ] Issue から辿れる
+
+---
+
+## ③ エージェントに依頼する
+
+### 目的
+
+②を読ませて、短く実行依頼する。
+
+### 方針
+
+- **依頼文は短く**（詳細は feature doc に置く）
+- 実装の切り方（1依頼か分割か）は **実装開始時に決める**（論点Cは保留）
+- テンプレを長くしない。足りない情報は doc 側を直す
+
+### 短い依頼テンプレ
+
+```text
+feature doc: docs/product/features/<name>.md
+vision: docs/product/vision.md
+
+上記の受け入れ条件を満たす実装と draft PR までお願いします。
+やらないことは feature doc の「やらないこと」に従うこと。
+マージはしないでください。
 ```
 
-Cloud Agent では指定サフィックス付きブランチ名に従う。
+必要なら1行足すだけにする例:
 
-### 3. 実装
+```text
+DBが未作成なら migration も同じPRで。UI変更後は verify-frontend-change まで。
+```
 
-- Next.js 16 の公式 docs（`node_modules/next/dist/docs/`）を確認してから API を使う
-- UI は `ui-design` スキル、DB は `supabase-migration` スキルに従う
-- レシピ機能は `recipe-feature` スキルに従う
+### 出口
 
-### 4. 検証ループ
+- [ ] 依頼文が短い
+- [ ] feature doc のパスが明示されている
+- [ ] 「マージしない」が明示されている（D1）
 
-詳細は [`loops.md`](./loops.md)。最低限:
+---
 
-- [ ] 該当する verify / migration チェックリストを実行した
-- [ ] `npm run lint` が通る
-- [ ] UI 変更なら dev で画面確認（`verify-frontend-change`）
-- [ ] マイグレーション追加時は `supabase db reset`（または同等）で適用確認
-- [ ] `docs/` / `AGENTS.md` が実装と一致している
+## ④ 実装・レビュー・検証・デプロイ（デプロイ: D1）
 
-### 5. PR
+### ④-1 実装（エージェント）
 
-- タイトルは「何をしたか」が分かる一文
-- 本文に: 目的 / 変更点 / 検証方法 / 関連 docs
-- 任意: `.cursor/agents/code-reviewer` で二次レビュー
-- レビュー観点: スコープ逸脱、RLS/grant 漏れ、秘密情報の混入
+1. ブランチ作成
+2. feature doc の受け入れ条件を満たすよう実装
+3. 関連 skills を使う（`.cursor/skills/`）
+4. 自己検証のうえ **draft PR**（マージしない）
 
-## エージェント運用（Cursor）
+### ④-2 レビュー
 
-| 役割 | 参照 |
+| 観点 | 主担当 |
 | --- | --- |
-| 常時エントリ | `AGENTS.md`, `.cursor/rules/`（`alwaysApply` / `globs`） |
-| プロジェクト知識 | `docs/` |
-| 手順 | `.cursor/skills/*/SKILL.md` |
-| 隔離タスク | `.cursor/agents/*.md` |
-| 決定的自動化 | `.cursor/hooks.json`（必要になったら追加） |
+| 受け入れ条件を満たすか（画面・操作） | **人間（QA）** |
+| やらないことをやっていないか | 人間 |
+| 危険な変更（秘密情報、破壊的DBなど） | 人間 + 任意で `code-reviewer` |
+| コード詳細 | 必須ではない（QAが全部見なくてよい） |
 
-## ローカル Supabase（データ機能を触るとき）
+### ④-3 検証（テストレベルは別途）
 
-詳細は `AGENTS.md` の Cloud 手順、および README の Getting started を参照。
+現時点の扱い:
 
-要約:
+- feature doc の **受け入れ条件** を手動で確認するのが必須ゲート
+- lint / build / 自動テストを「どのPRでどこまで必須か」は  
+  → [`test-level-policy.md`](./test-level-policy.md) で **後から定量ルール化**する（未整備）
 
-1. Docker daemon 起動（Cloud VM では手動）
-2. `supabase start`
-3. `.env.local` に `API_URL` / `ANON_KEY` を設定
-4. スキーマ変更後は `supabase db reset` で再適用
+エージェントの自己検証（`verify-frontend-change` 等）は続けてよいが、  
+**人間の受け入れ確認の代替にはしない**。
+
+### ④-4 デプロイ（D1）
+
+| 環境 | 誰がやるか |
+| --- | --- |
+| Vercel Preview（PR） | エージェント / CI で作成してよい |
+| Production（main マージ後） | **人間がレビュー後にマージ** |
+| 本番DB migration・env | 人間（または人間が明示依頼したときだけ） |
+
+### 出口（④完了 → 次機能へ）
+
+- [ ] 受け入れ条件を人間が確認した
+- [ ] draft → レビュー → **人間がマージ**
+- [ ] Preview で問題ないことを確認してから Production
+- [ ] `vision.md` の状態を更新（完了 / 一部残など）
+
+---
+
+## 関連ドキュメント
+
+- ステアリング（rules / skills / agents）: [`steering.md`](./steering.md)
+- 検証ループの考え方: [`loops.md`](./loops.md)
+- 依頼・役割の補足: [`agent-collaboration.md`](./agent-collaboration.md)
+- テストレベル方針（TBD）: [`test-level-policy.md`](./test-level-policy.md)
+- feature テンプレ: [`../product/features/_template.md`](../product/features/_template.md)

@@ -12,9 +12,11 @@ This repo is developed with **Cursor** (IDE + Cloud Agents). Agent instructions 
 | --- | --- |
 | [`docs/product/vision.md`](docs/product/vision.md) | Product scope and MVP |
 | [`docs/architecture/overview.md`](docs/architecture/overview.md) | Stack and data boundaries |
-| [`docs/development/workflow.md`](docs/development/workflow.md) | Branch / PR / verification flow |
+| [`docs/development/workflow.md`](docs/development/workflow.md) | 4-stage flow (decide → doc → request → implement) |
+| [`docs/product/features/`](docs/product/features/) | Feature contracts (QA-friendly acceptance) |
 | [`docs/development/steering.md`](docs/development/steering.md) | Where to put rules vs skills vs agents |
 | [`docs/development/loops.md`](docs/development/loops.md) | Verification loops and stop criteria |
+| [`docs/development/test-level-policy.md`](docs/development/test-level-policy.md) | Test level rules (TBD) |
 | [`.cursor/skills/`](.cursor/skills/) | On-demand procedural skills |
 | [`.cursor/rules/`](.cursor/rules/) | Always-on and path-scoped rules |
 | [`.cursor/agents/`](.cursor/agents/) | Isolated subagents (e.g. code review) |

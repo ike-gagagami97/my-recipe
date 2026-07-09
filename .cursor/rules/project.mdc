@@ -5,11 +5,14 @@ alwaysApply: true
 
 # My Recipe — always-on
 
+- Workflow (4 stages): `docs/development/workflow.md`
 - Product scope: `docs/product/vision.md`
+- Feature acceptance contracts: `docs/product/features/`
 - Architecture: `docs/architecture/overview.md`
-- Workflow: `docs/development/workflow.md`
-- Steering map (what goes where): `docs/development/steering.md`
+- Steering map: `docs/development/steering.md`
 - Task procedures: `.cursor/skills/*/SKILL.md`
+- Do not merge to production without human approval (deploy policy D1)
+- Keep agent prompts short; put behavior details in feature docs
 - Next.js 16: read `node_modules/next/dist/docs/` before unfamiliar APIs. `cookies()`/`headers()` are async. Use `proxy.ts`, not `middleware.ts`.
 - New Supabase tables need RLS **and** `grant` for `anon`/`authenticated`.
 - Do not commit secrets (`.env*` except `.env.example`).
