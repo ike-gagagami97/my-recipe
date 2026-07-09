@@ -4,6 +4,42 @@
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
 <!-- END:nextjs-agent-rules -->
 
+## Cursor project map
+
+This repo is developed with **Cursor** (IDE + Cloud Agents). Agent instructions live under `.cursor/`.
+
+| Path | Purpose |
+| --- | --- |
+| [`docs/product/vision.md`](docs/product/vision.md) | Product scope and MVP |
+| [`docs/architecture/overview.md`](docs/architecture/overview.md) | Stack and data boundaries |
+| [`docs/development/workflow.md`](docs/development/workflow.md) | 4-stage flow (decide → doc → request → implement) |
+| [`docs/product/features/`](docs/product/features/) | Feature contracts (QA-friendly acceptance) |
+| [`docs/development/steering.md`](docs/development/steering.md) | Where to put rules vs skills vs agents |
+| [`docs/development/loops.md`](docs/development/loops.md) | Verification loops and stop criteria |
+| [`docs/development/test-level-policy.md`](docs/development/test-level-policy.md) | Test level rules (TBD) |
+| [`.cursor/skills/`](.cursor/skills/) | On-demand procedural skills |
+| [`.cursor/rules/`](.cursor/rules/) | Always-on and path-scoped rules |
+| [`.cursor/agents/`](.cursor/agents/) | Isolated subagents (e.g. code review) |
+
+`CLAUDE.md` only points here for compatibility; **prefer this file and `.cursor/`**.
+
+## Commands
+
+```bash
+npm install
+npm run dev      # http://localhost:3000
+npm run lint
+npm run build
+```
+
+## Conventions (short)
+
+- Keep `AGENTS.md` lean; put long procedures in `.cursor/skills/`.
+- Path-specific constraints → `.cursor/rules/*.mdc` with `globs`.
+- After UI changes, use skill `verify-frontend-change` before declaring done.
+- New Supabase tables: RLS **and** `grant` for `anon`/`authenticated`.
+- Do not commit secrets (`.env*` except `.env.example`).
+
 ## Cursor Cloud specific instructions
 
 This is a Next.js 16 (App Router, React 19, Tailwind 4) recipe app that uses Supabase
