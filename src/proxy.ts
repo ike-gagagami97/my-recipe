@@ -4,6 +4,7 @@ import type { NextRequest } from "next/server";
 
 const PROTECTED_PREFIX = "/recipes";
 const LOGIN_PATH = "/login";
+const ROOT_PATH = "/";
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -12,8 +13,13 @@ export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // If Supabase is not configured (e.g. local dev without .env.local),
-  // skip auth checks and pass through all requests.
+  // redirect root → /login and pass through everything else.
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    if (pathname === ROOT_PATH) {
+      const loginUrl = request.nextUrl.clone();
+      loginUrl.pathname = LOGIN_PATH;
+      return NextResponse.redirect(loginUrl);
+    }
     return NextResponse.next({ request });
   }
 
@@ -50,15 +56,20 @@ export async function proxy(request: NextRequest) {
 
   const isAuthenticated = !!user;
 
-  // Unauthenticated user trying to reach a protected route → /login
-  if (!isAuthenticated && pathname.startsWith(PROTECTED_PREFIX)) {
+  const isRootOrProtected =
+    pathname === ROOT_PATH || pathname.startsWith(PROTECTED_PREFIX);
+  const isRootOrLogin =
+    pathname === ROOT_PATH || pathname === LOGIN_PATH;
+
+  // Unauthenticated: root or protected route → /login
+  if (!isAuthenticated && isRootOrProtected) {
     const loginUrl = request.nextUrl.clone();
     loginUrl.pathname = LOGIN_PATH;
     return NextResponse.redirect(loginUrl);
   }
 
-  // Authenticated user visiting /login → /recipes
-  if (isAuthenticated && pathname === LOGIN_PATH) {
+  // Authenticated: root or /login → /recipes
+  if (isAuthenticated && isRootOrLogin) {
     const recipesUrl = request.nextUrl.clone();
     recipesUrl.pathname = PROTECTED_PREFIX;
     return NextResponse.redirect(recipesUrl);
