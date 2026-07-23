@@ -6,7 +6,7 @@
 | 項目 | 内容 |
 | --- | --- |
 | 状態 | 下書き（テンプレ検証） |
-| 関連 Issue | （未作成） |
+| 関連 Issue | [#4](https://github.com/ike-gagagami97/my-recipe/issues/4) |
 | vision 上の位置づけ | P0 レシピ一覧 |
 | 作成日 | 2026-07-09 |
 | 承認者 | （未承認） |

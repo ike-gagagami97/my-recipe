@@ -23,14 +23,14 @@
 
 未実装。①で着手を決めたら状態を更新し、②で `docs/product/features/` に feature doc を作る。
 
-| 優先度 | 機能 | 状態 | feature doc |
-| --- | --- | --- | --- |
-| P0 | レシピ一覧 | 下書き（テンプレ検証） | [`features/recipe-list.md`](./features/recipe-list.md) |
-| P0 | レシピ詳細 | 未着手 | |
-| P0 | レシピ追加 | 未着手 | |
-| P1 | 編集・削除 | 未着手 | |
-| P2 | 認証・ユーザー別データ | 未着手 | |
-| P2 | 画像アップロード | 未着手 | |
+| 優先度 | 機能 | 状態 | feature doc | Issue |
+| --- | --- | --- | --- | --- |
+| P0 | レシピ一覧 | 下書き（テンプレ検証） | [`features/recipe-list.md`](./features/recipe-list.md) | [#4](https://github.com/ike-gagagami97/my-recipe/issues/4) |
+| P0 | レシピ詳細 | 未着手 | | [#5](https://github.com/ike-gagagami97/my-recipe/issues/5) |
+| P0 | レシピ追加 | 未着手 | | [#6](https://github.com/ike-gagagami97/my-recipe/issues/6) |
+| P1 | 編集・削除 | 未着手 | | [#7](https://github.com/ike-gagagami97/my-recipe/issues/7) |
+| P2 | 認証・ユーザー別データ | 未着手 | | |
+| P2 | 画像アップロード | 未着手 | | |
 
 ## 非スコープ（当面やらない）
 
