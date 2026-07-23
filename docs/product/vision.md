@@ -17,7 +17,8 @@
 ## 想定ユーザー
 
 - 自分用にレシピを溜めたい個人（ユーザーごとに自分のレシピのみ見える）
-- **認証あり**：サインアップ・ログインしないとレシピの閲覧・操作は不可
+- **認証あり**：ログインしないとレシピの閲覧・操作は不可
+- **ユーザー作成は Supabase Dashboard から手動**（セルフサインアップ画面は作らない）
 - 将来的な他ユーザーとの共有は非スコープ
 
 ## 初期スコープ（MVP 候補）
@@ -30,7 +31,7 @@
 
 | 実装順 | 優先度 | 機能 | 状態 | feature doc | Issue |
 | --- | --- | --- | --- | --- | --- |
-| 1 | P0 | 認証（サインアップ・ログイン） | 未着手 | | [#9](https://github.com/ike-gagagami97/my-recipe/issues/9) |
+| 1 | P0 | 認証（ログイン・ログアウト） | 未着手 | | [#10](https://github.com/ike-gagagami97/my-recipe/issues/10) |
 | 2 | P0 | レシピ一覧（検索・絞り込み含む） | 下書き（要改訂） | [`features/recipe-list.md`](./features/recipe-list.md) | [#4](https://github.com/ike-gagagami97/my-recipe/issues/4) |
 | 3 | P0 | レシピ詳細 | 未着手 | | [#5](https://github.com/ike-gagagami97/my-recipe/issues/5) |
 | 4 | P0 | レシピ追加 | 未着手 | | [#6](https://github.com/ike-gagagami97/my-recipe/issues/6) |
@@ -47,7 +48,7 @@
 
 ## 成功の定義（MVP）
 
-- サインアップ・ログインしないとレシピを閲覧・操作できない
+- ログインしないとレシピを閲覧・操作できない（サインアップ画面はなし、ユーザーはSupabase Dashboardで手動作成）
 - ログイン後、自分のレシピだけが一覧に表示される
 - 検索・絞り込みでレシピを絞り込める
 - ログイン → 一覧 → 詳細 → 追加の一連の流れがブラウザで完結する
