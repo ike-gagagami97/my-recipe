@@ -153,9 +153,10 @@ DBが未作成なら migration も同じPRで。UI変更後は verify-frontend-c
 ### ④-1 実装（エージェント）
 
 1. ブランチ作成
-2. feature doc の受け入れ条件を満たすよう実装
-3. 関連 skills を使う（`.cursor/skills/`）
-4. 自己検証のうえ **draft PR**（マージしない）
+2. [`test-level-policy.md`](./test-level-policy.md) のルール表で **変更タイプ・必須レベル・L3条件** を確認する
+3. feature doc の受け入れ条件を満たすよう実装
+4. 関連 skills を使う（`.cursor/skills/`）
+5. 自己検証のうえ **draft PR**（マージしない）
 
 ### ④-2 レビュー
 
