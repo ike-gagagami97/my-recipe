@@ -157,6 +157,7 @@ DBが未作成なら migration も同じPRで。UI変更後は verify-frontend-c
 3. feature doc の受け入れ条件を満たすよう実装
 4. 関連 skills を使う（`.cursor/skills/`）
 5. 自己検証のうえ **draft PR**（マージしない）
+6. 認証・RLS・DB 破壊的変更を含む場合は **`code-reviewer` サブエージェントを起動**し、findings を確認・修正してから人間レビューに渡す
 
 ### ④-2 レビュー
 
@@ -164,7 +165,7 @@ DBが未作成なら migration も同じPRで。UI変更後は verify-frontend-c
 | --- | --- |
 | 受け入れ条件を満たすか（画面・操作） | **人間（QA）** |
 | やらないことをやっていないか | 人間 |
-| 危険な変更（秘密情報、破壊的DBなど） | 人間 + 任意で `code-reviewer` |
+| 危険な変更（認証・RLS・secrets・DB破壊的変更） | エージェントが `code-reviewer` サブエージェントで事前確認済み |
 | コード詳細 | 必須ではない（QAが全部見なくてよい） |
 
 ### ④-3 検証（テストレベル）
