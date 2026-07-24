@@ -40,11 +40,16 @@ function formatCookingTime(minutes: number | null): string {
 }
 
 function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("ja-JP", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  });
+  const date = new Date(iso);
+  const currentYear = new Date().getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const dd = String(date.getDate()).padStart(2, "0");
+  const hh = String(date.getHours()).padStart(2, "0");
+  const min = String(date.getMinutes()).padStart(2, "0");
+  const time = `${mm}/${dd} ${hh}:${min}`;
+  return date.getFullYear() === currentYear
+    ? time
+    : `${date.getFullYear()}/${time}`;
 }
 
 function makeSortHref(
