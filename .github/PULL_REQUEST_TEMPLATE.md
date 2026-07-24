@@ -4,7 +4,7 @@
 
 ## Links
 
-- Issue:
+- Closes #<!-- Issue番号 （docs/文言のみなら N/A） -->
 - Feature doc: <!-- 例: docs/product/features/recipe-list.md （docs/文言のみなら N/A） -->
 - Vision: docs/product/vision.md
 
