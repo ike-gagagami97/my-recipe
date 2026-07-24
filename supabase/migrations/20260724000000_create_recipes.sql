@@ -12,7 +12,7 @@ create table public.recipes (
 );
 
 -- Auto-update updated_at on row changes
-create or replace function public.set_updated_at()
+create function public.set_recipes_updated_at()
 returns trigger language plpgsql as $$
 begin
   new.updated_at = now();
@@ -22,7 +22,7 @@ $$;
 
 create trigger recipes_set_updated_at
   before update on public.recipes
-  for each row execute function public.set_updated_at();
+  for each row execute function public.set_recipes_updated_at();
 
 alter table public.recipes enable row level security;
 
@@ -37,3 +37,4 @@ create policy "recipes_insert_own"
   with check (auth.uid() = user_id);
 
 grant select, insert on table public.recipes to authenticated;
+-- UPDATE/DELETE: grant and policy required in the edit/delete feature PR

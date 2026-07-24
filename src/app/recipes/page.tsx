@@ -5,6 +5,8 @@ import { Suspense } from "react";
 import LogoutButton from "./logout-button";
 import RecipeControls from "./recipe-controls";
 
+export const dynamic = "force-dynamic";
+
 const PAGE_SIZE = 10;
 
 type SortColumn = "updated_at" | "cooking_time_minutes";
@@ -90,7 +92,9 @@ export default async function RecipesPage({
     !process.env.NEXT_PUBLIC_SUPABASE_URL ||
     !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
   ) {
-    redirect("/login");
+    throw new Error(
+      "NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY must be set",
+    );
   }
 
   const supabase = await createClient();
@@ -184,7 +188,7 @@ export default async function RecipesPage({
       <section>
         <h2 className="text-xl font-semibold mb-6">レシピ一覧</h2>
 
-        <Suspense>
+        <Suspense fallback={<div className="mb-6 h-10" />}>
           <RecipeControls />
         </Suspense>
 
