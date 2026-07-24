@@ -1,12 +1,13 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 export default function RecipeControls() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const keywordRef = useRef<HTMLInputElement>(null);
+  const [isPending, startTransition] = useTransition();
 
   const push = (overrides: Record<string, string | undefined>) => {
     const next = new URLSearchParams(searchParams.toString());
@@ -18,7 +19,9 @@ export default function RecipeControls() {
       }
     }
     next.delete("page");
-    router.push(`/recipes?${next.toString()}`);
+    startTransition(() => {
+      router.push(`/recipes?${next.toString()}`);
+    });
   };
 
   const handleSearch = () => {
@@ -26,20 +29,24 @@ export default function RecipeControls() {
   };
 
   return (
-    <div className="mb-6 flex flex-wrap items-center gap-3">
+    <div
+      className={`mb-6 flex flex-wrap items-center gap-3 transition-opacity ${isPending ? "opacity-60" : "opacity-100"}`}
+    >
       <div className="flex gap-2">
         <input
           ref={keywordRef}
           defaultValue={searchParams.get("keyword") ?? ""}
           placeholder="タイトルで検索"
           onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-          className="rounded-lg border border-black/15 dark:border-white/20 bg-transparent px-3 py-2 text-sm placeholder:opacity-40 focus:outline-none focus:ring-2 focus:ring-black/30 dark:focus:ring-white/30 w-52"
+          disabled={isPending}
+          className="rounded-lg border border-black/15 dark:border-white/20 bg-transparent px-3 py-2 text-sm placeholder:opacity-40 focus:outline-none focus:ring-2 focus:ring-black/30 dark:focus:ring-white/30 w-52 disabled:opacity-50"
         />
         <button
           onClick={handleSearch}
-          className="rounded-lg border border-black/15 dark:border-white/20 px-4 py-2 text-sm font-medium hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+          disabled={isPending}
+          className="rounded-lg border border-black/15 dark:border-white/20 px-4 py-2 text-sm font-medium hover:bg-black/5 dark:hover:bg-white/5 transition-colors disabled:opacity-50"
         >
-          検索
+          {isPending ? "読込中…" : "検索"}
         </button>
       </div>
 
@@ -48,7 +55,8 @@ export default function RecipeControls() {
         onChange={(e) =>
           push({ cooking_time: e.target.value || undefined })
         }
-        className="rounded-lg border border-black/15 dark:border-white/20 bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black/30 dark:focus:ring-white/30"
+        disabled={isPending}
+        className="rounded-lg border border-black/15 dark:border-white/20 bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black/30 dark:focus:ring-white/30 disabled:opacity-50"
       >
         <option value="">所要時間（すべて）</option>
         <option value="under10">10分未満</option>
