@@ -1,0 +1,17 @@
+{
+  "name": "my-recipe",
+  "install": "bash .cursor/cloud/install.sh",
+  "start": "bash .cursor/cloud/start.sh",
+  "terminals": [
+    {
+      "name": "web",
+      "command": "npm run dev",
+      "description": "Next.js dev server on http://localhost:3000. Reads Supabase config from .env.local (written by start.sh)."
+    }
+  ],
+  "ports": [
+    { "name": "web", "port": 3000 },
+    { "name": "supabase-api", "port": 54321 },
+    { "name": "supabase-studio", "port": 54323 }
+  ]
+}
