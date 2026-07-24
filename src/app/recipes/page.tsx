@@ -1,8 +1,91 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import Link from "next/link";
+import { Suspense } from "react";
 import LogoutButton from "./logout-button";
+import RecipeControls from "./recipe-controls";
 
-export default async function RecipesPage() {
+const PAGE_SIZE = 10;
+
+type SortColumn = "updated_at" | "cooking_time_minutes";
+type SortDir = "asc" | "desc";
+type CookingTimeFilter = "under10" | "10to20" | "20to30" | "over30" | "";
+
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+
+function parseSortColumn(v: unknown): SortColumn {
+  return v === "cooking_time_minutes" ? "cooking_time_minutes" : "updated_at";
+}
+
+function parseSortDir(v: unknown): SortDir {
+  return v === "asc" ? "asc" : "desc";
+}
+
+function parseCookingTime(v: unknown): CookingTimeFilter {
+  if (
+    v === "under10" ||
+    v === "10to20" ||
+    v === "20to30" ||
+    v === "over30"
+  ) {
+    return v;
+  }
+  return "";
+}
+
+function formatCookingTime(minutes: number | null): string {
+  return minutes === null ? "−" : `${minutes}分`;
+}
+
+function formatDate(iso: string): string {
+  return new Date(iso).toLocaleDateString("ja-JP", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+}
+
+function makeSortHref(
+  col: SortColumn,
+  currentSort: SortColumn,
+  currentDir: SortDir,
+  base: URLSearchParams,
+): string {
+  const next = new URLSearchParams(base);
+  const newDir: SortDir =
+    currentSort === col && currentDir === "desc" ? "asc" : "desc";
+  next.set("sort", col);
+  next.set("sort_dir", newDir);
+  next.delete("page");
+  return `/recipes?${next.toString()}`;
+}
+
+function makePageHref(p: number, base: URLSearchParams): string {
+  const next = new URLSearchParams(base);
+  next.set("page", String(p));
+  return `/recipes?${next.toString()}`;
+}
+
+function SortIndicator({
+  col,
+  currentSort,
+  currentDir,
+}: {
+  col: SortColumn;
+  currentSort: SortColumn;
+  currentDir: SortDir;
+}) {
+  if (currentSort !== col) return <span className="opacity-30 ml-1">↕</span>;
+  return (
+    <span className="ml-1">{currentDir === "asc" ? "↑" : "↓"}</span>
+  );
+}
+
+export default async function RecipesPage({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) {
   if (
     !process.env.NEXT_PUBLIC_SUPABASE_URL ||
     !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -14,13 +97,82 @@ export default async function RecipesPage() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
 
-  if (!user) {
-    redirect("/login");
+  const sp = await searchParams;
+  const keyword =
+    typeof sp.keyword === "string" ? sp.keyword.trim() : "";
+  const cookingTime = parseCookingTime(
+    typeof sp.cooking_time === "string" ? sp.cooking_time : "",
+  );
+  const sort = parseSortColumn(
+    typeof sp.sort === "string" ? sp.sort : "",
+  );
+  const sortDir = parseSortDir(
+    typeof sp.sort_dir === "string" ? sp.sort_dir : "",
+  );
+  const page = Math.max(
+    1,
+    parseInt(typeof sp.page === "string" ? sp.page : "1", 10) || 1,
+  );
+
+  let query = supabase
+    .from("recipes")
+    .select("id, title, cooking_time_minutes, updated_at", {
+      count: "exact",
+    });
+
+  if (keyword) {
+    query = query.ilike("title", `%${keyword}%`);
   }
 
+  if (cookingTime) {
+    switch (cookingTime) {
+      case "under10":
+        query = query
+          .not("cooking_time_minutes", "is", null)
+          .lt("cooking_time_minutes", 10);
+        break;
+      case "10to20":
+        query = query
+          .gte("cooking_time_minutes", 10)
+          .lt("cooking_time_minutes", 20);
+        break;
+      case "20to30":
+        query = query
+          .gte("cooking_time_minutes", 20)
+          .lt("cooking_time_minutes", 30);
+        break;
+      case "over30":
+        query = query.gte("cooking_time_minutes", 30);
+        break;
+    }
+  }
+
+  query = query.order(sort, {
+    ascending: sortDir === "asc",
+    nullsFirst: false,
+  });
+
+  const from = (page - 1) * PAGE_SIZE;
+  query = query.range(from, from + PAGE_SIZE - 1);
+
+  const { data: recipes, count, error } = await query;
+
+  const totalPages = Math.ceil((count ?? 0) / PAGE_SIZE);
+
+  const baseParams = new URLSearchParams({
+    ...(keyword ? { keyword } : {}),
+    ...(cookingTime ? { cooking_time: cookingTime } : {}),
+    ...(sort !== "updated_at" ? { sort } : {}),
+    ...(sortDir !== "desc" ? { sort_dir: sortDir } : {}),
+  });
+
+  const isEmpty = !error && (!recipes || recipes.length === 0);
+  const hasFilter = !!(keyword || cookingTime);
+
   return (
-    <main className="mx-auto w-full max-w-2xl flex-1 px-6 py-16">
+    <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-16">
       <header className="mb-10 flex items-start justify-between gap-4">
         <div>
           <h1 className="text-4xl font-bold tracking-tight">My Recipe</h1>
@@ -29,11 +181,117 @@ export default async function RecipesPage() {
         <LogoutButton />
       </header>
 
-      <section className="rounded-xl border border-black/10 dark:border-white/15 p-6">
-        <h2 className="text-lg font-semibold">レシピ一覧</h2>
-        <p className="mt-2 text-sm opacity-75">
-          レシピ機能は準備中です。次のフェーズで追加されます。
-        </p>
+      <section>
+        <h2 className="text-xl font-semibold mb-6">レシピ一覧</h2>
+
+        <Suspense>
+          <RecipeControls />
+        </Suspense>
+
+        {error ? (
+          <p
+            role="alert"
+            className="rounded-xl border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 px-4 py-3 text-sm text-red-700 dark:text-red-300"
+          >
+            レシピの取得に失敗しました。ページを再読み込みしてください。
+          </p>
+        ) : isEmpty ? (
+          <p className="rounded-xl border border-black/10 dark:border-white/15 px-6 py-8 text-center text-sm opacity-60">
+            {hasFilter
+              ? "条件に一致するレシピがありません。"
+              : "まだレシピがありません。"}
+          </p>
+        ) : (
+          <>
+            <div className="overflow-x-auto rounded-xl border border-black/10 dark:border-white/15">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-black/10 dark:border-white/15 bg-black/2 dark:bg-white/2">
+                    <th className="px-4 py-3 text-left font-medium">
+                      タイトル
+                    </th>
+                    <th className="px-4 py-3 text-left font-medium whitespace-nowrap">
+                      <Link
+                        href={makeSortHref(
+                          "cooking_time_minutes",
+                          sort,
+                          sortDir,
+                          baseParams,
+                        )}
+                        className="hover:opacity-70 transition-opacity"
+                      >
+                        所要時間
+                        <SortIndicator
+                          col="cooking_time_minutes"
+                          currentSort={sort}
+                          currentDir={sortDir}
+                        />
+                      </Link>
+                    </th>
+                    <th className="px-4 py-3 text-left font-medium whitespace-nowrap">
+                      <Link
+                        href={makeSortHref(
+                          "updated_at",
+                          sort,
+                          sortDir,
+                          baseParams,
+                        )}
+                        className="hover:opacity-70 transition-opacity"
+                      >
+                        更新日時
+                        <SortIndicator
+                          col="updated_at"
+                          currentSort={sort}
+                          currentDir={sortDir}
+                        />
+                      </Link>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {recipes!.map((recipe) => (
+                    <tr
+                      key={recipe.id}
+                      className="border-b border-black/5 dark:border-white/8 last:border-0 hover:bg-black/2 dark:hover:bg-white/2 transition-colors"
+                    >
+                      <td className="px-4 py-3">{recipe.title}</td>
+                      <td className="px-4 py-3 tabular-nums">
+                        {formatCookingTime(recipe.cooking_time_minutes)}
+                      </td>
+                      <td className="px-4 py-3 tabular-nums whitespace-nowrap">
+                        {formatDate(recipe.updated_at)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {totalPages > 1 && (
+              <nav
+                aria-label="ページネーション"
+                className="mt-6 flex justify-center gap-1"
+              >
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (p) => (
+                    <Link
+                      key={p}
+                      href={makePageHref(p, baseParams)}
+                      aria-current={p === page ? "page" : undefined}
+                      className={`min-w-8 rounded-lg px-3 py-1.5 text-center text-sm transition-colors ${
+                        p === page
+                          ? "bg-black dark:bg-white text-white dark:text-black font-medium"
+                          : "hover:bg-black/8 dark:hover:bg-white/8 opacity-60 hover:opacity-100"
+                      }`}
+                    >
+                      {p}
+                    </Link>
+                  ),
+                )}
+              </nav>
+            )}
+          </>
+        )}
       </section>
     </main>
   );
