@@ -1,9 +1,18 @@
 -- L4（人間 Preview 受け入れ）用のテストデータ — レシピ詳細 / issue #5
 --
 -- 使い方
---   1. 下の :email を、Preview でログインする自分のユーザーのメールアドレスに書き換える
+--   1. `CHANGE_ME@example.com`（2箇所）を、Preview でログインする自分のメールアドレスに書き換える
+--      RLS も確認するなら `OTHER_USER@example.com`（1箇所）も別ユーザーのものに書き換える
 --   2. Supabase Studio の SQL Editor に全文を貼って実行する
 --   3. 確認が終わったら supabase/qa/l4_recipe_detail_cleanup.sql を実行して片付ける
+--
+-- 書き換えるのはメールアドレスだけ。UUID は触らなくてよい
+--   - `user_id`（レシピの持ち主）は書かない。`from auth.users u ... where u.email = '...'` で
+--     メールアドレスから自動的に引いてくる。該当ユーザーがいなければ0件挿入で終わる
+--   - `d0000000-...` はレシピ自身の id。URL を固定して直接開けるように決め打ちしてあるだけで、
+--     ユーザーの UUID とは無関係
+--   - メールではなくユーザーの UUID で指定したい場合だけ、`where u.email = '...'` を
+--     `where u.id = '<ユーザーのUUID>'::uuid` に置き換える（Authentication > Users で確認できる）
 --
 -- 注意
 --   - このファイルは手動実行専用。config.toml の [db.seed] は ./seed.sql のみを読むので
