@@ -12,8 +12,9 @@
 
 - Next.js 16 + Supabase + Vercel の土台
 - 認証（ログイン・ログアウト）実装済み
-- レシピ CRUD 未実装
-- DB スキーマ未定義（`supabase/migrations/` は空、recipes テーブルは次フェーズ）
+- レシピ一覧（検索・絞り込み・ソート・ページネーション）実装済み
+- `recipes` テーブル作成済み（RLS + `authenticated` への GRANT）。詳細・追加・編集で必要な列は各 feature で追加する
+- レシピの詳細・追加・編集・削除は未実装
 
 ## 想定ユーザー
 
@@ -34,7 +35,7 @@
 | --- | --- | --- | --- | --- | --- |
 | 1 | P0 | 認証（ログイン・ログアウト） | ✅ 完了 | [`features/auth.md`](./features/auth.md) | [#10](https://github.com/ike-gagagami97/my-recipe/issues/10) |
 | 2 | P0 | レシピ一覧（検索・絞り込み含む） | ✅ 完了 | [`features/recipe-list.md`](./features/recipe-list.md) | [#4](https://github.com/ike-gagagami97/my-recipe/issues/4) |
-| 3 | P0 | レシピ詳細 | 未着手 | | [#5](https://github.com/ike-gagagami97/my-recipe/issues/5) |
+| 3 | P0 | レシピ詳細 | 🚧 着手中（②feature doc 承認待ち） | [`features/recipe-detail.md`](./features/recipe-detail.md) | [#5](https://github.com/ike-gagagami97/my-recipe/issues/5) |
 | 4 | P0 | レシピ追加 | 未着手 | | [#6](https://github.com/ike-gagagami97/my-recipe/issues/6) |
 | 5 | P1 | 編集・削除 | 未着手 | | [#7](https://github.com/ike-gagagami97/my-recipe/issues/7) |
 
