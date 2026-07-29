@@ -262,7 +262,7 @@ export default async function RecipesPage({
                       <td className="px-4 py-3">
                         <Link
                           href={makeDetailHref(recipe.id, baseParams, page)}
-                          className="underline-offset-2 hover:underline"
+                          className="font-medium text-blue-700 dark:text-blue-400 underline decoration-blue-700/40 dark:decoration-blue-400/40 underline-offset-2 transition-colors hover:decoration-current"
                         >
                           {recipe.title}
                         </Link>

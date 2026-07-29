@@ -2,17 +2,38 @@ export function formatCookingTime(minutes: number | null): string {
   return minutes === null ? "−" : `${minutes}分`;
 }
 
+// Timestamps are rendered in JST regardless of where the server runs
+// (Vercel and the local containers are both UTC).
+const JST_FORMATTER = new Intl.DateTimeFormat("en-CA", {
+  timeZone: "Asia/Tokyo",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
+  hourCycle: "h23",
+});
+
+type DateParts = { year: string; month: string; day: string; time: string };
+
+function toJstParts(date: Date): DateParts {
+  const parts = JST_FORMATTER.formatToParts(date);
+  const get = (type: Intl.DateTimeFormatPartTypes) =>
+    parts.find((part) => part.type === type)?.value ?? "";
+  return {
+    year: get("year"),
+    month: get("month"),
+    day: get("day"),
+    time: `${get("hour")}:${get("minute")}`,
+  };
+}
+
 export function formatDate(iso: string): string {
-  const date = new Date(iso);
-  const currentYear = new Date().getFullYear();
-  const mm = String(date.getMonth() + 1).padStart(2, "0");
-  const dd = String(date.getDate()).padStart(2, "0");
-  const hh = String(date.getHours()).padStart(2, "0");
-  const min = String(date.getMinutes()).padStart(2, "0");
-  const time = `${mm}/${dd} ${hh}:${min}`;
-  return date.getFullYear() === currentYear
-    ? time
-    : `${date.getFullYear()}/${time}`;
+  const { year, month, day, time } = toJstParts(new Date(iso));
+  const currentYear = toJstParts(new Date()).year;
+  return year === currentYear
+    ? `${month}/${day} ${time}`
+    : `${year}/${month}/${day} ${time}`;
 }
 
 /** Newline separated text -> trimmed, non-empty lines. */
