@@ -22,6 +22,20 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
   return <h2 className="mb-3 text-lg font-semibold">{children}</h2>;
 }
 
+function DetailHeader({ backHref }: { backHref: string }) {
+  return (
+    <header className="mb-10 flex items-start justify-between gap-4">
+      <Link
+        href={backHref}
+        className="text-sm opacity-60 transition-opacity hover:opacity-100"
+      >
+        ← 一覧に戻る
+      </Link>
+      <LogoutButton />
+    </header>
+  );
+}
+
 function EmptyNote({ children }: { children: React.ReactNode }) {
   return <p className="text-sm opacity-50">{children}</p>;
 }
@@ -54,26 +68,23 @@ export default async function RecipeDetailPage({
   // A malformed id would make Postgres raise instead of returning zero rows.
   if (!UUID_PATTERN.test(id)) notFound();
 
+  // RLS already scopes this to the owner; the filter is defense in depth.
   const { data: recipe, error } = await supabase
     .from("recipes")
     .select(
       "id, title, cooking_time_minutes, ingredients, steps, notes, updated_at",
     )
     .eq("id", id)
+    .eq("user_id", user.id)
     .maybeSingle();
 
   if (error) {
     return (
       <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-16">
-        <Link
-          href={backHref}
-          className="text-sm opacity-60 transition-opacity hover:opacity-100"
-        >
-          ← 一覧に戻る
-        </Link>
+        <DetailHeader backHref={backHref} />
         <p
           role="alert"
-          className="mt-6 rounded-xl border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 px-4 py-3 text-sm text-red-700 dark:text-red-300"
+          className="rounded-xl border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 px-4 py-3 text-sm text-red-700 dark:text-red-300"
         >
           レシピの取得に失敗しました。ページを再読み込みしてください。
         </p>
@@ -81,7 +92,7 @@ export default async function RecipeDetailPage({
     );
   }
 
-  // RLS keeps other users' rows out of the result, so they land here too.
+  // Another user's recipe returns no row, so it lands on the same screen.
   if (!recipe) notFound();
 
   const ingredients = splitLines(recipe.ingredients);
@@ -90,15 +101,7 @@ export default async function RecipeDetailPage({
 
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-16">
-      <header className="mb-10 flex items-start justify-between gap-4">
-        <Link
-          href={backHref}
-          className="text-sm opacity-60 transition-opacity hover:opacity-100"
-        >
-          ← 一覧に戻る
-        </Link>
-        <LogoutButton />
-      </header>
+      <DetailHeader backHref={backHref} />
 
       <article>
         <h1 className="text-3xl font-bold tracking-tight break-words">

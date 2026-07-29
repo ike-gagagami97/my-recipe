@@ -1,27 +1,3 @@
-export type SortColumn = "updated_at" | "cooking_time_minutes";
-export type SortDir = "asc" | "desc";
-export type CookingTimeFilter =
-  | "under10"
-  | "10to20"
-  | "20to30"
-  | "over30"
-  | "";
-
-export function parseSortColumn(v: unknown): SortColumn {
-  return v === "cooking_time_minutes" ? "cooking_time_minutes" : "updated_at";
-}
-
-export function parseSortDir(v: unknown): SortDir {
-  return v === "asc" ? "asc" : "desc";
-}
-
-export function parseCookingTime(v: unknown): CookingTimeFilter {
-  if (v === "under10" || v === "10to20" || v === "20to30" || v === "over30") {
-    return v;
-  }
-  return "";
-}
-
 export function formatCookingTime(minutes: number | null): string {
   return minutes === null ? "−" : `${minutes}分`;
 }

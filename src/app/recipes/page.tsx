@@ -4,21 +4,37 @@ import Link from "next/link";
 import { Suspense } from "react";
 import LogoutButton from "./logout-button";
 import RecipeControls from "./recipe-controls";
-import {
-  formatCookingTime,
-  formatDate,
-  parseCookingTime,
-  parseSortColumn,
-  parseSortDir,
-  type SortColumn,
-  type SortDir,
-} from "@/lib/recipes";
+import { formatCookingTime, formatDate } from "@/lib/recipes";
 
 export const dynamic = "force-dynamic";
 
 const PAGE_SIZE = 10;
 
+type SortColumn = "updated_at" | "cooking_time_minutes";
+type SortDir = "asc" | "desc";
+type CookingTimeFilter = "under10" | "10to20" | "20to30" | "over30" | "";
+
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+
+function parseSortColumn(v: unknown): SortColumn {
+  return v === "cooking_time_minutes" ? "cooking_time_minutes" : "updated_at";
+}
+
+function parseSortDir(v: unknown): SortDir {
+  return v === "asc" ? "asc" : "desc";
+}
+
+function parseCookingTime(v: unknown): CookingTimeFilter {
+  if (
+    v === "under10" ||
+    v === "10to20" ||
+    v === "20to30" ||
+    v === "over30"
+  ) {
+    return v;
+  }
+  return "";
+}
 
 function makeSortHref(
   col: SortColumn,
