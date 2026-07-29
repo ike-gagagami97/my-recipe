@@ -4,53 +4,21 @@ import Link from "next/link";
 import { Suspense } from "react";
 import LogoutButton from "./logout-button";
 import RecipeControls from "./recipe-controls";
+import {
+  formatCookingTime,
+  formatDate,
+  parseCookingTime,
+  parseSortColumn,
+  parseSortDir,
+  type SortColumn,
+  type SortDir,
+} from "@/lib/recipes";
 
 export const dynamic = "force-dynamic";
 
 const PAGE_SIZE = 10;
 
-type SortColumn = "updated_at" | "cooking_time_minutes";
-type SortDir = "asc" | "desc";
-type CookingTimeFilter = "under10" | "10to20" | "20to30" | "over30" | "";
-
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
-
-function parseSortColumn(v: unknown): SortColumn {
-  return v === "cooking_time_minutes" ? "cooking_time_minutes" : "updated_at";
-}
-
-function parseSortDir(v: unknown): SortDir {
-  return v === "asc" ? "asc" : "desc";
-}
-
-function parseCookingTime(v: unknown): CookingTimeFilter {
-  if (
-    v === "under10" ||
-    v === "10to20" ||
-    v === "20to30" ||
-    v === "over30"
-  ) {
-    return v;
-  }
-  return "";
-}
-
-function formatCookingTime(minutes: number | null): string {
-  return minutes === null ? "−" : `${minutes}分`;
-}
-
-function formatDate(iso: string): string {
-  const date = new Date(iso);
-  const currentYear = new Date().getFullYear();
-  const mm = String(date.getMonth() + 1).padStart(2, "0");
-  const dd = String(date.getDate()).padStart(2, "0");
-  const hh = String(date.getHours()).padStart(2, "0");
-  const min = String(date.getMinutes()).padStart(2, "0");
-  const time = `${mm}/${dd} ${hh}:${min}`;
-  return date.getFullYear() === currentYear
-    ? time
-    : `${date.getFullYear()}/${time}`;
-}
 
 function makeSortHref(
   col: SortColumn,
@@ -71,6 +39,18 @@ function makePageHref(p: number, base: URLSearchParams): string {
   const next = new URLSearchParams(base);
   next.set("page", String(p));
   return `/recipes?${next.toString()}`;
+}
+
+/** Carries the current list state so the detail page can link back to it. */
+function makeDetailHref(
+  id: string,
+  base: URLSearchParams,
+  page: number,
+): string {
+  const next = new URLSearchParams(base);
+  if (page > 1) next.set("page", String(page));
+  const query = next.toString();
+  return query ? `/recipes/${id}?${query}` : `/recipes/${id}`;
 }
 
 function SortIndicator({
@@ -263,7 +243,14 @@ export default async function RecipesPage({
                       key={recipe.id}
                       className="border-b border-black/5 dark:border-white/8 last:border-0 hover:bg-black/2 dark:hover:bg-white/2 transition-colors"
                     >
-                      <td className="px-4 py-3">{recipe.title}</td>
+                      <td className="px-4 py-3">
+                        <Link
+                          href={makeDetailHref(recipe.id, baseParams, page)}
+                          className="underline-offset-2 hover:underline"
+                        >
+                          {recipe.title}
+                        </Link>
+                      </td>
                       <td className="px-4 py-3 tabular-nums">
                         {formatCookingTime(recipe.cooking_time_minutes)}
                       </td>
