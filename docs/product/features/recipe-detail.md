@@ -126,6 +126,7 @@ Feature: レシピ詳細
 - 端末: モバイル幅も見る
 - 回帰で触る画面: レシピ一覧（`/recipes`）
 - その他メモ: 「材料・手順・メモが全部入っているレシピ」「全部未入力のレシピ」「所要時間が未設定のレシピ」「他ユーザーのレシピ」の4種類のデータを用意して確認する
+- L4 用のテストデータは `supabase/qa/l4_recipe_detail_seed.sql`（後片付けは `supabase/qa/l4_recipe_detail_cleanup.sql`）
 
 ---
 
@@ -167,6 +168,7 @@ Feature: レシピ詳細
   - 既存行は NULL のまま。RLS ポリシー・GRANT は既存の `authenticated` 向け設定を流用（列追加のみで新規テーブルではない）
 - 一覧側: タイトルセルを `next/link` に変更し、現在のクエリ文字列を詳細 URL に引き継ぐ（戻り先の復元用）
 - 表示整形: 改行で分割 → 空行を除去 → `ul` / `ol` で描画（分割ロジックは `src/lib/` に置いて一覧・詳細で共有可能にする）
+- 確認用データ: `supabase/qa/*.sql`（手動実行専用。`config.toml` の `[db.seed]` は `./seed.sql` しか読まないので `supabase db reset` では流れない）
 - 使う skills: `recipe-feature`, `supabase-migration`, `verify-frontend-change`
 - テストレベル（想定）: 新規画面・新規フロー + migration → **L0 + L2 + L4**（L3 は env 変更が無ければ不要）
 - migration / RLS を含むため `code-reviewer` サブエージェントを実装 PR で実行する
