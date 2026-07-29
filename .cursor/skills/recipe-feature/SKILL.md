@@ -31,6 +31,15 @@ description: Implement My Recipe list/detail/create/edit flows with App Router a
 | Shared UI | `src/components/` (create when first needed) |
 | Data helpers | `src/lib/` (logic beyond client creation) |
 
+## L4 test data
+
+L4 is a human running the acceptance criteria on Preview, so hand them data instead of asking them to invent it. Put a manual-run seed and a matching cleanup script in `supabase/qa/` (not `supabase/seed.sql`, which `db reset` executes), and link both from the feature doc §6 確認メモ.
+
+- Resolve `user_id` with `from auth.users u ... where u.email = '...'` so the only thing to edit is the address, and a typo inserts nothing instead of writing to the wrong account
+- Give every row a title prefix so cleanup is one `delete ... where title like '...%'`
+- Cover the awkward cases, not just the happy path: all-empty record, null numeric, very long title and lines, blank lines and stray spaces, `<b>`-style strings, a last-year timestamp, boundary values for every filter, and one row owned by another user for RLS
+- Run it against the local stack and look at the screens before handing it over
+
 ## Done when
 
 - [ ] Feature doc acceptance criteria are met (or gaps reported)
