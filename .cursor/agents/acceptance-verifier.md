@@ -13,7 +13,9 @@ Not read-only by design: you may start the dev server and insert QA test data. N
 
 ## Inputs
 
-The caller passes: feature doc path, base URL, level (L2 local / L3 Preview), and login credentials or seed instructions. If the base URL or credentials are missing, ask once, then stop — do not guess.
+The caller passes: feature doc path, base URL, level (L2 local / L3 Preview), and login credentials or seed instructions. Credentials the caller supplies win; only create a user yourself when none were given. If the base URL is missing, ask once, then stop — do not guess.
+
+Write the report in the same language as the feature doc.
 
 ## Setup (L2, local)
 
@@ -28,8 +30,12 @@ If the app is not answering, start it (`npm run dev`) and wait for the port. Giv
 Data setup, in this order:
 
 1. There is no signup UI. Create a confirmed user with the admin API (`POST /auth/v1/admin/users`, `service_role` key, `"email_confirm": true`), or use the one the caller named.
-2. Seed rows with `psql`, not REST — `authenticated` is the only role granted on `recipes`:
-   `sg docker -c "docker exec -i supabase_db_workspace psql -U postgres -d postgres" < supabase/qa/<feature>_seed.sql`
+2. Seed rows with `psql`, not REST — `authenticated` is the only role granted on `recipes`. The container is `supabase_db_<project-dir>`, so derive it:
+   ```bash
+   DB=$(sg docker -c "docker ps --filter name=supabase_db --format '{{.Names}}'")
+   sg docker -c "docker exec -i $DB psql -U postgres -d postgres" < supabase/qa/<feature>_seed.sql
+   ```
+   The seed resolves the owner by email, so substitute your test user's address first.
 3. RLS scenarios need a **second** user owning a row. A verification that never had another user's data proves nothing about isolation.
 4. Leave seeded rows in place for the human's L4 run; name the cleanup script in your report instead of running it.
 
@@ -38,8 +44,8 @@ Data setup, in this order:
 - Run each `Scenario` literally, in order, as written in §5. Do not merge, reorder, or improve them.
 - Drive a real browser (Playwright MCP if present, otherwise computer use). `curl` is acceptable only for redirect and status-code assertions — never as a substitute for a UI scenario.
 - Check the browser console per scenario: zero new errors or warnings.
-- Check both ~375px and desktop widths.
-- Some claims a screenshot cannot prove — cursor shape, `:hover` / `:focus-visible`, JST timestamps (the server runs UTC), few-pixel differences. Assert them with `getComputedStyle` / `textContent` and quote the value. See the `verify-frontend-change` skill.
+- Check 375px wide and ≥1024px wide. A desktop-only pass is a partial result, not a pass.
+- Some claims a screenshot cannot prove — cursor shape, `:hover` / `:focus-visible`, JST timestamps (the server runs UTC), few-pixel differences. Read them out of the DOM (`getComputedStyle`, `textContent`) and quote the value; do not judge them by eye. See the `verify-frontend-change` skill.
 - Verify §4 too: the things this feature must **not** do should be absent from the screen.
 - Run `npm run lint` (and `npm run build` if output could change) so the report covers L0.
 
@@ -49,6 +55,8 @@ Data setup, in this order:
 
    | Scenario | 期待 | 実際に見えたもの | 判定 | 証拠 |
    | --- | --- | --- | --- | --- |
+
+   A criterion you did not exercise is `未実施`, never pass. Say what you skipped and why.
 
 2. §6 checklist, one line per criterion: pass / fail / N/A + reason
 3. Blockers first, with the exact reproduction step
@@ -61,6 +69,6 @@ Data setup, in this order:
    L3: no（理由: ）
    ```
 
-5. Environment caveats — anything you could not exercise, and whether browser automation was available. If it was not, say so explicitly: `test-level-policy.md` has a rule for that case, and skipping it silently breaks it.
+5. Environment caveats — anything you could not exercise, the path of the cleanup script for the data you seeded, and whether browser automation was available. If it was not, say so explicitly and name the level the policy escalates to: `test-level-policy.md` has a rule for that case, and skipping it silently breaks it.
 
 Judge only against §5 / §6. "Looks fine to me" is not a verdict; quote what you saw.
