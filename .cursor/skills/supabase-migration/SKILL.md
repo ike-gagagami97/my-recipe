@@ -64,6 +64,7 @@ sg docker -c "supabase db reset"   # Cloud VM may need docker group
 
 - [ ] RLS enabled
 - [ ] Both policies and grants present
+- [ ] `db-security-auditor` subagent run against the applied DB, findings addressed
 - [ ] Breaking changes documented in ADR or PR
 - [ ] App queries/types updated in the same PR (or follow-up Issue linked)
 
