@@ -6,7 +6,7 @@ Cursor-native agent configuration for My Recipe.
 | --- | --- |
 | `skills/` | Procedural skills (`SKILL.md` per folder) |
 | `rules/` | Project rules (`.mdc`, `alwaysApply` / `globs`) |
-| `agents/` | Subagent definitions |
+| `agents/` | Subagent definitions ([index](./agents/README.md)) |
 | `mcp.json` | MCP servers available to Cursor (Playwright, Supabase) |
 | `hooks.json` | Optional lifecycle hooks (add when needed) |
 

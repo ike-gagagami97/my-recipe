@@ -99,11 +99,13 @@ feature doc の主読者は **QA / プロダクト** です。
 
 1. `_template.md` をコピーして feature 名のファイルを作る
 2. 人間が書くか、エージェントに下書きさせて人間が **§1〜6** を承認する
-3. Issue から feature doc へリンクする
+3. 承認に出す前に **`feature-doc-reviewer` サブエージェント**で抜け漏れを潰す（下書きした本人以外が見る）
+4. Issue から feature doc へリンクする
 
 ### 出口（これがあれば②完了）
 
 - [ ] feature doc がある
+- [ ] `feature-doc-reviewer` の blocker が残っていない
 - [ ] §1〜6 が埋まっている
 - [ ] §2 にユーザー課題と提供価値がある
 - [ ] §5 が Gherkin である
@@ -158,6 +160,7 @@ DBが未作成なら migration も同じPRで。UI変更後は verify-frontend-c
 4. 関連 skills を使う（`.cursor/skills/`）
 5. 自己検証のうえ **draft PR**（マージしない）
 6. 認証・RLS・DB 破壊的変更を含む場合は **`code-reviewer` サブエージェントを起動**し、findings を確認・修正してから人間レビューに渡す
+7. migration / policy / grant を触ったら、さらに **`db-security-auditor`** で「適用後の DB」を検証する（SQL を読むだけでは RLS の合否は分からない）
 
 ### ④-2 レビュー
 
@@ -166,6 +169,7 @@ DBが未作成なら migration も同じPRで。UI変更後は verify-frontend-c
 | 受け入れ条件を満たすか（画面・操作） | **人間（QA）** |
 | やらないことをやっていないか | 人間 |
 | 危険な変更（認証・RLS・secrets・DB破壊的変更） | エージェントが `code-reviewer` サブエージェントで事前確認済み |
+| RLS / grant が適用後の DB で効いているか | エージェントが `db-security-auditor` で確認済み |
 | コード詳細 | 必須ではない（QAが全部見なくてよい） |
 
 ### ④-3 検証（テストレベル）
@@ -179,6 +183,8 @@ DBが未作成なら migration も同じPRで。UI変更後は verify-frontend-c
 | L2 | エージェント + Playwright MCP（local） |
 | L3 | Preview エージェント（**env/デプロイ絡みのとき必須**） |
 | L4 | 人間 Preview（常時必須ではない。**新規画面・新規フローは必須**） |
+
+L2 / L3 は **`acceptance-verifier` サブエージェント**に投げる（feature doc のパス・base URL・ログイン情報を渡す）。実装した本人が合否を判定しない。
 
 ルール表の要点:
 

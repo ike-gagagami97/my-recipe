@@ -15,6 +15,8 @@ Never report a UI change as complete based on a successful edit alone. Verify it
 
 If any step fails, fix the issue and rerun from step 1 — do not hand back partially verified work.
 
+This skill is your own pass over your own change. The graded L2 / L3 run against the feature doc's §5 / §6 belongs to the [`acceptance-verifier`](../../agents/acceptance-verifier.md) subagent — it judges from a clean context, so passing this skill does not substitute for it.
+
 ## Checks a screenshot or recording cannot prove
 
 Some properties never show up in captured media on this VM — the screen recorder composites its own cursor, so `cursor: pointer` looks like a plain arrow even where it is definitely applied. Verify these with `getComputedStyle` in the console (or a Playwright assertion) and quote the values instead of shipping misleading footage:

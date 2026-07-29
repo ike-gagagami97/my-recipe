@@ -4,7 +4,7 @@
 
 - テンプレート: [`_template.md`](./_template.md)
 - 書き手の主想定: QA / プロダクト（技術詳細は必須ではない）
-- 開発フロー上の位置: [`../development/workflow.md`](../development/workflow.md) の②
+- 開発フロー上の位置: [`../../development/workflow.md`](../../development/workflow.md) の②
 
 ## 必須セクション（§1〜6）
 
@@ -20,5 +20,6 @@
 新しい機能を始めるとき:
 
 1. `_template.md` をコピーして `<feature-name>.md` を作る
-2. 人間が §1〜6 を承認する
-3. Issue からリンクし、エージェント依頼ではそのパスだけ渡す
+2. `feature-doc-reviewer` サブエージェントで抜け漏れを確認する
+3. 人間が §1〜6 を承認する
+4. Issue からリンクし、エージェント依頼ではそのパスだけ渡す

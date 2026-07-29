@@ -36,9 +36,18 @@ Treat it as an index: commands, map of the repo, pointers into `docs/` and `.cur
 
 ## Agents in this repo
 
-| Agent | When |
-| --- | --- |
-| `code-reviewer` | Second-pass review of a diff without editing |
+Index: [`.cursor/agents/README.md`](../../.cursor/agents/README.md)
+
+| Agent | When | Stage |
+| --- | --- | --- |
+| `feature-doc-reviewer` | Feature doc drafted/edited, before implementation | ② |
+| `code-reviewer` | Second-pass review of a diff without editing | ④ |
+| `db-security-auditor` | Migrations, policies, grants, auth-scoped queries changed | ④ |
+| `acceptance-verifier` | §5 Gherkin / §6 in a browser (L2 local, L3 Preview) | ④-3 |
+
+Each is a **judge separated from the implementer**, and each one reads or emits enough noise (docs trees, SQL dumps, browser transcripts) that a separate context window pays for itself.
+
+Prefer a **skill** when the implementer should follow the procedure themselves, or when the task needs the current conversation's history — subagents start with a clean context and cannot see it.
 
 ## Compatibility note
 

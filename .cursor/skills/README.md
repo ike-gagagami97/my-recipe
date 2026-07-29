@@ -11,4 +11,6 @@ Only the name/description need to be discoverable up front; the body is for when
 | [`ui-design`](./ui-design/SKILL.md) | Landing and visual design |
 | [`verify-frontend-change`](./verify-frontend-change/SKILL.md) | Before declaring any UI change done |
 
+A skill is a procedure **you** follow. When the task is judging finished work, hand it to a subagent instead — see [`../agents/README.md`](../agents/README.md).
+
 See [`docs/development/steering.md`](../../docs/development/steering.md) for when to use a skill vs a rule vs an agent.
