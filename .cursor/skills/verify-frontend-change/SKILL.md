@@ -15,6 +15,14 @@ Never report a UI change as complete based on a successful edit alone. Verify it
 
 If any step fails, fix the issue and rerun from step 1 — do not hand back partially verified work.
 
+## Checks a screenshot or recording cannot prove
+
+Some properties never show up in captured media on this VM — the screen recorder composites its own cursor, so `cursor: pointer` looks like a plain arrow even where it is definitely applied. Verify these with `getComputedStyle` in the console (or a Playwright assertion) and quote the values instead of shipping misleading footage:
+
+- cursor shape, `:hover` / `:focus-visible` styles
+- timezone-dependent output (the server runs in UTC — assert the rendered string, not "looks right")
+- anything that only differs by a few pixels
+
 ## Recipe-app specifics
 
 - Confirm Supabase status indicator (or equivalent) still reflects env configuration honestly

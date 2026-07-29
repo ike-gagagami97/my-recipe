@@ -10,3 +10,5 @@ alwaysApply: false
 - Reuse `src/lib/supabase/server.ts` or `client.ts` — do not invent new Supabase client factories.
 - After UI edits, follow `.cursor/skills/verify-frontend-change/SKILL.md` before calling the work done.
 - For landing/visual work, also follow `.cursor/skills/ui-design/SKILL.md`.
+- Clickable things must look clickable: links get colour + underline, and the pointer cursor for buttons/selects comes from the base layer in `globals.css` (Tailwind 4 does not add it) — do not re-add `cursor-pointer` per component.
+- Render user-visible timestamps with the JST helpers in `src/lib/recipes.ts`; the server runs in UTC.

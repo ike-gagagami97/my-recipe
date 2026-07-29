@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import LogoutButton from "./logout-button";
 import RecipeControls from "./recipe-controls";
+import { formatCookingTime, formatDate } from "@/lib/recipes";
 
 export const dynamic = "force-dynamic";
 
@@ -35,23 +36,6 @@ function parseCookingTime(v: unknown): CookingTimeFilter {
   return "";
 }
 
-function formatCookingTime(minutes: number | null): string {
-  return minutes === null ? "−" : `${minutes}分`;
-}
-
-function formatDate(iso: string): string {
-  const date = new Date(iso);
-  const currentYear = new Date().getFullYear();
-  const mm = String(date.getMonth() + 1).padStart(2, "0");
-  const dd = String(date.getDate()).padStart(2, "0");
-  const hh = String(date.getHours()).padStart(2, "0");
-  const min = String(date.getMinutes()).padStart(2, "0");
-  const time = `${mm}/${dd} ${hh}:${min}`;
-  return date.getFullYear() === currentYear
-    ? time
-    : `${date.getFullYear()}/${time}`;
-}
-
 function makeSortHref(
   col: SortColumn,
   currentSort: SortColumn,
@@ -71,6 +55,18 @@ function makePageHref(p: number, base: URLSearchParams): string {
   const next = new URLSearchParams(base);
   next.set("page", String(p));
   return `/recipes?${next.toString()}`;
+}
+
+/** Carries the current list state so the detail page can link back to it. */
+function makeDetailHref(
+  id: string,
+  base: URLSearchParams,
+  page: number,
+): string {
+  const next = new URLSearchParams(base);
+  if (page > 1) next.set("page", String(page));
+  const query = next.toString();
+  return query ? `/recipes/${id}?${query}` : `/recipes/${id}`;
 }
 
 function SortIndicator({
@@ -263,7 +259,14 @@ export default async function RecipesPage({
                       key={recipe.id}
                       className="border-b border-black/5 dark:border-white/8 last:border-0 hover:bg-black/2 dark:hover:bg-white/2 transition-colors"
                     >
-                      <td className="px-4 py-3">{recipe.title}</td>
+                      <td className="px-4 py-3">
+                        <Link
+                          href={makeDetailHref(recipe.id, baseParams, page)}
+                          className="font-medium text-blue-700 dark:text-blue-400 underline decoration-blue-700/40 dark:decoration-blue-400/40 underline-offset-2 transition-colors hover:decoration-current"
+                        >
+                          {recipe.title}
+                        </Link>
+                      </td>
                       <td className="px-4 py-3 tabular-nums">
                         {formatCookingTime(recipe.cooking_time_minutes)}
                       </td>
