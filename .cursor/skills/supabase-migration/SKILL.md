@@ -73,3 +73,4 @@ sg docker -c "supabase db reset"   # Cloud VM may need docker group
 - Treat dashboard-only edits as source of truth
 - Ship RLS without grants
 - Use the service role on normal app paths
+- `create extension` without `with schema extensions` — `public` is API-exposed, so the extension's functions become anon-callable RPC (this happened with `pg_trgm`)
