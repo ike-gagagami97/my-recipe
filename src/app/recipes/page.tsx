@@ -43,8 +43,10 @@ function makeSortHref(
   base: URLSearchParams,
 ): string {
   const next = new URLSearchParams(base);
+  // A column you are not sorting by yet starts ascending; the current column
+  // flips. Keeps the first click on 所要時間 at 短い順 (recipe-list.md §5).
   const newDir: SortDir =
-    currentSort === col && currentDir === "desc" ? "asc" : "desc";
+    currentSort === col ? (currentDir === "desc" ? "asc" : "desc") : "asc";
   next.set("sort", col);
   next.set("sort_dir", newDir);
   next.delete("page");
