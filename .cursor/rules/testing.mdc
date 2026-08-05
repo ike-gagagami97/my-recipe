@@ -1,0 +1,61 @@
+---
+description: Testing conventions for unit tests (Vitest) and E2E tests (Playwright).
+globs: src/**/*.test.ts,src/**/*.spec.ts,tests/e2e/**,vitest.config.ts,playwright.config.ts
+alwaysApply: false
+---
+
+# Testing conventions
+
+Full policy: [`docs/development/testing.md`](../../docs/development/testing.md)  
+Run commands: [`.cursor/skills/run-tests/SKILL.md`](../skills/run-tests/SKILL.md)
+
+## 層の棲み分け（一言）
+
+| 何 | どこ |
+| --- | --- |
+| `src/lib/` の純粋関数（変換・URL 組み立て・パース） | **Unit（Vitest）** `src/lib/*.test.ts` |
+| ブラウザ操作・認証フロー・RLS 検証・画面遷移 | **E2E（Playwright）** `tests/e2e/*.spec.ts` |
+| Server Components / Actions / UI コンポーネント単体 | 対象外（E2E でフロー全体をカバー） |
+
+## Unit テストの書き方
+
+- コロケーション: `src/lib/foo.ts` → `src/lib/foo.test.ts`
+- 日時固定: `vi.setSystemTime()` を使い、`afterEach(() => vi.useRealTimers())` でリセット
+- `npm run test:unit` で全件確認
+
+## E2E テストの書き方
+
+**必ずこの構造に従う**（`test.use` と `test.beforeAll` を describe 内に置く）:
+
+```ts
+test.describe("機能名", () => {
+  test.use({ storageState: "tests/e2e/.auth/user.json" }); // 認証が必要な場合
+
+  test.beforeAll(async () => {
+    cleanupMainUserRecipes(); // psql 経由
+    // INSERT シード
+  });
+
+  test.afterAll(() => {
+    cleanupMainUserRecipes();
+  });
+
+  test("...", async ({ page }) => { ... });
+});
+```
+
+**ファイルスコープ（describe 外）に `test.use()` や `test.beforeAll()` を置かない** → worker が storageState を取得できない。
+
+## 重要な制約
+
+- `workers: 1` 必須（`playwright.config.ts`）。並列実行は storageState の race condition を引き起こす
+- テストユーザーのメールはタイムスタンプ付き（`e2e-{ts}-{role}@example.com`）。同一メールの繰り返し作成は Supabase Auth にレート制限される
+- `signOut({ scope: 'local' })` が必須（`src/app/recipes/actions.ts`）。デフォルトはグローバルで全セッションを破壊する
+- recipe の DELETE は psql を使う（DELETE grant は #7 で追加予定。それまで `docker exec ... psql`）
+
+## テスト実行
+
+```bash
+npm run test:unit   # Vitest — setup 不要
+npm run test:e2e    # Playwright — Supabase + dev server が必要
+```

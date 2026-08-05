@@ -16,7 +16,8 @@ This repo is developed with **Cursor** (IDE + Cloud Agents). Agent instructions 
 | [`docs/product/features/`](docs/product/features/) | Feature contracts (QA-friendly acceptance) |
 | [`docs/development/steering.md`](docs/development/steering.md) | Where to put rules vs skills vs agents |
 | [`docs/development/loops.md`](docs/development/loops.md) | Verification loops and stop criteria |
-| [`docs/development/test-level-policy.md`](docs/development/test-level-policy.md) | Test level rules (L0–L4 with Vitest + Playwright) |
+| [`docs/development/testing.md`](docs/development/testing.md) | Testing policy: unit vs E2E, layer separation, how to add tests |
+| [`docs/development/test-level-policy.md`](docs/development/test-level-policy.md) | Test level rules per PR type (L0–L4) |
 | [`.cursor/skills/`](.cursor/skills/) | On-demand procedural skills |
 | [`.cursor/rules/`](.cursor/rules/) | Always-on and path-scoped rules |
 | [`.cursor/agents/`](.cursor/agents/) | Isolated subagents (e.g. code review) |
@@ -39,6 +40,7 @@ npm run test:e2e      # Playwright E2E tests — requires Supabase + dev server 
 - Keep `AGENTS.md` lean; put long procedures in `.cursor/skills/`.
 - Path-specific constraints → `.cursor/rules/*.mdc` with `globs`.
 - After UI changes, use skill `verify-frontend-change` before declaring done.
+- After touching `src/lib/recipes.ts` or E2E-covered features, run tests (see `docs/development/testing.md`).
 - New Supabase tables: RLS **and** `grant` for `anon`/`authenticated`.
 - Do not commit secrets (`.env*` except `.env.example`).
 

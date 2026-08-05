@@ -33,6 +33,15 @@ Treat it as an index: commands, map of the repo, pointers into `docs/` and `.cur
 | `supabase-migration` | SQL / RLS / grants |
 | `ui-design` | Landing and visual design |
 | `verify-frontend-change` | After any UI change — required before "done" |
+| `run-tests` | Running or writing unit (Vitest) / E2E (Playwright) tests |
+
+## Path-scoped rules in this repo
+
+| Rule | Globs | What it enforces |
+| --- | --- | --- |
+| `app-router-ui.mdc` | `src/app/**`, `*.tsx` | Server Components, Supabase client usage, UI conventions |
+| `supabase-migrations.mdc` | `supabase/migrations/**` | Append-only, RLS + grant checklist |
+| `testing.mdc` | `*.test.ts`, `tests/e2e/**`, config files | Unit vs E2E separation, storageState constraints, key gotchas |
 
 ## Agents in this repo
 
