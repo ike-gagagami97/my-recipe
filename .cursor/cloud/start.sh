@@ -33,15 +33,17 @@ if ! sg docker -c "supabase status" >/dev/null 2>&1; then
   sg docker -c "supabase start"
 fi
 
-# --- 3. App env (local Supabase URL + anon key) ---------------------------------
+# --- 3. App env (local Supabase URL + anon key + service_role key) --------------
 if [ ! -f .env.local ]; then
   echo "[start] Writing .env.local from supabase status..."
   status_env="$(sg docker -c "supabase status -o env")"
   api_url="$(printf '%s\n' "$status_env" | sed -n 's/^API_URL="\?\([^"]*\)"\?$/\1/p')"
   anon_key="$(printf '%s\n' "$status_env" | sed -n 's/^ANON_KEY="\?\([^"]*\)"\?$/\1/p')"
+  service_role_key="$(printf '%s\n' "$status_env" | sed -n 's/^SERVICE_ROLE_KEY="\?\([^"]*\)"\?$/\1/p')"
   {
     echo "NEXT_PUBLIC_SUPABASE_URL=${api_url}"
     echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=${anon_key}"
+    echo "SUPABASE_SERVICE_ROLE_KEY=${service_role_key}"
   } > .env.local
 fi
 

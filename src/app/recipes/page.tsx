@@ -4,72 +4,23 @@ import Link from "next/link";
 import { Suspense } from "react";
 import LogoutButton from "./logout-button";
 import RecipeControls from "./recipe-controls";
-import { formatCookingTime, formatDate } from "@/lib/recipes";
+import {
+  formatCookingTime,
+  formatDate,
+  makeSortHref,
+  makePageHref,
+  makeDetailHref,
+  parseSortColumn,
+  parseSortDir,
+  parseCookingTime,
+} from "@/lib/recipes";
+import type { SortColumn, SortDir } from "@/lib/recipes";
 
 export const dynamic = "force-dynamic";
 
 const PAGE_SIZE = 10;
 
-type SortColumn = "updated_at" | "cooking_time_minutes";
-type SortDir = "asc" | "desc";
-type CookingTimeFilter = "under10" | "10to20" | "20to30" | "over30" | "";
-
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
-
-function parseSortColumn(v: unknown): SortColumn {
-  return v === "cooking_time_minutes" ? "cooking_time_minutes" : "updated_at";
-}
-
-function parseSortDir(v: unknown): SortDir {
-  return v === "asc" ? "asc" : "desc";
-}
-
-function parseCookingTime(v: unknown): CookingTimeFilter {
-  if (
-    v === "under10" ||
-    v === "10to20" ||
-    v === "20to30" ||
-    v === "over30"
-  ) {
-    return v;
-  }
-  return "";
-}
-
-function makeSortHref(
-  col: SortColumn,
-  currentSort: SortColumn,
-  currentDir: SortDir,
-  base: URLSearchParams,
-): string {
-  const next = new URLSearchParams(base);
-  // A column you are not sorting by yet starts ascending; the current column
-  // flips. Keeps the first click on 所要時間 at 短い順 (recipe-list.md §5).
-  const newDir: SortDir =
-    currentSort === col ? (currentDir === "desc" ? "asc" : "desc") : "asc";
-  next.set("sort", col);
-  next.set("sort_dir", newDir);
-  next.delete("page");
-  return `/recipes?${next.toString()}`;
-}
-
-function makePageHref(p: number, base: URLSearchParams): string {
-  const next = new URLSearchParams(base);
-  next.set("page", String(p));
-  return `/recipes?${next.toString()}`;
-}
-
-/** Carries the current list state so the detail page can link back to it. */
-function makeDetailHref(
-  id: string,
-  base: URLSearchParams,
-  page: number,
-): string {
-  const next = new URLSearchParams(base);
-  if (page > 1) next.set("page", String(page));
-  const query = next.toString();
-  return query ? `/recipes/${id}?${query}` : `/recipes/${id}`;
-}
 
 function SortIndicator({
   col,

@@ -47,6 +47,9 @@ L4 is a human running the acceptance criteria on Preview, so hand them data inst
 - [ ] Out-of-scope items in the feature doc / vision were not implemented
 - [ ] Missing Supabase config is handled (guard or clear error)
 - [ ] `npm run lint` passes (broader test levels: see `docs/development/test-level-policy.md`)
+- [ ] `npm run test:unit` passes (if `src/lib/recipes.ts` was changed)
+- [ ] `npm run test:e2e` passes for existing specs (auth / recipe-list / recipe-detail)
+- [ ] If new screens were added: new E2E spec added in `tests/e2e/` covering §5 Gherkin
 - [ ] UI changes also pass [`verify-frontend-change`](../verify-frontend-change/SKILL.md)
 - [ ] L2 / L3 handed to the `acceptance-verifier` subagent (do not self-certify §5 / §6)
 - [ ] If migration or RLS is included: `code-reviewer` **and** `db-security-auditor` subagents have been run and findings addressed
