@@ -16,7 +16,7 @@ This repo is developed with **Cursor** (IDE + Cloud Agents). Agent instructions 
 | [`docs/product/features/`](docs/product/features/) | Feature contracts (QA-friendly acceptance) |
 | [`docs/development/steering.md`](docs/development/steering.md) | Where to put rules vs skills vs agents |
 | [`docs/development/loops.md`](docs/development/loops.md) | Verification loops and stop criteria |
-| [`docs/development/test-level-policy.md`](docs/development/test-level-policy.md) | Test level rules (TBD) |
+| [`docs/development/test-level-policy.md`](docs/development/test-level-policy.md) | Test level rules (L0–L4 with Vitest + Playwright) |
 | [`.cursor/skills/`](.cursor/skills/) | On-demand procedural skills |
 | [`.cursor/rules/`](.cursor/rules/) | Always-on and path-scoped rules |
 | [`.cursor/agents/`](.cursor/agents/) | Isolated subagents (e.g. code review) |
@@ -27,9 +27,11 @@ This repo is developed with **Cursor** (IDE + Cloud Agents). Agent instructions 
 
 ```bash
 npm install
-npm run dev      # http://localhost:3000
+npm run dev           # http://localhost:3000
 npm run lint
 npm run build
+npm run test:unit     # Vitest unit tests (src/lib/) — no extra setup required
+npm run test:e2e      # Playwright E2E tests — requires Supabase + dev server running
 ```
 
 ## Conventions (short)
@@ -89,8 +91,16 @@ need to run any of the setup below by hand:
 
 ### Tests
 
-- Playwright is available (`@playwright/test`, browsers preinstalled). No `playwright.config`
-  or `e2e/` specs exist yet; add them under a `tests/`/`e2e/` dir and run with `npx playwright test`.
+- **Unit tests (Vitest)**: `npm run test:unit` — no extra setup, runs against `src/lib/`.
+- **E2E tests (Playwright)**: `npm run test:e2e` — requires Supabase + `npm run dev` running.
+  Full procedure: see `.cursor/skills/run-tests/SKILL.md`.
+- Key E2E constraints:
+  - Tests run with `workers: 1` (sequential) to avoid storageState race conditions.
+  - Test users use timestamped emails (`e2e-{ts}-{role}@example.com`) to avoid Supabase
+    Auth rate limiting on repeated create/delete of the same email.
+  - `signOut()` must use `scope: 'local'` in `src/app/recipes/actions.ts` to avoid
+    global session invalidation that breaks subsequent authenticated tests.
+  - Recipe cleanup uses psql (DELETE grant not yet in migrations — added with #7).
 
 ### Next.js 16 gotchas
 
