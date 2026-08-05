@@ -1,3 +1,73 @@
+// ---- URL / sort helpers (shared between list page and unit tests) ----
+
+export type SortColumn = "updated_at" | "cooking_time_minutes";
+export type SortDir = "asc" | "desc";
+export type CookingTimeFilter =
+  | "under10"
+  | "10to20"
+  | "20to30"
+  | "over30"
+  | "";
+
+export function parseSortColumn(v: unknown): SortColumn {
+  return v === "cooking_time_minutes" ? "cooking_time_minutes" : "updated_at";
+}
+
+export function parseSortDir(v: unknown): SortDir {
+  return v === "asc" ? "asc" : "desc";
+}
+
+export function parseCookingTime(v: unknown): CookingTimeFilter {
+  if (
+    v === "under10" ||
+    v === "10to20" ||
+    v === "20to30" ||
+    v === "over30"
+  ) {
+    return v;
+  }
+  return "";
+}
+
+/**
+ * Build the href for a sort header click.
+ * Clicking an inactive column starts ascending; clicking the active column flips direction.
+ */
+export function makeSortHref(
+  col: SortColumn,
+  currentSort: SortColumn,
+  currentDir: SortDir,
+  base: URLSearchParams,
+): string {
+  const next = new URLSearchParams(base);
+  const newDir: SortDir =
+    currentSort === col ? (currentDir === "desc" ? "asc" : "desc") : "asc";
+  next.set("sort", col);
+  next.set("sort_dir", newDir);
+  next.delete("page");
+  return `/recipes?${next.toString()}`;
+}
+
+export function makePageHref(p: number, base: URLSearchParams): string {
+  const next = new URLSearchParams(base);
+  next.set("page", String(p));
+  return `/recipes?${next.toString()}`;
+}
+
+/** Carries current list state into the detail URL so the back-link can restore it. */
+export function makeDetailHref(
+  id: string,
+  base: URLSearchParams,
+  page: number,
+): string {
+  const next = new URLSearchParams(base);
+  if (page > 1) next.set("page", String(page));
+  const query = next.toString();
+  return query ? `/recipes/${id}?${query}` : `/recipes/${id}`;
+}
+
+// ---- Display helpers ----
+
 export function formatCookingTime(minutes: number | null): string {
   return minutes === null ? "−" : `${minutes}分`;
 }
