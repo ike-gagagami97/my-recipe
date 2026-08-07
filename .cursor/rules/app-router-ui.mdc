@@ -11,4 +11,5 @@ alwaysApply: false
 - After UI edits, follow `.cursor/skills/verify-frontend-change/SKILL.md` before calling the work done.
 - For landing/visual work, also follow `.cursor/skills/ui-design/SKILL.md`.
 - Clickable things must look clickable: links get colour + underline, and the pointer cursor for buttons/selects comes from the base layer in `globals.css` (Tailwind 4 does not add it) — do not re-add `cursor-pointer` per component.
+- Form / CTA hierarchy: primary actions（追加・保存など）は塗りつぶしボタン見た目。secondary（キャンセルなど）は枠線ボタン。テキストリンクのままにしない（#6 L4 フィードバック）。ナビゲーション自体は `Link` のままでよいが、見た目はボタンに合わせる。
 - Render user-visible timestamps with the JST helpers in `src/lib/recipes.ts`; the server runs in UTC.

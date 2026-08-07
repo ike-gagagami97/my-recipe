@@ -2,7 +2,7 @@
 
 | 項目 | 内容 |
 | --- | --- |
-| 状態 | 完了（L4 受け入れ済み・マージ待ち） |
+| 状態 | 完了（マージ済み） |
 | 関連 Issue | [#6](https://github.com/ike-gagagami97/my-recipe/issues/6) |
 | vision 上の位置づけ | P0 レシピ追加（実装順 4番目） |
 | 作成日 | 2026-08-07 |
@@ -190,15 +190,23 @@ Feature: レシピ追加
 
 ### 実装メモ（エージェント用）
 
-- ルート: `src/app/recipes/new/page.tsx`（フォームは Server Action 想定。`"use client"` は最小限）
-- 一覧: 「レシピを追加」リンク（0件時の空状態にも同じ導線）
-- DB: 既存 `public.recipes` を利用。列は既に揃っている（`title` / `cooking_time_minutes` / `ingredients` / `steps` / `notes`）。`insert` の RLS policy と `grant insert` は既存 migration 済み。新規テーブルや列追加は原則不要
-- `user_id` はサーバー側で `auth.getUser()` の ID をセット（クライアントから改ざんさせない）
-- バリデーション: タイトル trim 後に空ならエラー。所要時間は空＝未設定、それ以外は1以上の整数のみ（§7 / §8 Q6）
-- 使う skills: `recipe-feature`, `verify-frontend-change`（migration が必要になった場合のみ `supabase-migration`）
-- テストレベル（想定）: 新規画面・新規フロー → **L0 + L2 + L4**。既存 E2E（auth / list / detail）に触るため **L1 も実施**。新規 E2E spec（`tests/e2e/`）を §5 向けに追加。L3 は env 変更が無ければ不要。権限の「書ける」拡大はあるが insert policy は既存のため新規 RLS 変更が無ければ H3「権限拡大」の新規ポリシー追加には当たらない——ポリシーを触ったら L4 必須のまま + `db-security-auditor`
-- migration / RLS を触る場合は `code-reviewer` と `db-security-auditor` を実装 PR で実行
+- ルート: `src/app/recipes/new/page.tsx`（Server Action + 最小限の client form）
+- 一覧: 「レシピを追加」はプライマリボタン見た目（0件時も同じ導線）。保存=プライマリ、キャンセル=セカンダリ
+- DB: 既存 `public.recipes`（列・insert RLS/grant 済み）。新規 migration なし
+- `user_id` はサーバー側で `auth.getUser()` の ID をセット
+- バリデーション: タイトル trim 後に空ならエラー。所要時間は空＝未設定、それ以外は1以上の整数のみ
+- 使う skills: `recipe-feature`, `verify-frontend-change`
+- テストレベル: **L0 + L1 + L2 + L4**（L3 不要）。E2E: `tests/e2e/recipe-create.spec.ts`
+- マージ: [#22](https://github.com/ike-gagagami97/my-recipe/pull/22)（2026-08-07）
+
+### 振り返り（⑤）
+
+| 気づき | 判断 | 反映先 |
+| --- | --- | --- |
+| 追加・保存・キャンセルがテキストリンクだと L4 で差し戻しになった | 繰り返しリスク（編集フォームでも同じ） | `app-router-ui.mdc` / `recipe-feature` skill |
+| 追加画面に一覧と同じメール表示は不要だった | 一度きり（画面ごとの判断） | 本 PR に留める |
 
 ### 変更したドキュメント
 
-- `docs/product/vision.md`（状態を「着手中」に更新し、この doc へリンク）
+- `docs/product/vision.md`（完了に更新）
+- `docs/product/features/recipe-list.md`（0件時の追加導線を上書き）

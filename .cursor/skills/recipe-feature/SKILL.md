@@ -23,6 +23,7 @@ description: Implement My Recipe list/detail/create/edit flows with App Router a
 - Create/update/delete: prefer Server Actions (Route Handlers only if needed)
 - Keep `"use client"` minimal (forms/interactivity)
 - Types follow DB columns; do not invent wide placeholder models
+- Primary CTAs（追加・保存）= filled button look; Cancel = bordered secondary button — not underlined text links（see `app-router-ui` rule）
 
 ## Placement
 
