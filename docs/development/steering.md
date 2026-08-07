@@ -29,7 +29,7 @@ Treat it as an index: commands, map of the repo, pointers into `docs/` and `.cur
 
 | Skill | When |
 | --- | --- |
-| `recipe-feature` | Recipe list/detail/create/edit |
+| `recipe-feature` | Recipe list/detail/create/edit/delete |
 | `supabase-migration` | SQL / RLS / grants |
 | `ui-design` | Landing and visual design |
 | `verify-frontend-change` | After any UI change — required before "done" |

@@ -41,7 +41,8 @@
 
 ## 4. やらないこと（必須）
 
-- レシピの編集・削除、および詳細画面への編集／削除ボタン（[#7](https://github.com/ike-gagagami97/my-recipe/issues/7) / 将来の feature doc）
+- レシピの編集、および詳細画面への編集ボタン（[#25](https://github.com/ike-gagagami97/my-recipe/issues/25) / 将来の `recipe-edit.md`）
+- レシピの削除、および詳細画面への削除ボタン（[#26](https://github.com/ike-gagagami97/my-recipe/issues/26) / 将来の `recipe-delete.md`）
 - 画像アップロード（vision 非スコープ）
 - タグ・カテゴリ管理
 - 下書き・自動保存・途中保存

@@ -102,7 +102,7 @@ need to run any of the setup below by hand:
     Auth rate limiting on repeated create/delete of the same email.
   - `signOut()` must use `scope: 'local'` in `src/app/recipes/actions.ts` to avoid
     global session invalidation that breaks subsequent authenticated tests.
-  - Recipe cleanup uses psql (DELETE grant not yet in migrations — added with #7).
+  - Recipe cleanup uses psql (DELETE grant not yet in migrations — added with #26).
 
 ### Next.js 16 gotchas
 

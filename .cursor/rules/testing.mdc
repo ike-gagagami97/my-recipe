@@ -59,7 +59,7 @@ test.describe("機能名", () => {
 - `workers: 1` 必須（`playwright.config.ts`）。並列実行は storageState の race condition を引き起こす
 - テストユーザーのメールはタイムスタンプ付き（`e2e-{ts}-{role}@example.com`）。同一メールの繰り返し作成は Supabase Auth にレート制限される
 - `signOut({ scope: 'local' })` が必須（`src/app/recipes/actions.ts`）。デフォルトはグローバルで全セッションを破壊する
-- recipe の DELETE は psql を使う（DELETE grant は #7 で追加予定。それまで `docker exec ... psql`）
+- recipe の DELETE は psql を使う（DELETE grant は #26 で追加予定。それまで `docker exec ... psql`）
 
 ## テスト実行
 

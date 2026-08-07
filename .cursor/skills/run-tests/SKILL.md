@@ -95,7 +95,7 @@ E2E は [Playwright 推奨の Page Object Model](https://playwright.dev/docs/pom
 
 - `beforeAll`: psql でレシピを削除 → JS client でレシピをシード（INSERT grant あり）
 - `afterAll`: psql で全件削除
-- **DELETE grant** は edit/delete 機能 PR (#7) でマイグレーションに追加予定。それまで psql を使用
+- **DELETE grant** は削除機能 PR (#26) でマイグレーションに追加予定。それまで psql を使用
 
 ### 既知の設計上の注意
 

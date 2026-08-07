@@ -42,7 +42,7 @@
 ## 4. やらないこと（必須）
 
 - レシピの追加フォーム本体（[`recipe-create.md`](./recipe-create.md) / [#6](https://github.com/ike-gagagami97/my-recipe/issues/6)）。一覧からの導線のみ本 feature 側に含む
-- 編集・削除（[#7](https://github.com/ike-gagagami97/my-recipe/issues/7)）
+- 編集（[#25](https://github.com/ike-gagagami97/my-recipe/issues/25)）・削除（[#26](https://github.com/ike-gagagami97/my-recipe/issues/26)）
 - レシピ詳細画面の実装（[`recipe-detail.md`](./recipe-detail.md) / [#5](https://github.com/ike-gagagami97/my-recipe/issues/5) で実施。一覧のタイトルを詳細へのリンクにする変更もそちらのスコープ）
 - 画像・サムネイル表示
 - タイトル以外のフィールド（本文など）のキーワード検索
