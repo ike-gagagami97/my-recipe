@@ -4,10 +4,10 @@
 -- 「他ユーザーのレシピが自分の一覧に出ない」確認用の他ユーザー行を用意する。
 --
 -- 使い方
---   1. `CHANGE_ME@example.com` を Preview でログインする自分（ユーザーA）のメールに書き換える
---   2. `OTHER_USER@example.com` を別の確認済みユーザー（ユーザーB）のメールに書き換える
---   3. Supabase Studio の SQL Editor に全文を貼って実行する
---   4. 確認が終わったら supabase/qa/l4_recipe_create_cleanup.sql を実行して片付ける
+--   1. `OTHER_USER@example.com` を別の確認済みユーザー（ユーザーB）のメールに書き換える
+--      （この seed は他ユーザー行のみ。ユーザーAのデータはフォーム操作で作る）
+--   2. Supabase Studio の SQL Editor に全文を貼って実行する
+--   3. 確認が終わったら supabase/qa/l4_recipe_create_cleanup.sql を実行して片付ける
 --
 -- 注意
 --   - 手動実行専用。`supabase db reset` では流れない

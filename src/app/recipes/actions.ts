@@ -59,11 +59,12 @@ export async function createRecipe(
     fieldErrors.cooking_time_minutes = cookingTime.error;
   }
 
-  if (fieldErrors.title || fieldErrors.cooking_time_minutes || !cookingTime.ok) {
+  if (fieldErrors.title || fieldErrors.cooking_time_minutes) {
     return { fieldErrors, values };
   }
 
-  const cookingTimeMinutes = cookingTime.value;
+  // Narrowed: cookingTime.ok is true when fieldErrors.cooking_time_minutes is unset.
+  const cookingTimeMinutes = cookingTime.ok ? cookingTime.value : null;
 
   if (
     !process.env.NEXT_PUBLIC_SUPABASE_URL ||
