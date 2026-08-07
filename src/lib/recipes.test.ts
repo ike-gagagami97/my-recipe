@@ -11,6 +11,8 @@ import {
   makeSortHref,
   makePageHref,
   makeDetailHref,
+  optionalText,
+  parseCookingTimeInput,
 } from "./recipes";
 
 // ---------------------------------------------------------------------------
@@ -296,5 +298,39 @@ describe("makeDetailHref", () => {
     const href = makeDetailHref(id, base, 2);
     expect(href).toContain("keyword=");
     expect(href).toContain("page=2");
+  });
+});
+
+describe("optionalText", () => {
+  it("returns null for empty or whitespace-only input", () => {
+    expect(optionalText("")).toBeNull();
+    expect(optionalText("   ")).toBeNull();
+    expect(optionalText("\n\t")).toBeNull();
+  });
+
+  it("trims and keeps non-empty text", () => {
+    expect(optionalText("  hello  ")).toBe("hello");
+    expect(optionalText("a\nb")).toBe("a\nb");
+  });
+});
+
+describe("parseCookingTimeInput", () => {
+  it("returns null for empty input (unset)", () => {
+    expect(parseCookingTimeInput("")).toEqual({ ok: true, value: null });
+    expect(parseCookingTimeInput("  ")).toEqual({ ok: true, value: null });
+  });
+
+  it("accepts integers >= 1", () => {
+    expect(parseCookingTimeInput("1")).toEqual({ ok: true, value: 1 });
+    expect(parseCookingTimeInput("30")).toEqual({ ok: true, value: 30 });
+    expect(parseCookingTimeInput(" 15 ")).toEqual({ ok: true, value: 15 });
+  });
+
+  it("rejects 0, negatives, text, and negatives", () => {
+    expect(parseCookingTimeInput("0").ok).toBe(false);
+    expect(parseCookingTimeInput("1.5").ok).toBe(false);
+    expect(parseCookingTimeInput("abc").ok).toBe(false);
+    expect(parseCookingTimeInput("-5").ok).toBe(false);
+    expect(parseCookingTimeInput("10分").ok).toBe(false);
   });
 });

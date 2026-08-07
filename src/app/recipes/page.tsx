@@ -140,7 +140,15 @@ export default async function RecipesPage({
       </header>
 
       <section>
-        <h2 className="text-xl font-semibold mb-6">レシピ一覧</h2>
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+          <h2 className="text-xl font-semibold">レシピ一覧</h2>
+          <Link
+            href="/recipes/new"
+            className="inline-flex items-center rounded-lg bg-black dark:bg-white px-4 py-2 text-sm font-medium text-white dark:text-black transition-opacity hover:opacity-80"
+          >
+            レシピを追加
+          </Link>
+        </div>
 
         <Suspense fallback={<div className="mb-6 h-10" />}>
           <RecipeControls />
@@ -154,11 +162,23 @@ export default async function RecipesPage({
             レシピの取得に失敗しました。ページを再読み込みしてください。
           </p>
         ) : isEmpty ? (
-          <p className="rounded-xl border border-black/10 dark:border-white/15 px-6 py-8 text-center text-sm opacity-60">
-            {hasFilter
-              ? "条件に一致するレシピがありません。"
-              : "まだレシピがありません。"}
-          </p>
+          <div className="rounded-xl border border-black/10 dark:border-white/15 px-6 py-8 text-center text-sm">
+            <p className="opacity-60">
+              {hasFilter
+                ? "条件に一致するレシピがありません。"
+                : "まだレシピがありません。"}
+            </p>
+            {!hasFilter && (
+              <div className="mt-4">
+                <Link
+                  href="/recipes/new"
+                  className="inline-flex items-center rounded-lg bg-black dark:bg-white px-4 py-2 text-sm font-medium text-white dark:text-black transition-opacity hover:opacity-80"
+                >
+                  レシピを追加
+                </Link>
+              </div>
+            )}
+          </div>
         ) : (
           <>
             <div className="overflow-x-auto rounded-xl border border-black/10 dark:border-white/15">

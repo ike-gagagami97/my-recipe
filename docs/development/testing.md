@@ -61,6 +61,7 @@
 | `tests/e2e/auth.spec.ts` | `docs/product/features/auth.md` §5 | 6 scenarios |
 | `tests/e2e/recipe-list.spec.ts` | `docs/product/features/recipe-list.md` §5 | 11 scenarios |
 | `tests/e2e/recipe-detail.spec.ts` | `docs/product/features/recipe-detail.md` §5 | 11 scenarios |
+| `tests/e2e/recipe-create.spec.ts` | `docs/product/features/recipe-create.md` §5 | 10 scenarios |
 
 ### 何を検証するか
 

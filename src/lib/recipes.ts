@@ -144,3 +144,38 @@ export function listHref(params: URLSearchParams): string {
   const query = params.toString();
   return query ? `/recipes?${query}` : "/recipes";
 }
+
+// ---- Create-form helpers ----
+
+/** Trim; empty after trim becomes null (optional text columns). */
+export function optionalText(raw: string): string | null {
+  const trimmed = raw.trim();
+  return trimmed === "" ? null : trimmed;
+}
+
+export type CookingTimeParseResult =
+  | { ok: true; value: number | null }
+  | { ok: false; error: string };
+
+/**
+ * Parse the cooking-time field from the create form.
+ * Empty → unset (null). Otherwise only integers ≥ 1 are accepted.
+ */
+export function parseCookingTimeInput(raw: string): CookingTimeParseResult {
+  const trimmed = raw.trim();
+  if (trimmed === "") return { ok: true, value: null };
+  if (!/^\d+$/.test(trimmed)) {
+    return {
+      ok: false,
+      error: "所要時間は1以上の整数で入力してください",
+    };
+  }
+  const n = Number(trimmed);
+  if (n < 1) {
+    return {
+      ok: false,
+      error: "所要時間は1以上の整数で入力してください",
+    };
+  }
+  return { ok: true, value: n };
+}

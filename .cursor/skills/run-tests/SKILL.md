@@ -73,6 +73,7 @@ tests/e2e/
   auth.spec.ts           # 認証フロー（ログイン・ログアウト・リダイレクト）
   recipe-list.spec.ts    # レシピ一覧（検索・絞り込み・ソート・ページネーション）
   recipe-detail.spec.ts  # レシピ詳細（表示・戻るリンク・RLS）
+  recipe-create.spec.ts  # レシピ追加（フォーム・バリデーション・保存後遷移）
   .auth/                 # gitignore済み。user.json と credentials.json
 ```
 
