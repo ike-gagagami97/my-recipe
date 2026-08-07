@@ -158,7 +158,7 @@ Feature: レシピ追加
   - L4 では「タイトル＋全項目入力」「タイトルのみ」「タイトル空で保存失敗」「所要時間不正」「キャンセル」「0件一覧からの追加」を必ず通す
   - 他ユーザー非表示: ユーザーAで新規保存 → ログアウト → 確認済みのユーザーBでログイン → 一覧にAがさっき保存したタイトルが出ないこと
   - 一覧 feature（`recipe-list.md`）時点の「0件時は追加導線なし」は、本 feature の承認（§8 Q5）で上書きする。実装 PR で `recipe-list.md` の §3/§7/§8 も「0件時も追加導線あり」に更新する
-- L4 用の補助データ: 実装 PR で `supabase/qa/l4_recipe_create_seed.sql` / `l4_recipe_create_cleanup.sql` を置き、ここへリンクする（詳細 seed の他ユーザー行の流用可）。追加そのもののデータはフォーム操作で作る
+- L4 用の補助データ: [`supabase/qa/l4_recipe_create_seed.sql`](../../../supabase/qa/l4_recipe_create_seed.sql) / [`l4_recipe_create_cleanup.sql`](../../../supabase/qa/l4_recipe_create_cleanup.sql)（詳細 seed の他ユーザー行の流用可）。追加そのもののデータはフォーム操作で作る。L4 中に作った確認用タイトルは `[L4-Create]` 接頭辞を付けると cleanup でまとめて消せる
 
 ---
 
