@@ -138,13 +138,13 @@ export default function RecipeCreateForm() {
         <button
           type="submit"
           disabled={isPending}
-          className="rounded-lg bg-black dark:bg-white text-white dark:text-black font-medium px-5 py-2 text-sm transition-opacity disabled:opacity-50 hover:opacity-80"
+          className="rounded-lg bg-black dark:bg-white px-5 py-2 text-sm font-medium text-white dark:text-black transition-opacity hover:opacity-80 disabled:opacity-50"
         >
           {isPending ? "保存中…" : "保存"}
         </button>
         <Link
           href="/recipes"
-          className="text-sm text-blue-700 dark:text-blue-400 underline decoration-blue-700/40 dark:decoration-blue-400/40 underline-offset-2 transition-colors hover:decoration-current"
+          className="inline-flex items-center rounded-lg border border-black/15 px-5 py-2 text-sm font-medium transition-opacity hover:opacity-70 dark:border-white/20"
         >
           キャンセル
         </Link>

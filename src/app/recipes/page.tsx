@@ -144,7 +144,7 @@ export default async function RecipesPage({
           <h2 className="text-xl font-semibold">レシピ一覧</h2>
           <Link
             href="/recipes/new"
-            className="text-sm font-medium text-blue-700 dark:text-blue-400 underline decoration-blue-700/40 dark:decoration-blue-400/40 underline-offset-2 transition-colors hover:decoration-current"
+            className="inline-flex items-center rounded-lg bg-black dark:bg-white px-4 py-2 text-sm font-medium text-white dark:text-black transition-opacity hover:opacity-80"
           >
             レシピを追加
           </Link>
@@ -169,15 +169,14 @@ export default async function RecipesPage({
                 : "まだレシピがありません。"}
             </p>
             {!hasFilter && (
-              <p className="mt-3">
+              <div className="mt-4">
                 <Link
                   href="/recipes/new"
-                  className="font-medium text-blue-700 dark:text-blue-400 underline decoration-blue-700/40 dark:decoration-blue-400/40 underline-offset-2 transition-colors hover:decoration-current"
+                  className="inline-flex items-center rounded-lg bg-black dark:bg-white px-4 py-2 text-sm font-medium text-white dark:text-black transition-opacity hover:opacity-80"
                 >
                   レシピを追加
                 </Link>
-                して最初の一品を記録しましょう。
-              </p>
+              </div>
             )}
           </div>
         ) : (

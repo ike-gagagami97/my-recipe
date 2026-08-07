@@ -35,7 +35,6 @@ export default async function NewRecipePage() {
           <h1 className="mt-4 text-3xl font-bold tracking-tight">
             レシピを追加
           </h1>
-          <p className="mt-1 text-sm opacity-60">{user.email}</p>
         </div>
         <LogoutButton />
       </header>
