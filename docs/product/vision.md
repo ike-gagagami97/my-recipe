@@ -15,7 +15,7 @@
 - レシピ一覧（検索・絞り込み・ソート・ページネーション）実装済み
 - レシピ詳細（`/recipes/[id]`）実装済み
 - `recipes` テーブル作成済み（RLS + `authenticated` への GRANT）。追加・編集で必要な列は各 feature で追加する
-- レシピの追加は L4 受け入れ済み（マージ待ち）。編集・削除は未実装
+- レシピの追加（`/recipes/new`）実装済み。編集・削除は未実装
 
 ## 想定ユーザー
 
@@ -30,14 +30,12 @@
 
 実装順に並べる（上から順に着手）。
 
-実装順に並べる（上から順に着手）。
-
 | 実装順 | 優先度 | 機能 | 状態 | feature doc | Issue |
 | --- | --- | --- | --- | --- | --- |
 | 1 | P0 | 認証（ログイン・ログアウト） | ✅ 完了 | [`features/auth.md`](./features/auth.md) | [#10](https://github.com/ike-gagagami97/my-recipe/issues/10) |
 | 2 | P0 | レシピ一覧（検索・絞り込み含む） | ✅ 完了 | [`features/recipe-list.md`](./features/recipe-list.md) | [#4](https://github.com/ike-gagagami97/my-recipe/issues/4) |
 | 3 | P0 | レシピ詳細 | ✅ 完了 | [`features/recipe-detail.md`](./features/recipe-detail.md) | [#5](https://github.com/ike-gagagami97/my-recipe/issues/5) |
-| 4 | P0 | レシピ追加 | ✅ L4 済み・マージ待ち | [`features/recipe-create.md`](./features/recipe-create.md) | [#6](https://github.com/ike-gagagami97/my-recipe/issues/6) |
+| 4 | P0 | レシピ追加 | ✅ 完了 | [`features/recipe-create.md`](./features/recipe-create.md) | [#6](https://github.com/ike-gagagami97/my-recipe/issues/6) |
 | 5 | P1 | 編集・削除 | 未着手 | | [#7](https://github.com/ike-gagagami97/my-recipe/issues/7) |
 
 ## 非スコープ（当面やらない）
