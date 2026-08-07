@@ -25,9 +25,13 @@ Run commands: [`.cursor/skills/run-tests/SKILL.md`](../skills/run-tests/SKILL.md
 
 ## E2E テストの書き方
 
+Page Object Model（`tests/e2e/pages/`）を使う。[Playwright POM](https://playwright.dev/docs/pom)
+
 **必ずこの構造に従う**（`test.use` と `test.beforeAll` を describe 内に置く）:
 
 ```ts
+import { RecipeListPage } from "./pages";
+
 test.describe("機能名", () => {
   test.use({ storageState: "tests/e2e/.auth/user.json" }); // 認証が必要な場合
 
@@ -40,11 +44,15 @@ test.describe("機能名", () => {
     cleanupMainUserRecipes();
   });
 
-  test("...", async ({ page }) => { ... });
+  test("...", async ({ page }) => {
+    const listPage = new RecipeListPage(page);
+    await listPage.goto();
+  });
 });
 ```
 
-**ファイルスコープ（describe 外）に `test.use()` や `test.beforeAll()` を置かない** → worker が storageState を取得できない。
+**ファイルスコープ（describe 外）に `test.use()` や `test.beforeAll()` を置かない** → worker が storageState を取得できない。  
+**セレクタは Page Object に置く** → スペックに `page.getByRole(...)` を直書きしない。
 
 ## 重要な制約
 

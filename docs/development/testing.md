@@ -83,12 +83,28 @@ global-teardown.ts テストユーザーを削除（recipes は ON DELETE CASCAD
 
 **DELETE は psql を使う理由**: `authenticated` ロールへの DELETE grant は edit/delete 機能（#7）で追加予定。それまでは `docker exec ... psql` で直接実行する。
 
+### Page Object Model
+
+セレクタと画面操作は `tests/e2e/pages/` の Page Object に集約する（[Playwright POM](https://playwright.dev/docs/pom)）。
+
+| Page Object | 対象画面 |
+| --- | --- |
+| `LoginPage` | `/login` |
+| `RecipeListPage` | `/recipes` |
+| `RecipeDetailPage` | `/recipes/[id]` |
+| `RecipeCreatePage` | `/recipes/new` |
+
+スペックはシナリオ記述に徹し、`page.getByRole(...)` などのセレクタ直書きは避ける。
+
 ### 新しい機能の E2E を追加するとき
 
-1. `tests/e2e/{feature-name}.spec.ts` を新規作成
-2. 必ずこのテンプレートに従う（スコープ問題を避けるため）:
+1. 新しい画面なら `tests/e2e/pages/{name}.page.ts` を追加し `pages/index.ts` から export
+2. `tests/e2e/{feature-name}.spec.ts` を新規作成
+3. 必ずこのテンプレートに従う（スコープ問題を避けるため）:
 
 ```ts
+import { RecipeListPage } from "./pages";
+
 test.describe("機能名 / Feature Name", () => {
   test.use({ storageState: "tests/e2e/.auth/user.json" }); // 認証が必要な場合
 
@@ -101,14 +117,18 @@ test.describe("機能名 / Feature Name", () => {
     cleanupMainUserRecipes();
   });
 
-  test("...", async ({ page }) => { ... });
+  test("...", async ({ page }) => {
+    const listPage = new RecipeListPage(page);
+    await listPage.goto();
+    // ...
+  });
 });
 ```
 
 > **重要**: `test.use()` と `test.beforeAll` はファイルスコープ（describe 外）に置かない。ファイルスコープに置くと worker が storageState を取得できないケースがある。
 
-3. テストシナリオは feature doc §5 の Gherkin を直接対応させる（1 Scenario ≈ 1 test）
-4. 認証不要のシナリオは `test.use({ storageState: { cookies: [], origins: [] } })` を別の describe に分ける
+4. テストシナリオは feature doc §5 の Gherkin を直接対応させる（1 Scenario ≈ 1 test）
+5. 認証不要のシナリオは `test.use({ storageState: { cookies: [], origins: [] } })` を別の describe に分ける
 
 ---
 

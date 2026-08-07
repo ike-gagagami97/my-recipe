@@ -70,12 +70,26 @@ tests/e2e/
   global-teardown.ts     # テスト用ユーザーを削除（recipes は CASCADE で連鎖削除）
   auth.setup.ts          # ブラウザでログインして .auth/user.json を保存
   helpers.ts             # 認証済みクライアント / psql ベースのクリーンアップ
+  pages/                 # Page Object Model（セレクタと画面操作）
+    login.page.ts
+    recipe-list.page.ts
+    recipe-detail.page.ts
+    recipe-create.page.ts
+    index.ts
   auth.spec.ts           # 認証フロー（ログイン・ログアウト・リダイレクト）
   recipe-list.spec.ts    # レシピ一覧（検索・絞り込み・ソート・ページネーション）
   recipe-detail.spec.ts  # レシピ詳細（表示・戻るリンク・RLS）
   recipe-create.spec.ts  # レシピ追加（フォーム・バリデーション・保存後遷移）
   .auth/                 # gitignore済み。user.json と credentials.json
 ```
+
+### Page Object Model
+
+E2E は [Playwright 推奨の Page Object Model](https://playwright.dev/docs/pom) で書く。
+
+- セレクタと画面操作は `tests/e2e/pages/*.page.ts` に集約する
+- スペックはシナリオ（Given/When/Then）だけを書き、`page.getByRole(...)` を直書きしない
+- 新しい画面を追加するときは対応する Page Object を先に作り、スペックから利用する
 
 ### テストデータの扱い
 
@@ -92,10 +106,24 @@ tests/e2e/
 
 ### 新しい E2E テストを書くとき
 
-1. `tests/e2e/*.spec.ts` に新しいファイルを作成
-2. `test.describe("...", () => { test.use({ storageState: "tests/e2e/.auth/user.json" }); ... })` パターンに従う
-3. `beforeAll` でデータシード、`afterAll` で `cleanupMainUserRecipes()` を呼ぶ
-4. 機能 doc の §5 Gherkin / §6 受け入れ条件をそのままテストシナリオに変換する
+1. 画面操作が必要なら `tests/e2e/pages/{name}.page.ts` に Page Object を追加し `pages/index.ts` から export
+2. `tests/e2e/*.spec.ts` に新しいファイルを作成
+3. `test.describe("...", () => { test.use({ storageState: "tests/e2e/.auth/user.json" }); ... })` パターンに従う
+4. `beforeAll` でデータシード、`afterAll` で `cleanupMainUserRecipes()` を呼ぶ
+5. スペック内では Page Object を生成して操作する（セレクタの直書きは避ける）
+6. 機能 doc の §5 Gherkin / §6 受け入れ条件をそのままテストシナリオに変換する
+
+```ts
+import { LoginPage, RecipeListPage } from "./pages";
+
+test("...", async ({ page }) => {
+  const loginPage = new LoginPage(page);
+  const listPage = new RecipeListPage(page);
+  await loginPage.goto();
+  await loginPage.login(email, password);
+  await listPage.expectOnListPage();
+});
+```
 
 ---
 
