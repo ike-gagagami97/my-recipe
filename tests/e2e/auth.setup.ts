@@ -5,16 +5,16 @@
 import { test as setup, expect } from "@playwright/test";
 import path from "path";
 import { loadCredentials } from "./helpers";
+import { LoginPage } from "./pages";
 
 const AUTH_FILE = path.join(__dirname, ".auth/user.json");
 
 setup("authenticate as main test user", async ({ page }) => {
   const { mainUser } = loadCredentials();
+  const loginPage = new LoginPage(page);
 
-  await page.goto("/login");
-  await page.getByLabel("メールアドレス").fill(mainUser.email);
-  await page.getByLabel("パスワード").fill(mainUser.password);
-  await page.getByRole("button", { name: "ログイン" }).click();
+  await loginPage.goto();
+  await loginPage.login(mainUser.email, mainUser.password);
 
   await expect(page).toHaveURL("/recipes");
 
