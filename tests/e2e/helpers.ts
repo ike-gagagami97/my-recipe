@@ -55,7 +55,7 @@ export async function otherUserClient() {
 /**
  * Deletes all recipes for a given user_id via psql.
  * Uses psql directly because DELETE is not yet granted to the `authenticated`
- * role (that grant lands in the edit/delete feature PR).
+ * role (that grant lands in the delete feature PR, #26).
  */
 function deleteRecipesByUserId(userId: string) {
   execSync(
