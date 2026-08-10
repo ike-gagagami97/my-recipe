@@ -36,7 +36,7 @@
 | 2 | P0 | レシピ一覧（検索・絞り込み含む） | ✅ 完了 | [`features/recipe-list.md`](./features/recipe-list.md) | [#4](https://github.com/ike-gagagami97/my-recipe/issues/4) |
 | 3 | P0 | レシピ詳細 | ✅ 完了 | [`features/recipe-detail.md`](./features/recipe-detail.md) | [#5](https://github.com/ike-gagagami97/my-recipe/issues/5) |
 | 4 | P0 | レシピ追加 | ✅ 完了 | [`features/recipe-create.md`](./features/recipe-create.md) | [#6](https://github.com/ike-gagagami97/my-recipe/issues/6) |
-| 5 | P1 | レシピ編集 | ✅ 完了（L4 済み・マージ待ち） | [`features/recipe-edit.md`](./features/recipe-edit.md) | [#25](https://github.com/ike-gagagami97/my-recipe/issues/25) |
+| 5 | P1 | レシピ編集 | ✅ 完了 | [`features/recipe-edit.md`](./features/recipe-edit.md) | [#25](https://github.com/ike-gagagami97/my-recipe/issues/25) |
 | 6 | P1 | レシピ削除 | 未着手 | | [#26](https://github.com/ike-gagagami97/my-recipe/issues/26) |
 
 ## 非スコープ（当面やらない）
@@ -53,5 +53,5 @@
 - ログインしないとレシピを閲覧・操作できない（サインアップ画面はなし、ユーザーはSupabase Dashboardで手動作成）
 - ログイン後、自分のレシピだけが一覧に表示される
 - 検索・絞り込みでレシピを絞り込める
-- ログイン → 一覧 → 詳細 → 追加の一連の流れがブラウザで完結する
+- ログイン → 一覧 → 詳細 → 追加 → 編集の一連の流れがブラウザで完結する
 - RLS により他ユーザーのレシピにはアクセスできない
