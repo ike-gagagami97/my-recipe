@@ -12,7 +12,7 @@ This repo is developed with **Cursor** (IDE + Cloud Agents). Agent instructions 
 | --- | --- |
 | [`docs/product/vision.md`](docs/product/vision.md) | Product scope and MVP |
 | [`docs/architecture/overview.md`](docs/architecture/overview.md) | Stack and data boundaries |
-| [`docs/development/workflow.md`](docs/development/workflow.md) | 4-stage flow (decide → doc → request → implement) |
+| [`docs/development/workflow.md`](docs/development/workflow.md) | ①〜⑤ flow (decide → doc → request → implement → retrospective) |
 | [`docs/product/features/`](docs/product/features/) | Feature contracts (QA-friendly acceptance) |
 | [`docs/development/steering.md`](docs/development/steering.md) | Where to put rules vs skills vs agents |
 | [`docs/development/loops.md`](docs/development/loops.md) | Verification loops and stop criteria |
