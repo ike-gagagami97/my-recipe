@@ -104,3 +104,95 @@ export async function createRecipe(
 
   redirect(`/recipes/${data.id}`);
 }
+
+export type UpdateRecipeValues = CreateRecipeValues;
+
+export type UpdateRecipeState = {
+  error?: string;
+  fieldErrors?: {
+    title?: string;
+    cooking_time_minutes?: string;
+  };
+  values: UpdateRecipeValues;
+} | null;
+
+const UUID_PATTERN =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+export async function updateRecipe(
+  _prevState: UpdateRecipeState,
+  formData: FormData,
+): Promise<UpdateRecipeState> {
+  const id = (formData.get("id") ?? "").toString();
+  const values = readValues(formData);
+  const title = values.title.trim();
+  const fieldErrors: NonNullable<UpdateRecipeState>["fieldErrors"] = {};
+
+  if (!title) {
+    fieldErrors.title = "タイトルを入力してください";
+  }
+
+  const cookingTime = parseCookingTimeInput(values.cooking_time_minutes);
+  if (!cookingTime.ok) {
+    fieldErrors.cooking_time_minutes = cookingTime.error;
+  }
+
+  if (fieldErrors.title || fieldErrors.cooking_time_minutes) {
+    return { fieldErrors, values };
+  }
+
+  const cookingTimeMinutes = cookingTime.ok ? cookingTime.value : null;
+
+  if (
+    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  ) {
+    return {
+      error: "Supabase が設定されていません（環境変数を確認してください）",
+      values,
+    };
+  }
+
+  if (!UUID_PATTERN.test(id)) {
+    return {
+      error: "レシピが見つかりません。",
+      values,
+    };
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
+
+  const { data, error } = await supabase
+    .from("recipes")
+    .update({
+      title,
+      cooking_time_minutes: cookingTimeMinutes,
+      ingredients: optionalText(values.ingredients),
+      steps: optionalText(values.steps),
+      notes: optionalText(values.notes),
+    })
+    .eq("id", id)
+    .eq("user_id", user.id)
+    .select("id")
+    .maybeSingle();
+
+  if (error) {
+    return {
+      error: "レシピの保存に失敗しました。もう一度お試しください。",
+      values,
+    };
+  }
+
+  if (!data) {
+    return {
+      error: "レシピが見つかりません。",
+      values,
+    };
+  }
+
+  redirect(`/recipes/${data.id}`);
+}

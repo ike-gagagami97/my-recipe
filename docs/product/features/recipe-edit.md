@@ -200,19 +200,19 @@ Feature: レシピ編集
 
 - ルート: `src/app/recipes/[id]/edit/page.tsx`（Server Component で既存行を読み、client form + Server Action で更新）
 - 詳細: 「編集」導線を追加（削除は付けない）
-- DB: 既存 `public.recipes`。**UPDATE の RLS policy + `grant update` が未整備**（初期 migration コメント参照）。編集 feature の PR で migration を追加する
-  - policy 例: `recipes_update_own` — `for update to authenticated using (auth.uid() = user_id) with check (auth.uid() = user_id)`
+- DB: migration `20260810000000_add_recipes_update_policy.sql`
+  - policy: `recipes_update_own` — `for update to authenticated using (auth.uid() = user_id) with check (auth.uid() = user_id)`
   - `grant update on table public.recipes to authenticated;`
-  - `user_id` の付け替えは許可しない（with check で所有者固定）
-- バリデーション: 追加（`createRecipe`）と同じ規則を共有または複製
+- バリデーション: 追加（`createRecipe`）と同じ規則
 - `updated_at` は既存 trigger `recipes_set_updated_at` で自動更新
 - 使う skills: `recipe-feature`, `supabase-migration`, `verify-frontend-change`
-- テストレベル: **L0 + L1 + L2 + L4**（新規画面・新規フロー + migration。L3 は env 変更が無ければ不要）
-- E2E: `tests/e2e/recipe-edit.spec.ts` を追加
+- テストレベル: **L0 + L1 + L2 + L4**（新規画面・新規フロー + migration / RLS 権限拡大。L3 は env 変更なしで不要）
+- E2E: `tests/e2e/recipe-edit.spec.ts`
+- L4 seed: `supabase/qa/l4_recipe_edit_seed.sql` / `l4_recipe_edit_cleanup.sql`
 - migration / RLS を含むため実装 PR で `code-reviewer` と `db-security-auditor` を実行する
 - マージ: 人間のみ（D1）
 
-### 変更したドキュメント（実装 PR で更新予定）
+### 変更したドキュメント
 
-- `docs/product/vision.md`（着手中 → 完了）
+- `docs/product/vision.md`（着手中 → 実装中）
 - `docs/product/features/recipe-detail.md`（編集導線ありに上書き。削除は無しのまま）
