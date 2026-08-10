@@ -207,13 +207,20 @@ Feature: レシピ編集
 - バリデーション: 追加（`createRecipe`）と同じ規則
 - `updated_at` は既存 trigger `recipes_set_updated_at` で自動更新
 - 使う skills: `recipe-feature`, `supabase-migration`, `verify-frontend-change`
-- テストレベル: **L0 + L1 + L2 + L4**（新規画面・新規フロー + migration / RLS 権限拡大。L3 は env 変更なしで不要）
+- テストレベル: **L0 + L1 + L2 + L4**（L0–L2 エージェント実施、L4 人間 2026-08-10 受け入れ済み）
 - E2E: `tests/e2e/recipe-edit.spec.ts`
 - L4 seed: `supabase/qa/l4_recipe_edit_seed.sql` / `l4_recipe_edit_cleanup.sql`
-- migration / RLS を含むため実装 PR で `code-reviewer` と `db-security-auditor` を実行する
-- マージ: 人間のみ（D1）
+- migration / RLS: `code-reviewer` + ライブ DB 監査実施済み
+- マージ: 人間のみ（D1）— PR [#29](https://github.com/ike-gagagami97/my-recipe/pull/29)
+
+### 振り返り（⑤）
+
+| 気づき | 判断 | 反映先 |
+| --- | --- | --- |
+| Preview に UPDATE migration を当てる前に L4 すると、編集画面は開けるが保存だけ失敗する | 繰り返しリスク（今後の grant/policy 追加でも同じ） | feature doc §6 確認メモ / PR Deploy notes |
+| 0 件 UPDATE を「見つかりません」と出すと原因が分かりにくい | 繰り返しリスク | `updateRecipe` のエラー分岐を改善 |
 
 ### 変更したドキュメント
 
-- `docs/product/vision.md`（着手中 → 実装中）
+- `docs/product/vision.md`（完了・マージ待ちに更新）
 - `docs/product/features/recipe-detail.md`（編集導線ありに上書き。削除は無しのまま）
