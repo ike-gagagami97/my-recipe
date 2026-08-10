@@ -10,4 +10,5 @@ alwaysApply: false
 - Every new table: enable RLS, add policies, and `grant` to `anon`/`authenticated` as needed.
 - `create extension … with schema extensions;` — never bare. `public` is exposed by the Data API, so an extension landing there makes its functions callable as RPC with the anon key.
 - Dashboard-only schema edits are not source of truth — encode changes in `supabase/migrations/`.
+- Vercel Preview does not apply migrations to hosted Supabase — L4 write flows need the human to apply new policies/grants on the host first (see `supabase-migration` skill).
 - Prefer the `supabase-migration` skill for the full checklist.

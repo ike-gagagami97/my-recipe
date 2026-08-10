@@ -42,6 +42,7 @@ npm run test:e2e      # Playwright E2E tests — requires Supabase + dev server 
 - After UI changes, use skill `verify-frontend-change` before declaring done.
 - After touching `src/lib/recipes.ts` or E2E-covered features, run tests (see `docs/development/testing.md`).
 - New Supabase tables: RLS **and** `grant` for `anon`/`authenticated`.
+- After a feature is L4-accepted or merged, run workflow **⑤** (retrospective) without waiting to be asked — put recurring risks in skill / rule / workflow.
 - Do not commit secrets (`.env*` except `.env.example`).
 
 ## Cursor Cloud specific instructions

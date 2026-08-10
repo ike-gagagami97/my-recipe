@@ -8,7 +8,7 @@
 | 誰 | やること |
 | --- | --- |
 | 人間（QA / プロダクト） | ①決める、② feature doc §1〜6 の承認、③短い依頼、④受け入れ確認と Production マージ |
-| Cursor エージェント | ②の下書き、④の実装・自己検証・draft PR。**マージはしない** |
+| Cursor エージェント | ②の下書き、④の実装・自己検証・draft PR、**⑤振り返り（L4 OK / マージ後に自分から開始）**。**マージはしない** |
 
 ## 依頼は短く（詳細は feature doc）
 
@@ -31,6 +31,7 @@ PR 本文は .github/PULL_REQUEST_TEMPLATE.md に従い、Test level を記入�
 - Production マージを勝手にしない（D1）
 - テストレベルを独自に拡大解釈しない（[`test-level-policy.md`](./test-level-policy.md)）。スコア表が無い間は暫定ゲートに従う
 - 「振る舞い不変」で L4 を省略する場合は、PR にその判断を一言書く（一次判定は PR 作成者）
+- feature が L4 OK またはマージされたら、[`workflow.md`](./workflow.md) の **⑤を自分から実施**する（人間に「振り返りして」と言われるのを待たない）。繰り返しリスクは skill / rule / workflow に書く
 
 ## スキルの使い分け
 

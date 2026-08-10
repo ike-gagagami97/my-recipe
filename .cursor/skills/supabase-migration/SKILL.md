@@ -60,6 +60,18 @@ sg docker -c "supabase db reset"   # Cloud VM may need docker group
 - `db reset` reapplies all migrations from scratch
 - Hosted projects: use `supabase db push` (or team equivalent)
 
+### Preview / L4（ホスト DB）
+
+Vercel Preview does **not** run migrations against hosted Supabase. Applying only on the local Docker stack leaves Preview with old policies/grants.
+
+Before asking a human for L4 on a PR that adds UPDATE/DELETE/new-table grants or policies:
+
+1. Put the migration SQL (or file path) in the PR Deploy notes and feature doc §6
+2. Human applies it on the hosted project (Studio SQL Editor or `supabase db push`) first
+3. Then run L4 write flows (save / delete)
+
+If skipped: SELECT screens work, writes return 0 rows (often shown as a misleading not-found error).
+
 ## Done when
 
 - [ ] RLS enabled
@@ -67,6 +79,7 @@ sg docker -c "supabase db reset"   # Cloud VM may need docker group
 - [ ] `db-security-auditor` subagent run against the applied DB, findings addressed
 - [ ] Breaking changes documented in ADR or PR
 - [ ] App queries/types updated in the same PR (or follow-up Issue linked)
+- [ ] If L4 will hit hosted Preview: Deploy notes + §6 tell the human to apply the migration on the hosted DB first
 
 ## Do not
 
@@ -74,3 +87,4 @@ sg docker -c "supabase db reset"   # Cloud VM may need docker group
 - Ship RLS without grants
 - Use the service role on normal app paths
 - `create extension` without `with schema extensions` — `public` is API-exposed, so the extension's functions become anon-callable RPC (this happened with `pg_trgm`)
+- Assume Vercel Preview applies `supabase/migrations/` for you

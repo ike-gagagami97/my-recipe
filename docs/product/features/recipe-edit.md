@@ -217,8 +217,9 @@ Feature: レシピ編集
 
 | 気づき | 判断 | 反映先 |
 | --- | --- | --- |
-| Preview に UPDATE migration を当てる前に L4 すると、編集画面は開けるが保存だけ失敗する | 繰り返しリスク（今後の grant/policy 追加でも同じ） | feature doc §6 確認メモ / PR Deploy notes |
-| 0 件 UPDATE を「見つかりません」と出すと原因が分かりにくい | 繰り返しリスク | `updateRecipe` のエラー分岐を改善 |
+| Preview に grant/policy migration を当てる前に L4 すると、画面は開けるが保存だけ失敗する | 繰り返しリスク（#26 DELETE でも同じ） | `supabase-migration` skill / `supabase-migrations.mdc` / `recipe-feature` L4 節 |
+| 0 件 UPDATE を「見つかりません」と出すと原因が分かりにくい | 繰り返しリスク | `updateRecipe` エラー分岐（#29）+ `recipe-feature` L4 節 |
+| ⑤振り返りを人間に明示依頼されるまでやらなかった | 繰り返しリスク | `workflow.md` ⑤の開始条件 / `project.mdc` / `agent-collaboration.md` / `recipe-feature` Done when / `AGENTS.md` |
 
 ### 変更したドキュメント
 
