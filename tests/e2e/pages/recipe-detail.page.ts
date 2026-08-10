@@ -8,6 +8,7 @@ export class RecipeDetailPage {
   readonly page: Page;
   readonly titleHeading: Locator;
   readonly backToListLink: Locator;
+  readonly editLink: Locator;
   readonly notFoundHeading: Locator;
   readonly backToListFromNotFoundLink: Locator;
   readonly ingredientsHeading: Locator;
@@ -22,6 +23,7 @@ export class RecipeDetailPage {
     this.page = page;
     this.titleHeading = page.getByRole("heading", { level: 1 });
     this.backToListLink = page.getByRole("link", { name: /一覧に戻る/ });
+    this.editLink = page.getByRole("link", { name: "編集" });
     this.notFoundHeading = page.getByRole("heading", {
       name: "レシピが見つかりません",
     });
@@ -51,6 +53,10 @@ export class RecipeDetailPage {
 
   async backToList() {
     await this.backToListLink.click();
+  }
+
+  async openEdit() {
+    await this.editLink.click();
   }
 
   async expectTitle(title: string) {

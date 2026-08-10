@@ -6,4 +6,5 @@ export { LoginPage } from "./login.page";
 export { RecipeListPage } from "./recipe-list.page";
 export { RecipeDetailPage } from "./recipe-detail.page";
 export { RecipeCreatePage } from "./recipe-create.page";
+export { RecipeEditPage } from "./recipe-edit.page";
 export type { RecipeFormValues } from "./recipe-create.page";
