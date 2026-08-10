@@ -187,7 +187,24 @@ export async function updateRecipe(
     };
   }
 
+  // 0 rows + no error usually means UPDATE RLS/grant is missing on the DB,
+  // or the row is not owned by this user (RLS filtered the update away).
   if (!data) {
+    const { data: existing } = await supabase
+      .from("recipes")
+      .select("id")
+      .eq("id", id)
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    if (existing) {
+      return {
+        error:
+          "レシピを保存できませんでした。データベースの更新権限（UPDATE）を確認してください。",
+        values,
+      };
+    }
+
     return {
       error: "レシピが見つかりません。",
       values,
