@@ -166,7 +166,7 @@ Feature: レシピ編集
   - L4 では「詳細→編集で既存値が入る」「自分の編集 URL を直接開いて既存値が入る」「項目を直して保存→詳細反映」「タイトル空で失敗」「所要時間不正」「キャンセルで詳細に戻り未保存」「他ユーザー編集 URL」「未ログインで編集 URL」を必ず通す
   - 他ユーザー非表示: ユーザーAのレシピ編集 URL をユーザーBで開く → 見つからない。Aで直した内容がBの一覧に出ないこと
   - 詳細 feature（`recipe-detail.md`）の「編集ボタンが無い」は、本 feature の承認で上書きする。実装 PR で `recipe-detail.md` の §3/§4/§6 も「編集導線あり／削除は無し」に更新する
-- L4 用の補助データ: [`supabase/qa/l4_recipe_edit_seed.sql`](../../../supabase/qa/l4_recipe_edit_seed.sql) / [`l4_recipe_edit_cleanup.sql`](../../../supabase/qa/l4_recipe_edit_cleanup.sql)（実装 PR で追加）。タイトル接頭辞は `[L4-Edit]`。他ユーザー行・空項目・長い行を含める。詳細 seed の流用可
+- L4 用の補助データ: [`supabase/qa/l4_recipe_edit_seed.sql`](../../../supabase/qa/l4_recipe_edit_seed.sql) / [`l4_recipe_edit_cleanup.sql`](../../../supabase/qa/l4_recipe_edit_cleanup.sql)（実装 PR で追加）。タイトル接頭辞は `【L4-Edit`。他ユーザー行・空項目・長い行を含める。詳細 seed の流用可
 
 ---
 

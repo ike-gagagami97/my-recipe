@@ -251,6 +251,15 @@ test.describe("レシピ編集 / Recipe Edit", () => {
     await detailPage.expectNotFound();
     await expect(detailPage.backToListFromNotFoundLink).toBeVisible();
   });
+
+  test("不正な形式の ID の編集 URL は見つからない", async ({ page }) => {
+    const editPage = new RecipeEditPage(page);
+    const detailPage = new RecipeDetailPage(page);
+
+    await page.goto("/recipes/not-a-valid-uuid/edit");
+    await detailPage.expectNotFound();
+    await expect(editPage.titleInput).toHaveCount(0);
+  });
 });
 
 test.describe("レシピ編集 / 未ログイン", () => {
