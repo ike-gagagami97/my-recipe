@@ -2,7 +2,7 @@
 
 | 項目 | 内容 |
 | --- | --- |
-| 状態 | 完了（L4 受け入れ済み・マージ待ち） |
+| 状態 | 完了（マージ済み） |
 | 関連 Issue | [#25](https://github.com/ike-gagagami97/my-recipe/issues/25) |
 | vision 上の位置づけ | P1 レシピ編集（実装順 5番目） |
 | 作成日 | 2026-08-10 |
@@ -211,7 +211,7 @@ Feature: レシピ編集
 - E2E: `tests/e2e/recipe-edit.spec.ts`
 - L4 seed: `supabase/qa/l4_recipe_edit_seed.sql` / `l4_recipe_edit_cleanup.sql`
 - migration / RLS: `code-reviewer` + ライブ DB 監査実施済み
-- マージ: 人間のみ（D1）— PR [#29](https://github.com/ike-gagagami97/my-recipe/pull/29)
+- マージ: [#29](https://github.com/ike-gagagami97/my-recipe/pull/29)（2026-08-10）
 
 ### 振り返り（⑤）
 
@@ -222,5 +222,5 @@ Feature: レシピ編集
 
 ### 変更したドキュメント
 
-- `docs/product/vision.md`（完了・マージ待ちに更新）
+- `docs/product/vision.md`（完了に更新）
 - `docs/product/features/recipe-detail.md`（編集導線ありに上書き。削除は無しのまま）
