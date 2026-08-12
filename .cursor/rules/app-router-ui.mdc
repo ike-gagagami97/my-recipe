@@ -12,4 +12,6 @@ alwaysApply: false
 - For landing/visual work, also follow `.cursor/skills/ui-design/SKILL.md`.
 - Clickable things must look clickable: links get colour + underline, and the pointer cursor for buttons/selects comes from the base layer in `globals.css` (Tailwind 4 does not add it) — do not re-add `cursor-pointer` per component.
 - Form / CTA hierarchy: primary actions（追加・保存など）は塗りつぶしボタン見た目。secondary（キャンセルなど）は枠線ボタン。テキストリンクのままにしない（#6 L4 フィードバック）。ナビゲーション自体は `Link` のままでよいが、見た目はボタンに合わせる。
+- Save buttons on create/edit forms: `type="button"` + `formRef.requestSubmit()` — not `type="submit"` — so Enter in a single-line field does not save（#33）。
+- Destructive delete: `<form action>` + Server Action `redirect(..., "replace")` on success; avoid client `location.replace` after programmatic action calls（#26 L4）。
 - Render user-visible timestamps with the JST helpers in `src/lib/recipes.ts`; the server runs in UTC.
