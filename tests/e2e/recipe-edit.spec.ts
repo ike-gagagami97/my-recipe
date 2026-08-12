@@ -199,6 +199,19 @@ test.describe("レシピ編集 / Recipe Edit", () => {
     await expect(editPage.titleError).toBeVisible();
   });
 
+  test("タイトル入力中に Enter では保存されない", async ({ page }) => {
+    cleanupMainUserRecipes();
+    const recipe = await seedOwnRecipe();
+    const editPage = new RecipeEditPage(page);
+
+    await editPage.goto(recipe.id);
+    await editPage.titleInput.fill(`${TITLE_PREFIX} Enter 編集`);
+    await editPage.titleInput.press("Enter");
+
+    await editPage.expectOnEditPage(recipe.id);
+    await expect(page).toHaveURL(new RegExp(`/recipes/${recipe.id}/edit$`));
+  });
+
   test("所要時間が不正だと保存できない", async ({ page }) => {
     cleanupMainUserRecipes();
     const recipe = await seedOwnRecipe();

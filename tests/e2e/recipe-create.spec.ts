@@ -124,6 +124,31 @@ test.describe("レシピ追加 / Recipe Create", () => {
     await expect(createPage.titleError).toBeVisible();
   });
 
+  test("タイトル入力中に Enter では保存されない", async ({ page }) => {
+    cleanupMainUserRecipes();
+    const createPage = new RecipeCreatePage(page);
+
+    await createPage.goto();
+    await createPage.titleInput.fill(`${TITLE_PREFIX} Enter テスト`);
+    await createPage.titleInput.press("Enter");
+
+    await createPage.expectOnCreatePage();
+    await expect(page).toHaveURL(/\/recipes\/new$/);
+  });
+
+  test("所要時間入力中に Enter では保存されない", async ({ page }) => {
+    cleanupMainUserRecipes();
+    const createPage = new RecipeCreatePage(page);
+
+    await createPage.goto();
+    await createPage.titleInput.fill(`${TITLE_PREFIX} 時間 Enter`);
+    await createPage.cookingTimeInput.fill("30");
+    await createPage.cookingTimeInput.press("Enter");
+
+    await createPage.expectOnCreatePage();
+    await expect(page).toHaveURL(/\/recipes\/new$/);
+  });
+
   test("所要時間が不正だと保存できない", async ({ page }) => {
     cleanupMainUserRecipes();
     const createPage = new RecipeCreatePage(page);
