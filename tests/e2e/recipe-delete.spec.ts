@@ -192,6 +192,21 @@ test.describe("レシピ削除 / Recipe Delete", () => {
     await expect(detailPage.deleteButton).toHaveCount(0);
   });
 
+  test("削除後に「見つかりません」画面が一瞬も出ない", async ({ page }) => {
+    cleanupMainUserRecipes();
+    const recipe = await seedOwnRecipe({
+      title: `${TITLE_PREFIX} 遷移確認`,
+    });
+    const detailPage = new RecipeDetailPage(page);
+
+    await page.goto(`/recipes/${recipe.id}`);
+    await detailPage.openDeleteDialog();
+    await detailPage.confirmDelete();
+
+    await expect(detailPage.notFoundHeading).not.toBeVisible();
+    await expect(page).toHaveURL(/\/recipes$/);
+  });
+
   test("編集画面に削除ボタンは無い", async ({ page }) => {
     cleanupMainUserRecipes();
     const recipe = await seedOwnRecipe({

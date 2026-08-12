@@ -276,8 +276,9 @@ export async function deleteRecipe(id: string): Promise<DeleteRecipeResult> {
     };
   }
 
+  // Revalidate list only. Do not revalidate the detail path while still on it —
+  // that flashes "レシピが見つかりません" before location.replace runs.
   revalidatePath("/recipes");
-  revalidatePath(`/recipes/${id}`);
 
   return { success: true };
 }
