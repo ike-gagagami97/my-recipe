@@ -1,0 +1,15 @@
+---
+description: Constraints for markdown under docs/ — Mermaid labels must survive GitHub's renderer.
+globs: docs/**/*.md,*.md
+alwaysApply: false
+---
+
+# Docs markdown
+
+Mermaid on GitHub clips any label wider than roughly 170px and gives no warning — Japanese labels are cut mid-character (`人間ゲート: ①決める / ②承`). `mermaid-cli` wraps the same label correctly, so **a local render is not evidence**.
+
+- Keep every label on **one line** within ~170px: at most **10 Japanese characters**, or ~22 ASCII, or a mix (count Japanese as ~13px, ASCII as ~7px).
+- `<br/>` does **not** work — GitHub strips it and joins the lines, making the clipping worse. There is no working multi-line label; move the detail into prose under the diagram instead.
+- Edge labels (`-->|…|`) clip under the same limit and cannot be wrapped either.
+- Verify diagrams on the pushed branch's GitHub blob view (not locally) before declaring a docs change done.
+- Relative links: check they resolve from the file's own directory (`docs/development/x.md` → `../../.cursor/…` for repo-root paths).

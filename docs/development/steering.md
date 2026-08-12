@@ -42,6 +42,7 @@ Treat it as an index: commands, map of the repo, pointers into `docs/` and `.cur
 | `app-router-ui.mdc` | `src/app/**`, `*.tsx` | Server Components, Supabase client usage, UI conventions |
 | `supabase-migrations.mdc` | `supabase/migrations/**` | Append-only, RLS + grant checklist |
 | `testing.mdc` | `*.test.ts`, `tests/e2e/**`, config files | Unit vs E2E separation, storageState constraints, key gotchas |
+| `docs-markdown.mdc` | `docs/**/*.md`, `*.md` | Mermaid label limits on GitHub, relative link checks |
 
 ## Agents in this repo
 
