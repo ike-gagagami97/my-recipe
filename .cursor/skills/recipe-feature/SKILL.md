@@ -30,6 +30,20 @@ description: Implement My Recipe list/detail/create/edit flows with App Router a
 - Types follow DB columns; do not invent wide placeholder models
 - Primary CTAs（追加・保存）= filled button look; Cancel = bordered secondary button — not underlined text links（see `app-router-ui` rule）
 
+### Delete navigation（#26 L4）
+
+- Confirm UI: `<form action={deleteAction}>` + hidden `id` + `useActionState` for errors
+- On success: `redirect("/recipes", "replace")` in the Server Action — **not** client `location.replace` after a programmatic action call
+- Do **not** `revalidatePath` the detail route on delete success (causes a flash of 「見つかりません」 before redirect)
+- Optional stale guard on detail: `popstate` / `pageshow` → `router.refresh()` when user returns via back button
+- Show a full-screen pending overlay during delete submit
+
+### Save buttons / implicit submit（#33）
+
+- Single-line inputs + default `type="submit"` save button → Enter triggers HTML implicit submit
+- Primary save: `type="button"` + `onClick={() => formRef.current?.requestSubmit()}` so only explicit click saves
+- Delete confirm dialog may keep `type="submit"` on 「削除する」（Enter で確定してよい）
+
 ## Placement
 
 | Kind | Path |

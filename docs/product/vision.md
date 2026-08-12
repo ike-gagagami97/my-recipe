@@ -15,7 +15,7 @@
 - レシピ一覧（検索・絞り込み・ソート・ページネーション）実装済み
 - レシピ詳細（`/recipes/[id]`）実装済み
 - `recipes` テーブル作成済み（RLS + `authenticated` への GRANT）。追加・編集で必要な列は各 feature で追加する
-- レシピの追加（`/recipes/new`）・編集（`/recipes/[id]/edit`）実装済み。削除は実装中（#26）
+- レシピの追加（`/recipes/new`）・編集（`/recipes/[id]/edit`）・削除（詳細画面）実装済み
 
 ## 想定ユーザー
 
@@ -26,9 +26,9 @@
 
 ## 初期スコープ（MVP 候補）
 
-未実装。①で着手を決めたら状態を更新し、②で `docs/product/features/` に feature doc を作る。
+**MVP スコープは 2026-08-12 時点で完了。** 次の機能は ① で新たに優先度を決める。
 
-実装順に並べる（上から順に着手）。
+実装順（着手順）。
 
 | 実装順 | 優先度 | 機能 | 状態 | feature doc | Issue |
 | --- | --- | --- | --- | --- | --- |
@@ -37,7 +37,7 @@
 | 3 | P0 | レシピ詳細 | ✅ 完了 | [`features/recipe-detail.md`](./features/recipe-detail.md) | [#5](https://github.com/ike-gagagami97/my-recipe/issues/5) |
 | 4 | P0 | レシピ追加 | ✅ 完了 | [`features/recipe-create.md`](./features/recipe-create.md) | [#6](https://github.com/ike-gagagami97/my-recipe/issues/6) |
 | 5 | P1 | レシピ編集 | ✅ 完了 | [`features/recipe-edit.md`](./features/recipe-edit.md) | [#25](https://github.com/ike-gagagami97/my-recipe/issues/25) |
-| 6 | P1 | レシピ削除 | 実装中 | [`features/recipe-delete.md`](./features/recipe-delete.md) | [#26](https://github.com/ike-gagagami97/my-recipe/issues/26) |
+| 6 | P1 | レシピ削除 | ✅ 完了 | [`features/recipe-delete.md`](./features/recipe-delete.md) | [#26](https://github.com/ike-gagagami97/my-recipe/issues/26) |
 
 ## 非スコープ（当面やらない）
 
@@ -53,5 +53,5 @@
 - ログインしないとレシピを閲覧・操作できない（サインアップ画面はなし、ユーザーはSupabase Dashboardで手動作成）
 - ログイン後、自分のレシピだけが一覧に表示される
 - 検索・絞り込みでレシピを絞り込める
-- ログイン → 一覧 → 詳細 → 追加 → 編集の一連の流れがブラウザで完結する
+- ログイン → 一覧 → 詳細 → 追加 → 編集 → 削除の一連の流れがブラウザで完結する
 - RLS により他ユーザーのレシピにはアクセスできない
