@@ -274,5 +274,5 @@ export async function deleteRecipe(id: string): Promise<DeleteRecipeResult> {
     };
   }
 
-  redirect("/recipes");
+  redirect("/recipes", "replace");
 }

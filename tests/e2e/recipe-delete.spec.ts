@@ -144,6 +144,31 @@ test.describe("レシピ削除 / Recipe Delete", () => {
     await expect(detailPage.deleteButton).toHaveCount(0);
   });
 
+  test("削除後にブラウザバックしても削除済み詳細は表示されない", async ({
+    page,
+  }) => {
+    cleanupMainUserRecipes();
+    const recipe = await seedOwnRecipe({
+      title: `${TITLE_PREFIX} バック確認`,
+    });
+    const detailPage = new RecipeDetailPage(page);
+    const listPage = new RecipeListPage(page);
+
+    await listPage.goto();
+    await listPage.openRecipe(recipe.title);
+    await detailPage.openDeleteDialog();
+    await detailPage.confirmDelete();
+    await expect(page).toHaveURL(/\/recipes$/);
+
+    await page.goBack();
+    await expect(
+      page.getByRole("heading", { level: 1, name: recipe.title }),
+    ).toHaveCount(0);
+    if (page.url().match(/\/recipes\/[0-9a-f-]+$/i)) {
+      await detailPage.expectNotFound();
+    }
+  });
+
   test("編集画面に削除ボタンは無い", async ({ page }) => {
     cleanupMainUserRecipes();
     const recipe = await seedOwnRecipe({
