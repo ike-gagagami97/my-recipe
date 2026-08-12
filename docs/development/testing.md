@@ -81,7 +81,7 @@ afterAll           psql でレシピを削除
 global-teardown.ts テストユーザーを削除（recipes は ON DELETE CASCADE で連鎖削除）
 ```
 
-**DELETE は psql を使う理由**: `authenticated` ロールへの DELETE grant は削除機能（#26）で追加予定。それまでは `docker exec ... psql` で直接実行する。
+**DELETE は psql を使う理由**: E2E のクリーンアップは UI 経路に依存せず高速に行うため `docker exec ... psql` を使う（DELETE grant は #26 で `authenticated` に付与済み）。
 
 ### Page Object Model
 

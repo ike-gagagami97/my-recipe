@@ -9,6 +9,10 @@ export class RecipeDetailPage {
   readonly titleHeading: Locator;
   readonly backToListLink: Locator;
   readonly editLink: Locator;
+  readonly deleteButton: Locator;
+  readonly deleteDialog: Locator;
+  readonly deleteConfirmButton: Locator;
+  readonly deleteCancelButton: Locator;
   readonly notFoundHeading: Locator;
   readonly backToListFromNotFoundLink: Locator;
   readonly ingredientsHeading: Locator;
@@ -24,6 +28,12 @@ export class RecipeDetailPage {
     this.titleHeading = page.getByRole("heading", { level: 1 });
     this.backToListLink = page.getByRole("link", { name: /一覧に戻る/ });
     this.editLink = page.getByRole("link", { name: "編集" });
+    this.deleteButton = page.getByRole("button", { name: "削除", exact: true });
+    this.deleteDialog = page.getByRole("alertdialog");
+    this.deleteConfirmButton = page.getByRole("button", { name: "削除する" });
+    this.deleteCancelButton = this.deleteDialog.getByRole("button", {
+      name: "キャンセル",
+    });
     this.notFoundHeading = page.getByRole("heading", {
       name: "レシピが見つかりません",
     });
@@ -57,6 +67,21 @@ export class RecipeDetailPage {
 
   async openEdit() {
     await this.editLink.click();
+  }
+
+  async openDeleteDialog() {
+    await this.deleteButton.click();
+    await expect(this.deleteDialog).toBeVisible();
+    await expect(this.deleteDialog).toContainText("本当に削除しますか？");
+  }
+
+  async confirmDelete() {
+    await this.deleteConfirmButton.click();
+  }
+
+  async cancelDelete() {
+    await this.deleteCancelButton.click();
+    await expect(this.deleteDialog).toHaveCount(0);
   }
 
   async expectTitle(title: string) {
