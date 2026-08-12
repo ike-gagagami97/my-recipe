@@ -1,7 +1,6 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { optionalText, parseCookingTimeInput } from "@/lib/recipes";
 
@@ -215,12 +214,16 @@ export async function updateRecipe(
   redirect(`/recipes/${data.id}`);
 }
 
-export type DeleteRecipeResult = {
+export type DeleteRecipeState = {
   error?: string;
-  success?: true;
 } | null;
 
-export async function deleteRecipe(id: string): Promise<DeleteRecipeResult> {
+export async function deleteRecipe(
+  _prevState: DeleteRecipeState,
+  formData: FormData,
+): Promise<DeleteRecipeState> {
+  const id = (formData.get("id") ?? "").toString();
+
   if (
     !process.env.NEXT_PUBLIC_SUPABASE_URL ||
     !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -276,9 +279,6 @@ export async function deleteRecipe(id: string): Promise<DeleteRecipeResult> {
     };
   }
 
-  // Revalidate list only. Do not revalidate the detail path while still on it —
-  // that flashes "レシピが見つかりません" before location.replace runs.
-  revalidatePath("/recipes");
-
-  return { success: true };
+  // Form POST + redirect: navigate without re-rendering this detail page (no flash).
+  redirect("/recipes", "replace");
 }
