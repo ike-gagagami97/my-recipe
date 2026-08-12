@@ -39,6 +39,7 @@ npm run test:e2e      # Playwright E2E tests — requires Supabase + dev server 
 
 - Keep `AGENTS.md` lean; put long procedures in `.cursor/skills/`.
 - Path-specific constraints → `.cursor/rules/*.mdc` with `globs`.
+- Do not start feature ④ until the feature doc has a human **承認者** and 状態 **承認済み**+（「ワークフローに沿って」 alone is not approval）.
 - After UI changes, use skill `verify-frontend-change` before declaring done.
 - After touching `src/lib/recipes.ts` or E2E-covered features, run tests (see `docs/development/testing.md`).
 - New Supabase tables: RLS **and** `grant` for `anon`/`authenticated`.

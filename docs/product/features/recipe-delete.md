@@ -151,8 +151,18 @@ Feature: レシピ削除
 - テストレベル: **L0 + L1 + L2 + L4**（取り消し不可の物理削除）
 - E2E: `tests/e2e/recipe-delete.spec.ts`
 
+### 振り返り（⑤・下書き）
+
+L4 / マージ後に⑤を完了する。再発防止は先に仕組みへ反映済み。
+
+| 気づき | 判断 | 反映先 |
+| --- | --- | --- |
+| 「ワークフローに沿って」で②の下書きから④実装まで一気に進め、feature doc の人間承認をスキップした | 繰り返しリスク | `recipe-feature` Before starting hard gate / `workflow.md` ②出口・④着手前ゲート / `project.mdc` / `agent-collaboration.md` |
+| Preview に DELETE grant/policy を当てる前に L4 すると削除だけ失敗する | 繰り返しリスク（#25 と同型） | 既存の `supabase-migration` skill / §6 確認メモ / PR Deploy notes（追加変更なし） |
+
 ### 変更したドキュメント
 
 - `docs/product/vision.md`（状態を「実装中」→完了に更新）
 - `docs/product/features/recipe-detail.md`（削除導線ありに上書き）
 - `docs/product/features/recipe-edit.md`（§4/§6 の「削除は #26」を削除済みに更新）
+- `docs/development/workflow.md` / `agent-collaboration.md` / `.cursor/skills/recipe-feature` / `.cursor/rules/project.mdc`（②承認スキップの再発防止）

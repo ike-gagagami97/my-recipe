@@ -11,6 +11,7 @@ alwaysApply: true
 - Architecture: `docs/architecture/overview.md`
 - Steering map: `docs/development/steering.md`
 - Task procedures: `.cursor/skills/*/SKILL.md`
+- Do not start feature implementation (④) until the feature doc header has a human **承認者** and 状態 is **承認済み** or later — drafting/reviewing the doc is not approval; 「ワークフローに沿って」 alone is not either
 - Do not merge to production without human approval (deploy policy D1)
 - After a feature is L4-accepted or merged, run **⑤ retrospective** without waiting to be asked — put recurring risks into skill / rule / workflow (not only the feature doc)
 - Keep agent prompts short; put behavior details in feature docs

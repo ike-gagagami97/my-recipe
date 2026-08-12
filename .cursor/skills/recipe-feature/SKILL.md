@@ -9,10 +9,15 @@ description: Implement My Recipe list/detail/create/edit flows with App Router a
 
 1. **Read the linked GitHub Issue first** — confirm all requirements before touching the feature doc.
 2. Read the feature doc under `docs/product/features/` (§1–6 required; Gherkin in §5, acceptance in §6).
-   - If missing or not yet approved by the human, stop. Do not start implementation.
+   - **Hard gate before ④:** Implementation (code, migration, E2E, draft PR for the feature) starts only when **all** of these are true:
+     - Feature doc exists and §1–6 are filled
+     - Header **承認者** names a human (not a placeholder)
+     - Header **状態** is `承認済み` or later (`実装中` / `完了`) — never jump from `下書き` / `レビュー中` straight into coding
+   - If any gate fails: **stop**. Draft/fix the doc, run `feature-doc-reviewer`, commit + push, ask the human to approve §1–6. Do **not** implement in the same turn.
+   - 「ワークフローに沿って進めて」 alone is **not** approval. Complete ②, then wait for ③ (or an explicit 「承認した／実装して」).
    - Drafting or editing it? Run the `feature-doc-reviewer` subagent before asking for approval.
    - Feature doc changes must be committed and pushed before asking for human approval (humans cannot review uncommitted files).
-   - Approval is always the human's responsibility — never self-approve.
+   - Approval is always the human's responsibility — never self-approve (including “指摘なしなので自分で承認済みにする”).
 3. Confirm scope in [`docs/product/vision.md`](../../../docs/product/vision.md)
 4. If tables are missing, invoke [`supabase-migration`](../supabase-migration/SKILL.md) first
 5. Reuse `src/lib/supabase/{client,server}.ts` — do not add new client factories
