@@ -88,6 +88,10 @@ export class RecipeListPage {
     await expect(this.page).toHaveURL("/recipes");
   }
 
+  async expectRecipeAbsent(title: string) {
+    await expect(this.recipeLink(title)).toHaveCount(0);
+  }
+
   async expectColumnHeadersVisible() {
     await expect(this.titleColumnHeader).toBeVisible();
     await expect(this.cookingTimeColumnHeader).toBeVisible();

@@ -31,6 +31,7 @@
 - レシピ一覧でレシピのタイトルをクリックすると、そのレシピの詳細画面（`/recipes/[id]`）が開く
 - 詳細画面でタイトル・所要時間・材料・手順・メモ・更新日時を確認できる
 - 詳細画面の「編集」から編集画面（`/recipes/[id]/edit`）を開ける（[#25](https://github.com/ike-gagagami97/my-recipe/issues/25)）
+- 詳細画面の「削除」からレシピを削除できる（[#26](https://github.com/ike-gagagami97/my-recipe/issues/26) / `recipe-delete.md`）
 - 材料は1行1項目の箇条書きで読める
 - 手順は1行1ステップの番号付きリストで読める
 - 材料・手順・メモが未入力のレシピは、その欄が未入力であることが分かる
@@ -40,7 +41,7 @@
 ## 4. やらないこと（必須）
 
 - レシピの追加（[#6](https://github.com/ike-gagagami97/my-recipe/issues/6)）
-- レシピの削除、および詳細画面への削除ボタンの設置（[#26](https://github.com/ike-gagagami97/my-recipe/issues/26)）
+- 編集画面・一覧行からの削除（削除は詳細のみ。[`recipe-delete.md`](./recipe-delete.md)）
 - 画像・サムネイルの表示
 - コメント・いいね・共有などのソーシャル機能
 - 印刷用レイアウト、材料の分量スケーリング（人数変更）、チェックボックス付き買い物リスト
@@ -118,7 +119,8 @@ Feature: レシピ詳細
 - [x] 他ユーザーのレシピ ID を直接開くと「見つかりません」になる（RLS で内容が漏れない）
 - [x] 存在しない ID・不正な形式の ID を開いてもエラー画面が崩れず、一覧に戻れる
 - [x] 詳細画面に「編集」がある（[#25](https://github.com/ike-gagagami97/my-recipe/issues/25) / `recipe-edit.md` で上書き）
-- [x] 詳細画面に削除ボタンが無い（§4）
+- [x] 詳細画面に「削除」がある（[#26](https://github.com/ike-gagagami97/my-recipe/issues/26) / `recipe-delete.md` で上書き）
+- [x] 編集画面に削除ボタンは無い
 - [x] モバイル幅（375px 相当）で横スクロールなしに全項目が読める
 - [x] 一覧画面の既存の検索・絞り込み・ソート・ページネーションが従来どおり動く（回帰）
 

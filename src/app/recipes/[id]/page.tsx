@@ -1,7 +1,10 @@
 import { createClient } from "@/lib/supabase/server";
+import { connection } from "next/server";
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import LogoutButton from "../logout-button";
+import RecipeDeleteButton from "./recipe-delete-button";
+import RecipeDetailStaleGuard from "./recipe-detail-stale-guard";
 import {
   formatCookingTime,
   formatDate,
@@ -62,6 +65,8 @@ export default async function RecipeDetailPage({
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
+  await connection();
+
   const { id } = await params;
   const backHref = listHref(pickListParams(await searchParams));
 
@@ -104,17 +109,19 @@ export default async function RecipeDetailPage({
       <DetailHeader backHref={backHref} />
 
       <article>
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <h1 className="text-3xl font-bold tracking-tight break-words">
-            {recipe.title}
-          </h1>
+        <h1 className="text-3xl font-bold tracking-tight break-words">
+          {recipe.title}
+        </h1>
+        <div className="mt-4 flex flex-wrap justify-end gap-3">
           <Link
             href={`/recipes/${recipe.id}/edit`}
             className="inline-flex shrink-0 items-center rounded-lg bg-black px-5 py-2 text-sm font-medium text-white transition-opacity hover:opacity-80 dark:bg-white dark:text-black"
           >
             編集
           </Link>
+          <RecipeDeleteButton recipeId={recipe.id} />
         </div>
+        <RecipeDetailStaleGuard />
 
         <dl className="mt-4 flex flex-wrap gap-x-8 gap-y-2 text-sm opacity-70">
           <div className="flex gap-2">
