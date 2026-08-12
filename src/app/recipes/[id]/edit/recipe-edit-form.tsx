@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useRef } from "react";
 import Link from "next/link";
 import { updateRecipe, type UpdateRecipeState } from "../../actions";
 
@@ -24,6 +24,7 @@ export default function RecipeEditForm({
   recipeId: string;
   initialValues: RecipeEditInitialValues;
 }) {
+  const formRef = useRef<HTMLFormElement>(null);
   const [state, formAction, isPending] = useActionState(
     updateRecipe,
     null as UpdateRecipeState,
@@ -31,7 +32,7 @@ export default function RecipeEditForm({
   const values = state?.values ?? initialValues;
 
   return (
-    <form action={formAction} className="space-y-5">
+    <form ref={formRef} action={formAction} className="space-y-5">
       <input type="hidden" name="id" value={recipeId} />
       <div className="space-y-1">
         <label htmlFor="title" className={labelClass}>
@@ -143,8 +144,9 @@ export default function RecipeEditForm({
 
       <div className="flex flex-wrap items-center gap-3 pt-2">
         <button
-          type="submit"
+          type="button"
           disabled={isPending}
+          onClick={() => formRef.current?.requestSubmit()}
           className="rounded-lg bg-black dark:bg-white px-5 py-2 text-sm font-medium text-white dark:text-black transition-opacity hover:opacity-80 disabled:opacity-50"
         >
           {isPending ? "保存中…" : "保存"}
