@@ -283,8 +283,9 @@ PR 作成時は [`.github/PULL_REQUEST_TEMPLATE.md`](../../.github/PULL_REQUEST_
 
 ## 関連ドキュメント
 
+- QA向け入門（用語・仕組み・役割）: [`ai-dev-process-for-qa.md`](./ai-dev-process-for-qa.md)
 - ステアリング（rules / skills / agents）: [`steering.md`](./steering.md)
 - 検証ループの考え方: [`loops.md`](./loops.md)
 - 依頼・役割の補足: [`agent-collaboration.md`](./agent-collaboration.md)
-- テストレベル方針（TBD）: [`test-level-policy.md`](./test-level-policy.md)
+- テストレベル方針: [`test-level-policy.md`](./test-level-policy.md)
 - feature テンプレ: [`../product/features/_template.md`](../product/features/_template.md)
