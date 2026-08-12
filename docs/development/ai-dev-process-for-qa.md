@@ -37,13 +37,13 @@
 
 ```mermaid
 flowchart LR
-  Human[人間: 決める / 承認 / 受け入れ]
-  Agent[エージェント: 実装 / 検証 / draft PR]
-  Docs[リポジトリの仕組み: docs / skills / rules / agents]
+  Human["人間<br/>決める・承認<br/>受け入れ"]
+  Agent["エージェント<br/>実装・検証<br/>draft PR"]
+  Docs["リポジトリの仕組み<br/>docs / skills<br/>rules / agents"]
   Human -->|短い依頼| Agent
   Docs -->|常に参照| Agent
-  Agent -->|Preview / PR| Human
-  Human -->|振り返り反映| Docs
+  Agent -->|draft PR| Human
+  Human -->|振り返りを反映| Docs
 ```
 
 最後の矢印（振り返り反映）が、この開発の要点です。**同じ指摘を二度しないために、指摘を仕組みへ書き戻します。**
@@ -111,14 +111,14 @@ HITL ────────────── HOTL ─────────
 
 ```mermaid
 flowchart TD
-  H1[人間ゲート: ①決める / ②承認 / ③依頼]
-  A1[エージェントの自律ループ: 実装 → L0〜L3 → 修正 → draft PR]
-  H2[人間ゲート: L4 Preview / Production マージ]
-  A2[エージェント: ⑤振り返りを仕組みへ]
-  H1 -->|人が許可してから開始| A1
+  H1["人間ゲート<br/>①決める ②承認<br/>③依頼"]
+  A1["エージェント<br/>自律ループ<br/>実装 → L0〜L3<br/>→ 修正 → PR"]
+  H2["人間ゲート<br/>L4 Preview<br/>本番マージ"]
+  A2["エージェント<br/>⑤振り返り"]
+  H1 -->|人が許可してから| A1
   A1 -->|人が最終判断| H2
   H2 --> A2
-  A1 -.->|中の試行錯誤は逐一承認しない| A1
+  A1 -.->|逐一の承認は不要| A1
 ```
 
 ④の中でエージェントは、実装 → 検証 → 失敗 → 修正を**逐一の承認なしに**繰り返します。人はその区間を監視するだけです（HOTL 的）。だから④の内側の品質は、人の承認ではなく **§3.3 のハーネスと §3.4 のループ設計**に依存します。
@@ -409,13 +409,13 @@ QA的に言えば、**開発者とテスターを分ける**のと同じ理屈�
 
 ```mermaid
 flowchart TD
-  S1[① 作るものを決める] --> S2[② feature doc 承認]
-  S2 --> S3[③ 短い依頼]
-  S3 --> S4[④ 実装・L0〜L3・draft PR]
-  S4 --> L4[L4 人間 Preview]
-  L4 --> Merge[人間が Production マージ]
-  Merge --> S5[⑤ 振り返り → skill / rule / workflow へ]
-  S5 -.->|次の feature は改善後のレールで走る| S1
+  S1["① 作るものを決める"] --> S2["② feature doc 承認"]
+  S2 --> S3["③ 短い依頼"]
+  S3 --> S4["④ 実装・L0〜L3<br/>draft PR"]
+  S4 --> L4["L4 人間 Preview"]
+  L4 --> Merge["人間が本番マージ"]
+  Merge --> S5["⑤ 振り返り<br/>skill / rule へ"]
+  S5 -.->|次は改善後のレール| S1
 ```
 
 ②と L4 が QA の主戦場です。**②で契約を曖昧にすると、L4 の判定根拠も曖昧になります。**
