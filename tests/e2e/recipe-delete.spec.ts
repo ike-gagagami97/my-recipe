@@ -154,8 +154,10 @@ test.describe("レシピ削除 / Recipe Delete", () => {
     const detailPage = new RecipeDetailPage(page);
     const listPage = new RecipeListPage(page);
 
+    // Client-side navigation (Link click) — matches typical user flow.
     await listPage.goto();
     await listPage.openRecipe(recipe.title);
+    await expect(page).toHaveURL(new RegExp(`/recipes/${recipe.id}$`));
     await detailPage.openDeleteDialog();
     await detailPage.confirmDelete();
     await expect(page).toHaveURL(/\/recipes$/);
@@ -167,6 +169,27 @@ test.describe("レシピ削除 / Recipe Delete", () => {
     if (page.url().match(/\/recipes\/[0-9a-f-]+$/i)) {
       await detailPage.expectNotFound();
     }
+  });
+
+  test("削除後に詳細 URL へ戻っても Router Cache で内容が復活しない", async ({
+    page,
+  }) => {
+    cleanupMainUserRecipes();
+    const recipe = await seedOwnRecipe({
+      title: `${TITLE_PREFIX} キャッシュ確認`,
+    });
+    const detailPage = new RecipeDetailPage(page);
+
+    await page.goto("/recipes");
+    await page.goto(`/recipes/${recipe.id}`);
+    await detailPage.openDeleteDialog();
+    await detailPage.confirmDelete();
+    await expect(page).toHaveURL(/\/recipes$/);
+
+    // Revisit the deleted detail URL (simulates back when detail remains in history).
+    await page.goto(`/recipes/${recipe.id}`);
+    await detailPage.expectNotFound();
+    await expect(detailPage.deleteButton).toHaveCount(0);
   });
 
   test("編集画面に削除ボタンは無い", async ({ page }) => {

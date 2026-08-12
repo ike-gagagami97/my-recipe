@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { optionalText, parseCookingTimeInput } from "@/lib/recipes";
 
@@ -216,6 +217,7 @@ export async function updateRecipe(
 
 export type DeleteRecipeResult = {
   error?: string;
+  success?: true;
 } | null;
 
 export async function deleteRecipe(id: string): Promise<DeleteRecipeResult> {
@@ -274,5 +276,8 @@ export async function deleteRecipe(id: string): Promise<DeleteRecipeResult> {
     };
   }
 
-  redirect("/recipes", "replace");
+  revalidatePath("/recipes");
+  revalidatePath(`/recipes/${id}`);
+
+  return { success: true };
 }

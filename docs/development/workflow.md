@@ -184,6 +184,8 @@ DBが未作成なら migration も同じPRで。UI変更後は verify-frontend-c
 | RLS / grant が適用後の DB で効いているか | エージェントが `db-security-auditor` で確認済み |
 | コード詳細 | 必須ではない（QAが全部見なくてよい） |
 
+**L4 / Preview からのフィードバック修正:** ローカルで再現・修正・確認（E2E または `verify-frontend-change`）してから Preview 再確認を依頼する。Preview だけ直して「確認お願いします」にしない。
+
 ### ④-3 検証（テストレベル）
 
 正本: [`test-level-policy.md`](./test-level-policy.md)（レベル定義 + **ルール表**）

@@ -24,6 +24,13 @@ export default function RecipeDeleteButton({ recipeId }: { recipeId: string }) {
       if (result?.error) {
         setError(result.error);
         setDialogOpen(false);
+        return;
+      }
+      if (result?.success) {
+        setDialogOpen(false);
+        // Full navigation replaces the detail entry in browser history (router.replace alone
+        // can leave the deleted detail restorable via back + Router Cache on Preview).
+        window.location.replace("/recipes");
       }
     });
   }

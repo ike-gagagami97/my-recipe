@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { connection } from "next/server";
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import LogoutButton from "../logout-button";
@@ -63,6 +64,8 @@ export default async function RecipeDetailPage({
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
+
+  await connection();
 
   const { id } = await params;
   const backHref = listHref(pickListParams(await searchParams));
