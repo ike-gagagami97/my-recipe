@@ -92,8 +92,8 @@ flowchart LR
   Login["/login"]
   List["/recipes"]
   New["/recipes/new"]
-  Detail["/recipes/{id}"]
-  Edit["/recipes/{id}/edit"]
+  Detail["/recipes/[id]"]
+  Edit["/recipes/[id]/edit"]
   Login -->|ログイン成功| List
   List -->|レシピを追加| New
   List -->|タイトルを押す| Detail
