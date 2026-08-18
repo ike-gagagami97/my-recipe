@@ -9,6 +9,7 @@ AI 駆動開発向けのプロジェクトドキュメントです。Cursor エ�
 | [`product/`](./product/) | プロダクトの目的・スコープ・ユーザー価値 |
 | [`architecture/`](./architecture/) | 技術構成・ディレクトリ・データ境界 |
 | [`development/`](./development/) | 開発フロー・ステアリング・ループ・連携 |
+| [`product/product-and-stack-for-qa.md`](./product/product-and-stack-for-qa.md) | **QA向け**: プロダクトと技術構成の入門（画面・データ・権限・環境・落とし穴） |
 | [`development/ai-dev-process-for-qa.md`](./development/ai-dev-process-for-qa.md) | **QA向け**: AIフル活用開発の入門（用語・仕組み・役割） |
 | [`decisions/`](./decisions/) | Architecture Decision Records (ADR) |
 
@@ -16,9 +17,10 @@ AI 駆動開発向けのプロジェクトドキュメントです。Cursor エ�
 
 ### 人間（QA）向けの入口
 
-1. [`development/ai-dev-process-for-qa.md`](./development/ai-dev-process-for-qa.md) — AI開発プロセス入門（用語・仕組み・役割）
-2. [`development/workflow.md`](./development/workflow.md) — ①〜⑤の進め方（正本）
-3. 該当する [`product/features/`](./product/features/) — 受け入れ条件（契約）
+1. [`product/product-and-stack-for-qa.md`](./product/product-and-stack-for-qa.md) — プロダクトと技術構成の入門（何をテストするか）
+2. [`development/ai-dev-process-for-qa.md`](./development/ai-dev-process-for-qa.md) — AI開発プロセス入門（どう進めるか）
+3. [`development/workflow.md`](./development/workflow.md) — ①〜⑤の進め方（正本）
+4. 該当する [`product/features/`](./product/features/) — 受け入れ条件（契約）
 
 ### エージェント向け
 
