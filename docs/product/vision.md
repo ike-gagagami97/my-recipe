@@ -39,6 +39,17 @@
 | 5 | P1 | レシピ編集 | ✅ 完了 | [`features/recipe-edit.md`](./features/recipe-edit.md) | [#25](https://github.com/ike-gagagami97/my-recipe/issues/25) |
 | 6 | P1 | レシピ削除 | ✅ 完了 | [`features/recipe-delete.md`](./features/recipe-delete.md) | [#26](https://github.com/ike-gagagami97/my-recipe/issues/26) |
 
+## ポスト MVP 候補（Issue 登録済み・実装順は未決定）
+
+①で優先度と着手順を決める。詳細仕様は各 Issue → ② feature doc。
+
+| 優先度 | 種別 | 機能 | 状態 | Issue |
+| --- | --- | --- | --- | --- |
+| P2 | プロダクト | レシピお気に入り（ブックマーク） | 候補 | [#37](https://github.com/ike-gagagami97/my-recipe/issues/37) |
+| P2 | プロダクト | レシピ検索対象の拡張（材料・メモなど） | 候補 | [#38](https://github.com/ike-gagagami97/my-recipe/issues/38) |
+| P2 | プロダクト | レシピのタグ／カテゴリ | 候補 | [#39](https://github.com/ike-gagagami97/my-recipe/issues/39) |
+| P2 | 開発基盤 | CI 整備（lint / unit / e2e） | 候補 | [#40](https://github.com/ike-gagagami97/my-recipe/issues/40) |
+
 ## 非スコープ（当面やらない）
 
 - 画像アップロード
