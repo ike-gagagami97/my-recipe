@@ -33,6 +33,7 @@ Treat it as an index: commands, map of the repo, pointers into `docs/` and `.cur
 | `supabase-migration` | SQL / RLS / grants |
 | `ui-design` | Landing and visual design |
 | `verify-frontend-change` | After any UI change — required before "done" |
+| `design-tests` | L2/L3: draft after ②, delta after implement, agent review, execute |
 | `run-tests` | Running or writing unit (Vitest) / E2E (Playwright) tests |
 
 ## Path-scoped rules in this repo
@@ -51,11 +52,15 @@ Index: [`.cursor/agents/README.md`](../../.cursor/agents/README.md)
 | Agent | When | Stage |
 | --- | --- | --- |
 | `feature-doc-reviewer` | Feature doc drafted/edited, before implementation | ② |
+| `test-designer` | After feature approval (draft) and after implementation (delta) | ②→④ / ④-3 |
+| `test-case-reviewer` | After test design draft/delta — agent-only gate before L2/L3 | ④-3 |
 | `code-reviewer` | Second-pass review of a diff without editing | ④ |
 | `db-security-auditor` | Migrations, policies, grants, auth-scoped queries changed | ④ |
-| `acceptance-verifier` | §5 Gherkin / §6 in a browser (L2 local, L3 Preview) | ④-3 |
+| `acceptance-verifier` | Execute reviewed test design in a browser (L2 local, L3 Preview) | ④-3 |
 
-Each is a **judge separated from the implementer**, and each one reads or emits enough noise (docs trees, SQL dumps, browser transcripts) that a separate context window pays for itself.
+Each is a **judge (or designer) separated from the implementer**, and each one reads or emits enough noise (docs trees, SQL dumps, browser transcripts) that a separate context window pays for itself.
+
+Test pipeline: `test-designer` → `test-case-reviewer` → `acceptance-verifier` (skill `design-tests`). Artifacts live under `docs/qa/test-design/`.
 
 Prefer a **skill** when the implementer should follow the procedure themselves, or when the task needs the current conversation's history — subagents start with a clean context and cannot see it.
 

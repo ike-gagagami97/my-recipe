@@ -116,11 +116,21 @@ feature doc の主読者は **QA / プロダクト** です。
 - [ ] Issue から辿れる
 - [ ] **人間が §1〜6 を承認した**（ヘッダの「承認者」が埋まっている。状態は「承認済み」）
 
+### ②承認直後（テスト設計の下書き）
+
+人間承認のあと、実装（④）に入る前か入り始めに、skill [`design-tests`](../../.cursor/skills/design-tests/SKILL.md) の **draft** を走らせる。
+
+1. `test-designer`（mode=draft）→ `docs/qa/test-design/<feature>.md`
+2. `test-case-reviewer` で blocker を潰す（**レビューはエージェントのみ**。人間ゲートにしない）
+
+§5 Gherkin は受け入れの最小契約のまま。テスト設計側がそれを包含・拡張する（feature doc を肥大化させない）。
+
 ### エージェントへの注意（②で止まる）
 
 - 「ワークフローに沿って」「①から進めて」と言われても、**②の承認が済むまで④に入らない**
 - 下書き・`feature-doc-reviewer`・push までやったら **人間の承認を待つ**（同じターンで migration / UI / E2E を始めない）
 - エージェントが「指摘が無いので承認済み」と自認しない
+- 承認後のテスト設計 draft は④の実装コードより先（または並行の入り口）でよい。**L2 実行は実装後の delta + 再レビューのあと**
 
 ---
 
@@ -188,17 +198,24 @@ DBが未作成なら migration も同じPRで。UI変更後は verify-frontend-c
 
 ### ④-3 検証（テストレベル）
 
-正本: [`test-level-policy.md`](./test-level-policy.md)（レベル定義 + **ルール表**）
+正本: [`test-level-policy.md`](./test-level-policy.md)（レベル定義 + **ルール表**）  
+手順: [`.cursor/skills/design-tests/SKILL.md`](../../.cursor/skills/design-tests/SKILL.md)
 
 | Level | 要約 |
 | --- | --- |
-| L0 | 静的（lint / build / 将来 unit） |
+| L0 | 静的（lint / build / unit） |
 | L1 | local の既存 E2E 等（回帰・該当時のみ） |
-| L2 | エージェント + Playwright MCP（local） |
-| L3 | Preview エージェント（**env/デプロイ絡みのとき必須**） |
+| L2 | レビュー済みテスト設計をエージェントが local で実行 |
+| L3 | Preview で L2 相当（**env/デプロイ絡みのとき必須**） |
 | L4 | 人間 Preview（常時必須ではない。**新規画面・新規フローは必須**） |
 
-L2 / L3 は **`acceptance-verifier` サブエージェント**に投げる（feature doc のパス・base URL・ログイン情報を渡す）。実装した本人が合否を判定しない。
+L2 / L3 が必要な変更では、自己検証のあとに次をこの順で行う（実装者バイアス回避）:
+
+1. `test-designer`（mode=**delta**）— ②後 draft を実装に合わせて更新
+2. `test-case-reviewer` — blocker 0 まで（**人間レビューは不要**）
+3. `acceptance-verifier` — feature doc **と** テスト設計のパス、base URL、ログイン情報を渡して実行
+
+実装した本人が合否を判定しない。§5 だけをその場しのぎで実行して L2 完了にしない。
 
 ルール表の要点:
 
@@ -221,6 +238,7 @@ L2 / L3 は **`acceptance-verifier` サブエージェント**に投げる（fea
 ### 出口（④完了 → ⑤へ）
 
 - [ ] ルール表どおりのテストレベルを実施した（PR 本文に記載）
+- [ ] L2/L3 が必要なら `docs/qa/test-design/<feature>.md` があり、`test-case-reviewer` 合格のうえで `acceptance-verifier` を実行した
 - [ ] 新規画面・新規フローなら L4（人間 Preview）済み
 - [ ] draft → レビュー → **人間がマージ**
 - [ ] 必要なら Preview 確認のうえ Production
@@ -288,4 +306,5 @@ PR 作成時は [`.github/PULL_REQUEST_TEMPLATE.md`](../../.github/PULL_REQUEST_
 - 検証ループの考え方: [`loops.md`](./loops.md)
 - 依頼・役割の補足: [`agent-collaboration.md`](./agent-collaboration.md)
 - テストレベル方針: [`test-level-policy.md`](./test-level-policy.md)
+- テスト設計成果物: [`../qa/test-design/`](../qa/test-design/)
 - feature テンプレ: [`../product/features/_template.md`](../product/features/_template.md)

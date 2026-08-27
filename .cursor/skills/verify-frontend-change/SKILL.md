@@ -23,7 +23,7 @@ When addressing feedback from L4 or human Preview review:
 2. Fix and rerun the same local check until it passes.
 3. Only then commit, push, and ask the human to re-verify on **Preview** (do not skip straight to Preview re-check).
 
-This skill is your own pass over your own change. The graded L2 / L3 run against the feature doc's §5 / §6 belongs to the [`acceptance-verifier`](../../agents/acceptance-verifier.md) subagent — it judges from a clean context, so passing this skill does not substitute for it.
+This skill is your own pass over your own change. Graded L2 / L3 belongs to the test pipeline in [`design-tests`](../design-tests/SKILL.md): `test-designer` → `test-case-reviewer` → [`acceptance-verifier`](../../agents/acceptance-verifier.md). Passing this skill does not substitute for that pipeline.
 
 ## Checks a screenshot or recording cannot prove
 

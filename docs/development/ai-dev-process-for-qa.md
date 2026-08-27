@@ -331,6 +331,7 @@ Cursor（IDE / Cloud Agent）向けに、次の部品をリポジトリに置い
 | `supabase-migration` | テーブル / RLS / grant |
 | `ui-design` | 見た目・ランディング |
 | `verify-frontend-change` | UI変更後の自己検証（完了宣言前に必須） |
+| `design-tests` | L2/L3: テスト設計（下書き→差分→レビュー→実行） |
 | `run-tests` | unit / E2E の実行手順 |
 
 ポイント:
@@ -346,16 +347,20 @@ Cursor（IDE / Cloud Agent）向けに、次の部品をリポジトリに置い
 | サブエージェント | 役割 | 段階 |
 | --- | --- | --- |
 | `feature-doc-reviewer` | feature doc の抜け漏れチェック | ② |
+| `test-designer` | テスト計画・分析・ケース作成（②後下書き / 実装後差分） | ②→④ / ④-3 |
+| `test-case-reviewer` | テスト設計のレビュー（**エージェントのみ**・人間ゲートなし） | ④-3 |
 | `code-reviewer` | diff の第二レビュー（危険変更の事前確認） | ④ |
 | `db-security-auditor` | **適用後のDB**で RLS / grant を検証 | ④ |
-| `acceptance-verifier` | §5 / §6 をブラウザで実行（L2 / L3） | ④-3 |
+| `acceptance-verifier` | レビュー済みテスト設計をブラウザで実行（L2 / L3） | ④-3 |
 
 なぜ分けるのか、が肝心です。
 
 1. **利害の分離**: 実装した本人は「動いたことにしたい」バイアスを持ちます。別コンテキストの判定者は、その実装過程を見ていないので擁護しません
 2. **コンテキストの分離**: SQL ダンプやブラウザ操作ログは長大です。親の会話に混ぜると他の判断精度が落ちます
+3. **設計と実行の分離**: ケースを書く役（`test-designer`）と実行する役（`acceptance-verifier`）を分け、そのあいだを `test-case-reviewer` がゲートします（JSTQB の計画・分析・設計→実行に相当）
 
-QA的に言えば、**開発者とテスターを分ける**のと同じ理屈です。`acceptance-verifier` は「一次テスター」、L4 の QA は「受け入れ担当」に相当します。
+QA的に言えば、**開発者とテスターを分ける**のと同じ理屈です。テスト設計パイプラインが「一次テスト設計＋実行」、L4 の QA は「受け入れ担当」に相当します。  
+成果物は `docs/qa/test-design/`。feature doc §5 は最小の受け入れ契約のまま残し、設計書がそれを包含・拡張します。
 
 スキルとの違い:
 
@@ -439,9 +444,15 @@ flowchart TD
 | --- | --- | --- |
 | **L0** | エージェント | `lint` / `build`（型チェック含む）/ `test:unit`（Vitest） |
 | **L1** | エージェント | 既存 E2E の実行（`test:e2e`、Playwright）＝回帰 |
-| **L2** | エージェント（`acceptance-verifier`） | local で §5 Gherkin / §6 をブラウザ操作で確認 |
-| **L3** | エージェント（`acceptance-verifier`） | Preview 上で L2 相当（env / デプロイ絡みのとき） |
+| **L2** | エージェント（設計→レビュー→実行） | local でレビュー済みテスト設計をブラウザ実行（§5/§6 を包含） |
+| **L3** | エージェント（同上） | Preview 上で L2 相当（env / デプロイ絡みのとき） |
 | **L4** | **人間（QA）** | Preview での最終受け入れ |
+
+L2 の中身（エージェントのみ・人間は設計レビューしない）:
+
+1. `test-designer`（②承認後に下書き、実装後に差分更新）
+2. `test-case-reviewer`
+3. `acceptance-verifier`
 
 ルール表の要点（抜粋）:
 

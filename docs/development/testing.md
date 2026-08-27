@@ -3,6 +3,7 @@
 テストの実装方針・層の棲み分け・追加ルール。
 
 テストレベル（L0〜L4）の定義と PR ごとの必須セット: [`test-level-policy.md`](./test-level-policy.md)  
+L2/L3 のテスト設計パイプライン: [`.cursor/skills/design-tests/SKILL.md`](../../.cursor/skills/design-tests/SKILL.md)  
 テストの実行コマンドと手順: [`.cursor/skills/run-tests/SKILL.md`](../../.cursor/skills/run-tests/SKILL.md)
 
 ---

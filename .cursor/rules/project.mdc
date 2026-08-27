@@ -14,6 +14,7 @@ alwaysApply: true
 - Do not start feature implementation (④) until the feature doc header has a human **承認者** and 状態 is **承認済み** or later — drafting/reviewing the doc is not approval; 「ワークフローに沿って」 alone is not either
 - Do not merge to production without human approval (deploy policy D1)
 - After a feature is L4-accepted or merged, run **⑤ retrospective** without waiting to be asked — put recurring risks into skill / rule / workflow (not only the feature doc)
+- L2/L3: skill `design-tests`（test-designer → test-case-reviewer → acceptance-verifier）. Do not treat implementer §5 eyeballing as L2
 - Keep agent prompts short; put behavior details in feature docs
 - Next.js 16: read `node_modules/next/dist/docs/` before unfamiliar APIs. `cookies()`/`headers()` are async. Use `proxy.ts`, not `middleware.ts`.
 - New Supabase tables need RLS **and** `grant` for `anon`/`authenticated`.
