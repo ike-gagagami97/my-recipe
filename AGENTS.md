@@ -18,6 +18,7 @@ This repo is developed with **Cursor** (IDE + Cloud Agents). Agent instructions 
 | [`docs/development/loops.md`](docs/development/loops.md) | Verification loops and stop criteria |
 | [`docs/development/testing.md`](docs/development/testing.md) | Testing policy: unit vs E2E, layer separation, how to add tests |
 | [`docs/development/test-level-policy.md`](docs/development/test-level-policy.md) | Test level rules per PR type (L0–L4) |
+| [`docs/qa/test-design/`](docs/qa/test-design/) | Test design artifacts (plan / analysis / cases) |
 | [`.cursor/skills/`](.cursor/skills/) | On-demand procedural skills |
 | [`.cursor/rules/`](.cursor/rules/) | Always-on and path-scoped rules |
 | [`.cursor/agents/`](.cursor/agents/) | Isolated subagents (e.g. code review) |
@@ -41,6 +42,7 @@ npm run test:e2e      # Playwright E2E tests — requires Supabase + dev server 
 - Path-specific constraints → `.cursor/rules/*.mdc` with `globs`.
 - Do not start feature ④ until the feature doc has a human **承認者** and 状態 **承認済み**+（「ワークフローに沿って」 alone is not approval）.
 - After UI changes, use skill `verify-frontend-change` before declaring done.
+- Before L2/L3, use skill `design-tests`（②後 draft → 実装後 delta → `test-case-reviewer` → `acceptance-verifier`）。
 - After touching `src/lib/recipes.ts` or E2E-covered features, run tests (see `docs/development/testing.md`).
 - New Supabase tables: RLS **and** `grant` for `anon`/`authenticated`.
 - After a feature is L4-accepted or merged, run workflow **⑤** (retrospective) without waiting to be asked — put recurring risks in skill / rule / workflow.

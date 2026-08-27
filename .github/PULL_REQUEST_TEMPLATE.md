@@ -22,19 +22,21 @@ Test level:
 Type:
 振る舞い不変: yes / no
 L3: yes / no （理由: ）
+Test design: docs/qa/test-design/<feature>.md （L2/L3 時）
+Review: test-case-reviewer 合格 / N/A
 ```
 
 | Level | 実施 | メモ |
 | --- | --- | --- |
 | L0 lint + build | [ ] | |
 | L1 既存 E2E（該当時） | [ ] / N/A | |
-| L2 local エージェント検証 | [ ] / N/A | |
+| L2 local（設計→レビュー→実行） | [ ] / N/A | skill `design-tests` |
 | L3 Preview エージェント | [ ] / N/A | env/デプロイ絡みのとき必須 |
 | L4 人間 Preview | [ ] / N/A | 新規画面・新規フローは必須 |
 
 ## How to verify（人間向け）
 
-<!-- L4 が必要なとき、または L2 不可時。§5 Gherkin / §6 へのポインタで可。 -->
+<!-- L4 が必要なとき、または L2 不可時。feature doc §5/§6 とテスト設計へのポインタで可。 -->
 
 1.
 2.
@@ -50,6 +52,7 @@ L3: yes / no （理由: ）
 
 - [ ] feature doc がある変更なら §1〜6（とくに §4 やらないこと・§5・§6）に沿っている
 - [ ] ルール表の必須レベルを上表で実施した（または N/A 理由あり）
+- [ ] L2/L3 が必要ならテスト設計があり `test-case-reviewer` 合格のうえ実行した
 - [ ] 秘密情報・`.env.local` を含めていない
 - [ ] 振る舞い不変で L4 省略する場合、その判断を Test level に書いた
 - [ ] docs / vision の状態更新が必要なら同じ PR に含めている

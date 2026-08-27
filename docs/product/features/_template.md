@@ -108,6 +108,7 @@ Feature: レシピ一覧
 - 確認環境: ローカル / Preview
 - 端末: モバイル幅も見る / デスクトップのみ
 - 回帰で触る画面:
+- テスト設計: `docs/qa/test-design/<feature-name>.md`（②承認後に draft、L2 前に delta + エージェントレビュー）
 - その他メモ:
 
 ---

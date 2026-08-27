@@ -10,6 +10,7 @@ Only the name/description need to be discoverable up front; the body is for when
 | [`supabase-migration`](./supabase-migration/SKILL.md) | Tables, RLS, grants, seeds |
 | [`ui-design`](./ui-design/SKILL.md) | Landing and visual design |
 | [`verify-frontend-change`](./verify-frontend-change/SKILL.md) | Before declaring any UI change done |
+| [`design-tests`](./design-tests/SKILL.md) | L2/L3 前: テスト設計下書き→差分更新→エージェントレビュー→実行 |
 | [`run-tests`](./run-tests/SKILL.md) | Running or writing unit (Vitest) / E2E (Playwright) tests |
 
 A skill is a procedure **you** follow. When the task is judging finished work, hand it to a subagent instead — see [`../agents/README.md`](../agents/README.md).

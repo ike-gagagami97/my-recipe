@@ -17,14 +17,17 @@ PR ごとに「どこまで検証するか」を決める方針。
 | --- | --- | --- | --- | --- |
 | **L0** | 静的検証 | CI / local | エージェント / CI | `lint`、`build`（型チェック含む）、**`npm run test:unit`（Vitest）** |
 | **L1** | 動的自動検証 | local（将来は CI も） | エージェント / CI | **`npm run test:e2e`（Playwright）** — `tests/e2e/` に存在する E2E を実行（**回帰**） |
-| **L2** | エージェント検証 | local | エージェント（Playwright MCP 等） | feature doc の §5 Gherkin / §6 をブラウザ操作で確認 |
-| **L3** | Preview エージェント検証 | Vercel Preview | エージェント | L2 相当を Preview URL で再実行（環境・env 込み） |
+| **L2** | エージェント検証 | local | 設計→レビュー→実行（別コンテキスト） | **レビュー済み** `docs/qa/test-design/*.md` のケースをブラウザで実行（§5/§6 を包含）。手順: skill `design-tests` |
+| **L3** | Preview エージェント検証 | Vercel Preview | 同上 | L2 相当を Preview URL で再実行（環境・env 込み） |
 | **L4** | 人間受け入れ | Preview | 人間（QA） | 手動で受け入れ判断・最終確認 |
 
 ### 補足
 
 - **L0**: ユニットが影響しない変更では unit は N/A（例: 純粋な UI 変更）
-- **L1 と L2 は併存**: 回帰は L1（自動 E2E）、新規・未整備は L2（エージェントブラウザ）。E2E が存在する機能の変更では L1 必須
+- **L1 と L2 は併存**: 回帰は L1（自動 E2E）、新規・未整備や契約確認は L2（テスト設計パイプライン）。E2E が存在する機能の変更では L1 必須
+- **L2 の前提**: ②承認後に `test-designer` draft → 実装後 `delta` → `test-case-reviewer` 合格 → `acceptance-verifier`。§5 直実行だけで L2 完了にしない
+- **テスト設計のレビュー**は **エージェントのみ**（`test-case-reviewer`）。人間ゲートにしない
+- **§5 とテスト設計**: §5 は受け入れ最小契約。設計書が包含・拡張する（§5 へ全ケースを書き戻さない）
 - **L3**: env / デプロイ設定など **Preview でしか分からないリスクがあるときだけ**必須（下記）
 - **L4**: 常時必須ではない。ただし **新規画面・新規フローでは必須**。「振る舞い不変」の一次判定は **PR 作成者**（QA は覆せる）
 
@@ -105,6 +108,8 @@ Test level: L0 + L2 + L4
 Type: 新規画面・新規フロー（レシピ一覧）
 振る舞い不変: no
 L3: no（env/デプロイ変更なし）
+Test design: docs/qa/test-design/recipe-list.md
+Review: test-case-reviewer 合格
 ```
 
 認証例:
@@ -113,6 +118,8 @@ L3: no（env/デプロイ変更なし）
 Test level: L0 + L2 + L4
 Type: ログイン・ログアウト・セッション
 L3: no
+Test design: docs/qa/test-design/auth.md
+Review: test-case-reviewer 合格
 ```
 
 ---
@@ -135,3 +142,4 @@ L3: no
 | 2026-07-09 | ルール表（案 R）試行。docs/文言は L0。新規は L4 必須。L3 は env/デプロイ時 |
 | 2026-07-09 | 認証・権限・削除を H3 サブタイプでルール表に採用。運用しながら調整可と明記 |
 | 2026-08-04 | L0 に unit テスト（Vitest）追加。L1 を Playwright E2E（`tests/e2e/`）に更新。整備済み機能の変更は L1 必須に格上げ |
+| 2026-08-27 | L2/L3 を「§5 直実行」からテスト設計パイプライン（draft→delta→agent review→execute）に更新。レビューはエージェントのみ |

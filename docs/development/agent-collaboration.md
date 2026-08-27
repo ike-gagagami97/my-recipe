@@ -42,6 +42,7 @@ PR 本文は .github/PULL_REQUEST_TEMPLATE.md に従い、Test level を記入�
 | SQL / RLS / migrations | `.cursor/skills/supabase-migration` |
 | ランディングや見た目 | `.cursor/skills/ui-design` |
 | UI 自己検証 | `.cursor/skills/verify-frontend-change` |
+| L2/L3 テスト設計パイプライン | `.cursor/skills/design-tests` |
 
 ## サブエージェントの使い分け
 
@@ -50,11 +51,13 @@ PR 本文は .github/PULL_REQUEST_TEMPLATE.md に従い、Test level を記入�
 | 状況 | エージェント |
 | --- | --- |
 | feature doc を承認に出す前（②） | `feature-doc-reviewer` |
+| ②承認後のテスト設計下書き / 実装後の差分更新 | `test-designer` |
+| テスト設計のレビュー（人間不要） | `test-case-reviewer` |
 | diff の第二レビュー（④） | `code-reviewer` |
 | migration / RLS / grant を触った（④） | `db-security-auditor` |
-| §5 Gherkin / §6 をブラウザで確認（L2・L3） | `acceptance-verifier` |
+| レビュー済みテスト設計をブラウザで確認（L2・L3） | `acceptance-verifier` |
 
-サブエージェントは会話履歴を引き継がない。**doc のパス・base URL・ログイン情報など必要な入力は依頼文に書く。**
+サブエージェントは会話履歴を引き継がない。**doc のパス・テスト設計パス・base URL・ログイン情報など必要な入力は依頼文に書く。**
 
 ## フィードバックループ
 

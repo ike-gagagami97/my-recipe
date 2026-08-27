@@ -23,9 +23,9 @@ This repo's baseline:
 
 - UI work → `.cursor/skills/verify-frontend-change/SKILL.md`
 - Schema work → checklist inside `supabase-migration`
-- Independent judge → `.cursor/agents/` (`feature-doc-reviewer` before implementation, `code-reviewer` on the diff, `db-security-auditor` on the applied DB, `acceptance-verifier` in the browser)
+- Independent judge → `.cursor/agents/` (`feature-doc-reviewer` before implementation, `test-designer` / `test-case-reviewer` for the test design pipeline, `code-reviewer` on the diff, `db-security-auditor` on the applied DB, `acceptance-verifier` in the browser)
 
-The implementer's own "done" is the weakest signal in the loop. Each agent above is the same loop with a different stop condition, run in a context that never saw the implementation being defended.
+The implementer's own "done" is the weakest signal in the loop. Each agent above is the same loop with a different stop condition, run in a context that never saw the implementation being defended. L2/L3 specifically: design → agent review → execute (skill `design-tests`), not §5 eyeballing by the implementer.
 
 Quantitative checks beat vague ones (`npm run lint` exit 0, console errors = 0, Lighthouse ≥ N, tests green).
 
