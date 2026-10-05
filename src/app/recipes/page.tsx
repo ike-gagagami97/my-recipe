@@ -13,8 +13,10 @@ import {
   parseSortColumn,
   parseSortDir,
   parseCookingTime,
+  parseFavoriteOnly,
 } from "@/lib/recipes";
 import type { SortColumn, SortDir } from "@/lib/recipes";
+import FavoriteToggle from "@/components/favorite-toggle";
 
 export const dynamic = "force-dynamic";
 
@@ -63,6 +65,9 @@ export default async function RecipesPage({
   const cookingTime = parseCookingTime(
     typeof sp.cooking_time === "string" ? sp.cooking_time : "",
   );
+  const favoriteOnly = parseFavoriteOnly(
+    typeof sp.favorite === "string" ? sp.favorite : "",
+  );
   const sort = parseSortColumn(
     typeof sp.sort === "string" ? sp.sort : "",
   );
@@ -76,12 +81,16 @@ export default async function RecipesPage({
 
   let query = supabase
     .from("recipes")
-    .select("id, title, cooking_time_minutes, updated_at", {
+    .select("id, title, cooking_time_minutes, updated_at, is_favorite", {
       count: "exact",
     });
 
   if (keyword) {
     query = query.ilike("title", `%${keyword}%`);
+  }
+
+  if (favoriteOnly) {
+    query = query.eq("is_favorite", true);
   }
 
   if (cookingTime) {
@@ -122,12 +131,13 @@ export default async function RecipesPage({
   const baseParams = new URLSearchParams({
     ...(keyword ? { keyword } : {}),
     ...(cookingTime ? { cooking_time: cookingTime } : {}),
+    ...(favoriteOnly ? { favorite: "1" } : {}),
     ...(sort !== "updated_at" ? { sort } : {}),
     ...(sortDir !== "desc" ? { sort_dir: sortDir } : {}),
   });
 
   const isEmpty = !error && (!recipes || recipes.length === 0);
-  const hasFilter = !!(keyword || cookingTime);
+  const hasFilter = !!(keyword || cookingTime || favoriteOnly);
 
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-16">
@@ -185,6 +195,9 @@ export default async function RecipesPage({
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-black/10 dark:border-white/15 bg-black/2 dark:bg-white/2">
+                    <th className="w-12 px-2 py-3 text-left font-medium">
+                      <span className="sr-only">お気に入り</span>
+                    </th>
                     <th className="px-4 py-3 text-left font-medium">
                       タイトル
                     </th>
@@ -232,6 +245,13 @@ export default async function RecipesPage({
                       key={recipe.id}
                       className="border-b border-black/5 dark:border-white/8 last:border-0 hover:bg-black/2 dark:hover:bg-white/2 transition-colors"
                     >
+                      <td className="px-2 py-3 align-middle">
+                        <FavoriteToggle
+                          recipeId={recipe.id}
+                          isFavorite={!!recipe.is_favorite}
+                          compact
+                        />
+                      </td>
                       <td className="px-4 py-3">
                         <Link
                           href={makeDetailHref(recipe.id, baseParams, page)}

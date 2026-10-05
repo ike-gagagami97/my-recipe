@@ -13,6 +13,7 @@ import {
   makeDetailHref,
   optionalText,
   parseCookingTimeInput,
+  parseFavoriteOnly,
 } from "./recipes";
 
 // ---------------------------------------------------------------------------
@@ -111,6 +112,7 @@ describe("pickListParams", () => {
     const sp = {
       keyword: "パスタ",
       cooking_time: "under10",
+      favorite: "1",
       sort: "cooking_time_minutes",
       sort_dir: "asc",
       page: "2",
@@ -118,6 +120,7 @@ describe("pickListParams", () => {
     const result = pickListParams(sp);
     expect(result.get("keyword")).toBe("パスタ");
     expect(result.get("cooking_time")).toBe("under10");
+    expect(result.get("favorite")).toBe("1");
     expect(result.get("sort")).toBe("cooking_time_minutes");
     expect(result.get("sort_dir")).toBe("asc");
     expect(result.get("page")).toBe("2");
@@ -210,6 +213,24 @@ describe("parseCookingTime", () => {
     expect(parseCookingTime("")).toBe("");
     expect(parseCookingTime(undefined)).toBe("");
     expect(parseCookingTime("invalid")).toBe("");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// parseFavoriteOnly
+// ---------------------------------------------------------------------------
+
+describe("parseFavoriteOnly", () => {
+  it("returns true for 1 and true", () => {
+    expect(parseFavoriteOnly("1")).toBe(true);
+    expect(parseFavoriteOnly("true")).toBe(true);
+  });
+
+  it("returns false for other values", () => {
+    expect(parseFavoriteOnly("")).toBe(false);
+    expect(parseFavoriteOnly("0")).toBe(false);
+    expect(parseFavoriteOnly("false")).toBe(false);
+    expect(parseFavoriteOnly(undefined)).toBe(false);
   });
 });
 

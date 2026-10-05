@@ -11,6 +11,7 @@ export class RecipeListPage {
   readonly keywordInput: Locator;
   readonly searchButton: Locator;
   readonly cookingTimeFilter: Locator;
+  readonly favoriteOnlyCheckbox: Locator;
   readonly titleColumnHeader: Locator;
   readonly cookingTimeColumnHeader: Locator;
   readonly updatedAtColumnHeader: Locator;
@@ -28,6 +29,9 @@ export class RecipeListPage {
     this.searchButton = page.getByRole("button", { name: "検索" });
     this.cookingTimeFilter = page.getByRole("combobox", {
       name: "所要時間で絞り込む",
+    });
+    this.favoriteOnlyCheckbox = page.getByRole("checkbox", {
+      name: "お気に入りのみ",
     });
     this.titleColumnHeader = page.getByRole("columnheader", { name: "タイトル" });
     this.cookingTimeColumnHeader = page.getByRole("columnheader", {
@@ -58,6 +62,24 @@ export class RecipeListPage {
 
   async filterByCookingTime(value: string) {
     await this.cookingTimeFilter.selectOption(value);
+  }
+
+  async setFavoriteOnly(on: boolean) {
+    const checked = await this.favoriteOnlyCheckbox.isChecked();
+    if (checked !== on) {
+      await this.favoriteOnlyCheckbox.click();
+    }
+  }
+
+  favoriteToggleForRow(title: string) {
+    return this.page
+      .locator("tbody tr")
+      .filter({ has: this.page.getByRole("link", { name: title }) })
+      .getByRole("button", { name: /お気に入り/ });
+  }
+
+  async toggleFavoriteForRecipe(title: string) {
+    await this.favoriteToggleForRow(title).click();
   }
 
   async sortByCookingTime() {

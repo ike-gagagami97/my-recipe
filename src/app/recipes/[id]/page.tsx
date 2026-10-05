@@ -5,6 +5,7 @@ import Link from "next/link";
 import LogoutButton from "../logout-button";
 import RecipeDeleteButton from "./recipe-delete-button";
 import RecipeDetailStaleGuard from "./recipe-detail-stale-guard";
+import FavoriteToggle from "@/components/favorite-toggle";
 import {
   formatCookingTime,
   formatDate,
@@ -77,7 +78,7 @@ export default async function RecipeDetailPage({
   const { data: recipe, error } = await supabase
     .from("recipes")
     .select(
-      "id, title, cooking_time_minutes, ingredients, steps, notes, updated_at",
+      "id, title, cooking_time_minutes, ingredients, steps, notes, updated_at, is_favorite",
     )
     .eq("id", id)
     .eq("user_id", user.id)
@@ -112,14 +113,20 @@ export default async function RecipeDetailPage({
         <h1 className="text-3xl font-bold tracking-tight break-words">
           {recipe.title}
         </h1>
-        <div className="mt-4 flex flex-wrap justify-end gap-3">
-          <Link
-            href={`/recipes/${recipe.id}/edit`}
-            className="inline-flex shrink-0 items-center rounded-lg bg-black px-5 py-2 text-sm font-medium text-white transition-opacity hover:opacity-80 dark:bg-white dark:text-black"
-          >
-            編集
-          </Link>
-          <RecipeDeleteButton recipeId={recipe.id} />
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+          <FavoriteToggle
+            recipeId={recipe.id}
+            isFavorite={!!recipe.is_favorite}
+          />
+          <div className="flex flex-wrap justify-end gap-3">
+            <Link
+              href={`/recipes/${recipe.id}/edit`}
+              className="inline-flex shrink-0 items-center rounded-lg bg-black px-5 py-2 text-sm font-medium text-white transition-opacity hover:opacity-80 dark:bg-white dark:text-black"
+            >
+              編集
+            </Link>
+            <RecipeDeleteButton recipeId={recipe.id} />
+          </div>
         </div>
         <RecipeDetailStaleGuard />
 
