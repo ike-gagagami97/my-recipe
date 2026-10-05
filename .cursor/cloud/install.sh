@@ -11,7 +11,22 @@ SUPABASE_CLI_VERSION="2.109.1"
 # --- 1. Docker CE (Docker-in-Docker compatible) --------------------------------
 # Pinned to 28.x: Docker 29 defaults to the containerd snapshotter, which breaks
 # the fuse-overlayfs storage driver required in this nested-container VM.
-if ! command -v docker >/dev/null 2>&1; then
+#
+# Noninteractive apt: the Cursor base image already ships /etc/fuse.conf with
+# `user_allow_other` enabled. Installing fuse3 (pulled in by fuse-overlayfs)
+# otherwise stops on a dpkg conffile prompt and fails the build with
+# "end of file on stdin at conffile prompt".
+APT_NONINTERACTIVE=(
+  -o Dpkg::Options::=--force-confdef
+  -o Dpkg::Options::=--force-confold
+)
+
+docker_ready() {
+  command -v docker >/dev/null 2>&1 \
+    && dpkg -s fuse-overlayfs 2>/dev/null | grep -q '^Status: install ok installed$'
+}
+
+if ! docker_ready; then
   echo "[install] Installing Docker CE ${DOCKER_CE_VERSION}..."
   sudo install -m 0755 -d /etc/apt/keyrings
   curl --retry 3 --retry-delay 5 -fsSL https://download.docker.com/linux/ubuntu/gpg \
@@ -20,7 +35,7 @@ if ! command -v docker >/dev/null 2>&1; then
   echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
     | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
   sudo apt-get update -qq
-  sudo apt-get install -y \
+  sudo DEBIAN_FRONTEND=noninteractive apt-get install -y "${APT_NONINTERACTIVE[@]}" \
     "docker-ce=${DOCKER_CE_VERSION}" \
     "docker-ce-cli=${DOCKER_CE_VERSION}" \
     containerd.io docker-buildx-plugin docker-compose-plugin \
