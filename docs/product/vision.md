@@ -45,7 +45,7 @@
 
 | 優先度 | 種別 | 機能 | 状態 | feature doc | Issue |
 | --- | --- | --- | --- | --- | --- |
-| P2 | プロダクト | レシピお気に入り（ブックマーク） | 着手中（② レビュー中） | [`features/recipe-favorite.md`](./features/recipe-favorite.md) | [#37](https://github.com/ike-gagagami97/my-recipe/issues/37) |
+| P2 | プロダクト | レシピお気に入り（ブックマーク） | 着手中（④ 実装中） | [`features/recipe-favorite.md`](./features/recipe-favorite.md) | [#37](https://github.com/ike-gagagami97/my-recipe/issues/37) |
 | P2 | プロダクト | レシピ検索対象の拡張（材料・メモなど） | 候補 | — | [#38](https://github.com/ike-gagagami97/my-recipe/issues/38) |
 | P2 | プロダクト | レシピのタグ／カテゴリ | 候補 | — | [#39](https://github.com/ike-gagagami97/my-recipe/issues/39) |
 | P2 | 開発基盤 | CI 整備（lint / unit / e2e） | 候補 | — | [#40](https://github.com/ike-gagagami97/my-recipe/issues/40) |
