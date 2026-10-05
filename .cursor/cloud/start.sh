@@ -18,6 +18,15 @@ if ! sudo docker info >/dev/null 2>&1; then
     sleep 1
   done
 fi
+# Nested DinD: custom bridge networks need FORWARD ACCEPT between br+ interfaces,
+# otherwise container-to-container TCP (auth→db) times out during schema init.
+sudo iptables -P FORWARD ACCEPT 2>/dev/null || true
+sudo iptables -C DOCKER-USER -j ACCEPT 2>/dev/null || sudo iptables -I DOCKER-USER -j ACCEPT 2>/dev/null || true
+sudo iptables -C FORWARD -i br+ -o br+ -j ACCEPT 2>/dev/null || sudo iptables -I FORWARD -i br+ -o br+ -j ACCEPT 2>/dev/null || true
+sudo iptables-legacy -P FORWARD ACCEPT 2>/dev/null || true
+sudo iptables-legacy -C DOCKER-USER -j ACCEPT 2>/dev/null || sudo iptables-legacy -I DOCKER-USER -j ACCEPT 2>/dev/null || true
+sudo iptables-legacy -C FORWARD -i br+ -o br+ -j ACCEPT 2>/dev/null || sudo iptables-legacy -I FORWARD -i br+ -o br+ -j ACCEPT 2>/dev/null || true
+
 # Make the socket usable by the docker group (so `sg docker -c ...` works).
 sudo chown root:docker /var/run/docker.sock 2>/dev/null || true
 sudo chmod 660 /var/run/docker.sock 2>/dev/null || true

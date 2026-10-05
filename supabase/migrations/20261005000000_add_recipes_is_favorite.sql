@@ -12,9 +12,9 @@ returns trigger
 language plpgsql
 as $$
 begin
-  -- Skip updated_at bump when only is_favorite changed.
+  -- Bump updated_at only when content columns change.
+  -- Favorite-only toggles and no-op UPDATEs keep the previous timestamp (§8 Q4).
   if tg_op = 'UPDATE'
-     and new.is_favorite is distinct from old.is_favorite
      and new.title is not distinct from old.title
      and new.cooking_time_minutes is not distinct from old.cooking_time_minutes
      and new.ingredients is not distinct from old.ingredients
