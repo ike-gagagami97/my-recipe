@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { optionalText, parseCookingTimeInput } from "@/lib/recipes";
 
@@ -281,4 +282,80 @@ export async function deleteRecipe(
 
   // Form POST + redirect: navigate without re-rendering this detail page (no flash).
   redirect("/recipes", "replace");
+}
+
+export type SetFavoriteState = {
+  error?: string;
+} | null;
+
+/**
+ * Toggle a recipe's favorite flag. Does not bump updated_at
+ * (DB trigger skips favorite-only updates; feature §8 Q4).
+ */
+export async function setRecipeFavorite(
+  _prevState: SetFavoriteState,
+  formData: FormData,
+): Promise<SetFavoriteState> {
+  const id = (formData.get("id") ?? "").toString();
+  const raw = (formData.get("is_favorite") ?? "").toString();
+  const isFavorite = raw === "true" || raw === "1";
+
+  if (
+    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  ) {
+    return {
+      error: "Supabase が設定されていません（環境変数を確認してください）",
+    };
+  }
+
+  if (!UUID_PATTERN.test(id)) {
+    return {
+      error: "レシピが見つかりません。",
+    };
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
+
+  const { data, error } = await supabase
+    .from("recipes")
+    .update({ is_favorite: isFavorite })
+    .eq("id", id)
+    .eq("user_id", user.id)
+    .select("id, is_favorite")
+    .maybeSingle();
+
+  if (error) {
+    return {
+      error: "お気に入りの保存に失敗しました。もう一度お試しください。",
+    };
+  }
+
+  if (!data) {
+    const { data: existing } = await supabase
+      .from("recipes")
+      .select("id")
+      .eq("id", id)
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    if (existing) {
+      return {
+        error:
+          "お気に入りを保存できませんでした。データベースの更新権限（UPDATE）を確認してください。",
+      };
+    }
+
+    return {
+      error: "レシピが見つかりません。",
+    };
+  }
+
+  revalidatePath("/recipes");
+  revalidatePath(`/recipes/${id}`);
+  return null;
 }

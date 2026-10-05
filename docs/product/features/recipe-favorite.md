@@ -137,8 +137,9 @@ Feature: レシピお気に入り
 - テスト設計: `docs/qa/test-design/recipe-favorite.md`（②承認後に draft、L2 前に delta + エージェントレビュー）
 - その他メモ:
   - サインアップ画面が無いため、L4 前に確認済みユーザーを用意する
-  - L4 用データ: 実装 PR で `supabase/qa/l4_recipe_favorite_seed.sql` / `l4_recipe_favorite_cleanup.sql` を追加し、ここにリンクする（お気に入りあり／なし、0件、11件以上、他ユーザー1件）
-  - 列追加 migration を含むため、Preview L4 前にホスト側 Supabase へ当該 migration を適用する（未適用だと ON/OFF が失敗しうる）
+  - L4 用データ: [`supabase/qa/l4_recipe_favorite_seed.sql`](../../../supabase/qa/l4_recipe_favorite_seed.sql) / [`l4_recipe_favorite_cleanup.sql`](../../../supabase/qa/l4_recipe_favorite_cleanup.sql)（お気に入りあり／なし、0件確認用、11件以上、他ユーザー1件）
+  - 列追加 migration: [`supabase/migrations/20261005000000_add_recipes_is_favorite.sql`](../../../supabase/migrations/20261005000000_add_recipes_is_favorite.sql)。Preview L4 前にホスト側 Supabase へ適用する（未適用だと ON/OFF が失敗しうる）
+  - URL クエリ: `favorite=1` が「お気に入りのみ」
 
 ---
 

@@ -66,6 +66,20 @@ export default function RecipeControls() {
         <option value="20to30">20〜30分</option>
         <option value="over30">30分以上</option>
       </select>
+
+      <label className="inline-flex items-center gap-2 text-sm select-none">
+        <input
+          type="checkbox"
+          checked={searchParams.get("favorite") === "1"}
+          onChange={(e) =>
+            push({ favorite: e.target.checked ? "1" : undefined })
+          }
+          disabled={isPending}
+          aria-label="お気に入りのみ"
+          className="h-4 w-4 rounded border-black/20 dark:border-white/30"
+        />
+        お気に入りのみ
+      </label>
     </div>
   );
 }

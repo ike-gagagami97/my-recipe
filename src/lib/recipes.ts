@@ -29,6 +29,11 @@ export function parseCookingTime(v: unknown): CookingTimeFilter {
   return "";
 }
 
+/** URL query `favorite=1` means "favorites only". */
+export function parseFavoriteOnly(v: unknown): boolean {
+  return v === "1" || v === "true";
+}
+
 /**
  * Build the href for a sort header click.
  * Clicking an inactive column starts ascending; clicking the active column flips direction.
@@ -118,6 +123,7 @@ export function splitLines(text: string | null): string[] {
 const LIST_PARAM_KEYS = [
   "keyword",
   "cooking_time",
+  "favorite",
   "sort",
   "sort_dir",
   "page",

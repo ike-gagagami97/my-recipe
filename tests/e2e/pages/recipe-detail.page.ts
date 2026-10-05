@@ -10,6 +10,7 @@ export class RecipeDetailPage {
   readonly backToListLink: Locator;
   readonly editLink: Locator;
   readonly deleteButton: Locator;
+  readonly favoriteToggle: Locator;
   readonly deleteDialog: Locator;
   readonly deleteConfirmButton: Locator;
   readonly deleteCancelButton: Locator;
@@ -29,6 +30,7 @@ export class RecipeDetailPage {
     this.backToListLink = page.getByRole("link", { name: /一覧に戻る/ });
     this.editLink = page.getByRole("link", { name: "編集" });
     this.deleteButton = page.getByRole("button", { name: "削除", exact: true });
+    this.favoriteToggle = page.getByRole("button", { name: /お気に入り/ });
     this.deleteDialog = page.getByRole("alertdialog");
     this.deleteConfirmButton = page.getByRole("button", { name: "削除する" });
     this.deleteCancelButton = this.deleteDialog.getByRole("button", {
@@ -67,6 +69,18 @@ export class RecipeDetailPage {
 
   async openEdit() {
     await this.editLink.click();
+  }
+
+  async toggleFavorite() {
+    await this.favoriteToggle.click();
+  }
+
+  async expectFavoriteOn() {
+    await expect(this.favoriteToggle).toHaveAttribute("aria-pressed", "true");
+  }
+
+  async expectFavoriteOff() {
+    await expect(this.favoriteToggle).toHaveAttribute("aria-pressed", "false");
   }
 
   async openDeleteDialog() {
